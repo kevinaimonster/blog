@@ -25,21 +25,23 @@
 - 旧 Hexo 产物暂留仓库根目录，新的构建输出单独放 dist；后续正式切换使用静态产物发布，避免把框架源码直接当 Pages 页面。
 - 代码独立编写，以公开演示站的结构与视觉作为参照，没有获取或使用付费模板源文件。
 - 第一版错误：绿色便签、项目封面和小字号时间线替代了原站的关键结构。功能验证不能证明视觉符合要求，此前关于风格还原的交付表述不准确。
-- 当前头像来自公开 GitHub 账号；照片带为可替换的 Unsplash 图库示意，来源与作者保存在 site.ts，关于页说明其不是个人摄影。
+- 用户确认修正后的视觉，并指定 kevin.top 作为基础素材来源。本轮替换个人介绍、头像、海滩插画及 Second Me / valseit / Avatar / UPon 资料；保留 Flash。原站头像与海滩图为插画，其余四张为明确标注的图库示意。
+- 社交入口只保留 X 与 GitHub；X 链接由用户明确提供 https://x.com/KevinAIMonster 。RSS 属于独立订阅卡片，不占社交入口。
 
 ## 就绪
 
-conditional：用户已确认原创实现。真实文章尚未提供，起步内容仅含建站稿与本次选定的设计收藏；发布到正式域名前需用户审阅内容。
+conditional：用户已确认视觉方向并提供个人素材来源。kevin.top 的博客目录为空，起步文章仍仅含建站稿；发布到正式域名前需用户审阅文章内容。
 
 ## 验证与交付
 
 - 构建：Astro 静态输出 7 个 HTML 页面及 RSS；构建成功。
-- 类型检查：16 个文件，0 errors / 0 warnings / 0 hints。
+- 类型检查：18 个文件，0 errors / 0 warnings / 0 hints。
 - 构建产物测试：页面基础元数据、内部链接与资源存在性、RSS 域名与文章链接全部通过。
 - Chrome 实测：笔记/收藏筛选、大小写不敏感关键词搜索、无结果状态、恢复全部 3 条内容、主题切换及跨页保留、笔记详情、RSS 复制、手机菜单与 Escape 关闭通过。
 - 视觉检查：桌面完整首页、深色阅读页、390px 手机首页；320px 首页与关于页 scrollWidth 等于视口宽度。
 - 本地开发：使用 Node 22.23.4，dev 与 preview 均能前台启动。指定 --ignore-lock 避免 Astro 在代理环境自动后台化后根路径不一致；本轮服务会在交付时停止。
 - 1512px 桌面对照：原站与修正版内容左边界 x=244px；主标题 y=216px、宽 672px、高 112px、48px 字号/56px 行高；照片单张 288×320px、间隔 32px、倾斜 ±2°；下方双栏宽 512/416px、间隔 96px。中文文案长度与照片内容不同。
 - 本轮对照截图：/Users/kevinaimonster/empty/artifacts/spotlight-reference.png 和 spotlight-revision.png（本地证据，不进入部署产物）。
+- 素材替换验证：构建、既有 3 项产物测试通过；桌面首页与项目页已目视核验，首页社交区精确包含用户指定的 X / GitHub URL。最新截图另存 kevin-materials.png。
 - 私密预览项目：appgprj_6ae356b37bb08191b39044a2b3247240；预期 URL https://kevin-digital-garden.kevinmonster.chatgpt.site 。实际发布状态以 Sites 部署记录为准。
 - 正式域名与旧 master 保持原有状态；旧文章迁移、真实内容审阅及正式域名切换属于后续上线工作。

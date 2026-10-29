@@ -56,8 +56,8 @@ const canonical = new URL(pathname, Astro.site);
         {!isHome && (
           <a href="/" class="header-avatar" aria-label="Kevin 的数字花园首页">
             <img
-              src="/images/avatar.png"
-              alt="Kevin 的 GitHub 头像"
+              src={site.avatar}
+              alt="Kevin 的头像，来自 kevin.top"
               width="40"
               height="40"
             />

@@ -1,17 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-import {
-  Rss,
-  BookOpen,
-  Bookmark,
-  BriefcaseBusiness,
-  ArrowRight,
-  Zap,
-  Leaf,
-  Copy,
-} from 'lucide-react';
+import { Rss, BriefcaseBusiness, ArrowRight, Copy } from 'lucide-react';
 import Base from '../layouts/Base.astro';
 import GitHubIcon from '../components/GitHubIcon.astro';
+import XIcon from '../components/XIcon.astro';
+import ProjectIcon from '../components/ProjectIcon.astro';
 import GardenFeed, { type FeedItem } from '../components/GardenFeed';
 import { site, projects, thoughts, bookmarks, photos } from '../data/site';
 const notes = await getCollection('notes', ({ data }) => !data.draft);
@@ -43,8 +36,8 @@ const items: FeedItem[] = [
   <section class="hero container" aria-labelledby="hero-title">
     <a class="hero-avatar" href="/about/" aria-label="关于 Kevin">
       <img
-        src="/images/avatar.png"
-        alt="Kevin 的 GitHub 头像"
+        src={site.avatar}
+        alt="Kevin 的头像，来自 kevin.top"
         width="64"
         height="64"
         fetchpriority="high"
@@ -59,6 +52,14 @@ const items: FeedItem[] = [
       <p>{site.intro}</p>
       <div class="social-links">
         <a
+          href={site.x}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Kevin 的 X"
+        >
+          <XIcon />
+        </a>
+        <a
           href={site.github}
           target="_blank"
           rel="noopener noreferrer"
@@ -66,21 +67,12 @@ const items: FeedItem[] = [
         >
           <GitHubIcon />
         </a>
-        <a href="/rss.xml" aria-label="订阅笔记 RSS">
-          <Rss size={24} />
-        </a>
-        <a href="/notes/" aria-label="阅读笔记">
-          <BookOpen size={24} />
-        </a>
-        <a href="/bookmarks/" aria-label="浏览收藏">
-          <Bookmark size={23} />
-        </a>
       </div>
     </div>
   </section>
   <section
     class="photo-section"
-    aria-label="照片带，当前使用可替换的图库示意图"
+    aria-label="图片带：原站插画与可替换的图库示意图"
   >
     <div class="photo-track">
       {photos.map((photo) => (
@@ -96,9 +88,11 @@ const items: FeedItem[] = [
             href={photo.source}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`查看图库示意照片来源：${photo.alt}`}
+            aria-label={`查看${photo.kind}来源：${photo.alt}`}
           >
-            <span>图库示意 · {photo.credit}</span>
+            <span>
+              {photo.kind} · {photo.credit}
+            </span>
           </a>
         </figure>
       ))}
@@ -132,44 +126,35 @@ const items: FeedItem[] = [
       <section class="sidebar-card work-card" aria-labelledby="work-title">
         <h2 id="work-title">
           <BriefcaseBusiness size={22} aria-hidden="true" />
-          正在做
+          作品与项目
         </h2>
         <ul>
-          {projects.map((project) => (
-            <li>
-              <span
-                class:list={[
-                  'project-icon',
-                  project.id === 'flash' ? 'flash-icon' : 'garden-icon',
-                ]}
-              >
-                {project.id === 'flash' ? (
-                  <Zap size={21} />
-                ) : (
-                  <Leaf size={20} />
-                )}
-              </span>
-              <div>
-                <a
-                  href={project.url}
-                  target={project.url.startsWith('http') ? '_blank' : undefined}
-                  rel={
-                    project.url.startsWith('http')
-                      ? 'noopener noreferrer'
-                      : undefined
-                  }
-                >
-                  {project.name}
-                </a>
-                <div class="project-meta">
-                  <span>
-                    {project.id === 'flash' ? 'macOS 应用' : '个人网站'}
-                  </span>
-                  <span>{project.id === 'flash' ? '产品' : '持续更新'}</span>
+          {projects
+            .filter((project) => project.featured)
+            .map((project) => (
+              <li>
+                <ProjectIcon icon={project.icon} size={21} />
+                <div>
+                  <a
+                    href={project.url}
+                    target={
+                      project.url.startsWith('http') ? '_blank' : undefined
+                    }
+                    rel={
+                      project.url.startsWith('http')
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
+                  >
+                    {project.name}
+                  </a>
+                  <div class="project-meta">
+                    <span>{project.role}</span>
+                    <span>{project.category}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
+              </li>
+            ))}
         </ul>
         <a class="subtle-button" href="/projects/">
           查看所有项目 <ArrowRight size={15} />

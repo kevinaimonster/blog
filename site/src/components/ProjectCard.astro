@@ -1,11 +1,13 @@
 ---
-import { ArrowUpRight, Link, Zap, Leaf } from 'lucide-react';
+import { ArrowUpRight, Link } from 'lucide-react';
+import ProjectIcon from './ProjectIcon.astro';
 import { projects } from '../data/site';
 interface Props {
   project: (typeof projects)[number];
 }
 const { project } = Astro.props;
 const external = project.url.startsWith('http');
+const domain = new URL(project.url, 'https://kevin1988.fun').hostname;
 ---
 
 <a
@@ -14,19 +16,13 @@ const external = project.url.startsWith('http');
   target={external ? '_blank' : undefined}
   rel={external ? 'noopener noreferrer' : undefined}
 >
-  <span
-    class:list={[
-      'project-icon',
-      project.id === 'flash' ? 'flash-icon' : 'garden-icon',
-    ]}
-  >
-    {project.id === 'flash' ? <Zap size={24} /> : <Leaf size={24} />}
-  </span>
+  <ProjectIcon icon={project.icon} size={24} />
   <h3>{project.name}</h3>
+  <span class="project-role">{project.role}</span>
   <p>{project.description}</p>
   <span class="project-link">
     <Link size={16} aria-hidden="true" />
-    {external ? 'github.com' : 'kevin1988.fun'}
+    {domain}
     <ArrowUpRight size={14} aria-hidden="true" />
   </span>
 </a>

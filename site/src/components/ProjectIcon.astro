@@ -1,0 +1,20 @@
+---
+import { Brain, Network, PanelsTopLeft, Layers, Zap } from 'lucide-react';
+interface Props {
+  icon: string;
+  size?: number;
+}
+const { icon, size = 22 } = Astro.props;
+const icons = {
+  brain: Brain,
+  network: Network,
+  canvas: PanelsTopLeft,
+  layers: Layers,
+  zap: Zap,
+};
+const Icon = icons[icon as keyof typeof icons] || Layers;
+---
+
+<span class:list={['project-icon', `project-icon-${icon}`]}>
+  <Icon size={size} aria-hidden="true" />
+</span>

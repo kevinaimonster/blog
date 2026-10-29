@@ -562,10 +562,13 @@ input:focus-visible {
   box-shadow: 0 2px 5px #18181b06;
   flex-shrink: 0;
 }
-.flash-icon {
+.project-icon-brain,
+.project-icon-zap {
   color: #7c3aed;
 }
-.garden-icon {
+.project-icon-network,
+.project-icon-canvas,
+.project-icon-layers {
   color: var(--accent);
 }
 .work-card li > div {
@@ -800,6 +803,13 @@ input:focus-visible {
   line-height: 25px;
   color: var(--muted);
   margin-top: 8px;
+}
+.project-role {
+  display: block;
+  color: var(--faint);
+  font-size: 12px;
+  line-height: 22px;
+  margin-top: 4px;
 }
 .project-link {
   display: flex;

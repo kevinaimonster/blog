@@ -28,9 +28,11 @@ npm test
 | 色彩、字体、间距和响应式样式       | `site/src/styles/global.css`         |
 | 搜索和分类筛选                     | `site/src/components/GardenFeed.tsx` |
 
-首版的建站近况、建站笔记和介绍是待确认的起始文案。Flash 使用已确认的公开发布仓库链接；没有填入未经确认的履历或数据。
+个人介绍、Second Me / valseit / Avatar / UPon 项目资料取自用户指定的 [kevin.top](https://kevin.top/)，文字作了压缩，未迁入可能过时的星数或上架进度。Flash 保留已确认的公开发布仓库链接。建站近况与建站笔记仍为起始文案。
 
-头像来自本人公开 GitHub 账号。首页照片是可替换的图库示意，并非个人摄影或旅行经历；照片配置、作者与来源见 `photos` 数组，文件在 `site/public/images/`。使用 [Unsplash License](https://unsplash.com/license) 下的图库素材，未使用 Spotlight 演示站的照片。
+头像与海滩背景插画沿用用户指定的 kevin.top，分别保存在 `kevin-avatar.jpg` 与 `kevin-beach.jpg`。其余四张图片是可替换的图库示意，并非个人摄影或旅行经历；配置、作者与来源见 `photos` 数组，文件在 `site/public/images/`。使用 [Unsplash License](https://unsplash.com/license) 下的图库素材，未使用 Spotlight 演示站的照片。
+
+首页及关于页的社交入口只保留 X 与 GitHub。X 地址由用户明确提供：`https://x.com/KevinAIMonster`；GitHub 地址为 `https://github.com/kevinaimonster`。RSS 保留为独立订阅功能。
 
 新增笔记时复制现有 Markdown 的 frontmatter，日期使用 `YYYY-MM-DD`。`draft: true` 会同时从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。
 
