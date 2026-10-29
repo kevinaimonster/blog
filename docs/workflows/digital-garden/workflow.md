@@ -95,3 +95,17 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - CUA 原生 Safari 检查桌面首屏、390px 英文首页、320px 中文首页和 640px 文章插画；无可见横向溢出。这是本地浏览器布局检查，不等同于真实手机测试。
 - 本地截图：/Users/kevinaimonster/empty/artifacts/kevin-identity-desktop.png、kevin-identity-responsive.png。临时 QA 页已从部署产物移除。
 - 使用既有 owner-private Sites 项目及 codex/digital-garden 分支；发布状态以 Sites 返回为准。
+
+
+## 2026-10-29：头像形象图与深海蓝配色
+
+用户认为上一版过素，要求用头像延展的形象图替换信息量低的介绍段落，并换掉整体色调。本节替代上节的全站素色方向；只用 Kevin、只谈能力与项目的内容约束继续有效。
+
+- 使用内置 image_gen，以既有狐狸头像为身份参考，生成工作台横幅；保留橙色狐狸、黑框眼镜与蓝色花衬衫。资产为 site/public/images/kevin-workbench.png（2172 × 724），完整提示词见 kevin-workbench-art.md。
+- 首页删除两段泛泛介绍，改为 Kevin、三个能力关键词与形象图，保留 X/GitHub、关于入口和最近文章。桌面侧栏项目增加克制的表面色与首字母标记。
+- 全站换成深海蓝底、柔和白字、青蓝与杏橙强调色；浅色模式为浅蓝白。主题 meta 和 favicon 同步，默认英文深色不变。
+- 手机采用 2:1 裁切，使狐狸和电脑可辨认。旧海边纸页飞鸟插画仍只在开篇文章中。
+- Astro check：21 文件，0 errors / warnings / hints。最终构建 13 个 HTML 页面与中英文 RSS；5 项已有测试通过；git diff --check 通过。
+- CUA 原生 Safari 目视检查深色桌面、浅色桌面、390px 英文、320px 中文与 640px 阅读页。主题切换实测通过；窄屏无可见横向溢出。临时 iframe QA 页面已移除，不进入部署。
+- 本地验收图：/Users/kevinaimonster/empty/artifacts/kevin-workbench-desktop.png、kevin-workbench-responsive.png。属于浏览器尺寸检查，不声称真实设备测试。
+- 继续发布同一 owner-private Sites 项目并同步 codex/digital-garden 分支。正式域名、master 与 Pages 配置保持原状。

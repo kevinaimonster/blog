@@ -89,8 +89,8 @@ test('both languages include translated content and same-page switching', async 
   for (const [route, english, chinese] of [
     [
       '',
-      'Engineer &amp; independent AI builder',
-      '工程师 · 独立 AI 产品开发者',
+      'AI products · macOS tools · Custom AI',
+      'AI 产品 · macOS 工具 · 企业 AI 定制',
     ],
     ['about/', 'Hi, I’m Kevin', '你好，我是 Kevin'],
     ['projects/', 'Ideas, made real.', '让想法，有所着落。'],

@@ -48,42 +48,31 @@ const items: FeedItem[] = [
 ].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
-<Base>
+<Base image="/images/kevin-workbench.png">
   <div class="container home-layout">
     <section class="identity-intro" aria-labelledby="identity-title">
       <div class="identity-heading">
-        <img
-          class="identity-avatar"
-          src={site.avatar}
-          alt={t('Kevin 的头像', 'Kevin’s avatar')}
-          width="64"
-          height="64"
-          fetchpriority="high"
-        />
-        <div>
-          <h1 id="identity-title">
-            Kevin<span>.</span>
-          </h1>
-          <p class="identity-role">
-            {t(
-              '工程师 · 独立 AI 产品开发者',
-              'Engineer & independent AI builder',
-            )}
-          </p>
-        </div>
+        <h1 id="identity-title">
+          Kevin<span>.</span>
+        </h1>
+        <p class="identity-role">
+          {t(
+            'AI 产品 · macOS 工具 · 企业 AI 定制',
+            'AI products · macOS tools · Custom AI',
+          )}
+        </p>
       </div>
-      <p class="identity-bio">
-        {t(
-          '我做 AI 产品、macOS 工具和企业 AI 定制，把想法做成真正能用的软件。',
-          'I build AI products, macOS tools, and custom AI for businesses—turning ideas into working software.',
+      <img
+        class="identity-art"
+        src="/images/kevin-workbench.png"
+        alt={t(
+          'Kevin 的狐狸形象戴着黑框眼镜、穿着花衬衫，在暖灯下使用笔记本电脑。',
+          'Kevin’s fox character in black glasses and a floral shirt, working on a laptop by a warm desk lamp.',
         )}
-      </p>
-      <p class="identity-writing">
-        {t(
-          '这里记录 AI、产品实验，以及把想法做出来的过程。',
-          'I write about AI, product experiments, and the process of making things.',
-        )}
-      </p>
+        width="2172"
+        height="724"
+        fetchpriority="high"
+      />
       <div class="identity-links">
         <a
           href={site.x}
@@ -133,7 +122,14 @@ const items: FeedItem[] = [
           {selectedProjects.map((project) => (
             <li>
               <a href={project.url} target="_blank" rel="noopener noreferrer">
-                <span>
+                <span
+                  class="project-initial"
+                  data-project={project.id}
+                  aria-hidden="true"
+                >
+                  {project.name.slice(0, 1).toUpperCase()}
+                </span>
+                <span class="home-project-name">
                   <strong>{project.name}</strong>
                   <small>{project.role}</small>
                 </span>

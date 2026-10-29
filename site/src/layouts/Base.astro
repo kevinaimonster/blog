@@ -46,7 +46,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ? `${title} · Kevin` : site.title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#181818" />
+    <meta name="theme-color" content="#101f2d" />
     <meta
       property="og:title"
       content={title ? `${title} · Kevin` : site.title}
@@ -241,7 +241,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         );
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', dark ? '#181818' : '#f5f2eb');
+          ?.setAttribute('content', dark ? '#101f2d' : '#f2f7fa');
       };
       syncTheme();
       themeButton?.addEventListener('click', () => {
