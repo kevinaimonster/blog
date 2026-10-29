@@ -1,0 +1,359 @@
+---
+import {
+  MoonIcon as Moon,
+  SunIcon as Sun,
+  ListIcon as List,
+  XIcon as X,
+} from '@phosphor-icons/react/ssr';
+import {
+  getContent,
+  localeFromPath,
+  localizedPath,
+  translator,
+  withoutLocale,
+  type Locale,
+} from '../data/i18n';
+import { indexable, pageAlternates } from '../data/seo';
+import '@fontsource-variable/geist';
+import '../styles/journal.css';
+import '../styles/glass.css';
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  canonicalPath?: string;
+  alternates?: { locale: Locale; path: string }[];
+  article?: { published: string; modified?: string; tags: string[] };
+}
+const pathname = Astro.url.pathname;
+const locale = localeFromPath(pathname);
+const { site, navigation } = getContent(locale);
+const t = translator(locale);
+const href = (path: string) => localizedPath(path, locale);
+const {
+  title,
+  description = site.description,
+  image = site.avatar,
+  imageAlt = 'Kevin',
+  noindex = false,
+  canonicalPath = pathname,
+  alternates: customAlternates,
+  article,
+} = Astro.props;
+const currentPath = withoutLocale(pathname);
+const isHome = currentPath === '/';
+const isActive = (href: string) =>
+  href === '/' ? isHome : currentPath.startsWith(href);
+const canonical = new URL(canonicalPath, Astro.site);
+const alternates = customAlternates ?? pageAlternates(currentPath);
+const otherLocale = locale === 'en' ? 'zh' : 'en';
+const languagePath =
+  alternates.find((item) => item.locale === otherLocale)?.path ??
+  localizedPath('/notes/', otherLocale);
+const imageUrl = new URL(image, Astro.site).href;
+const defaultPath = alternates.find((item) => item.locale === 'en')?.path;
+const pageTitle = title ? `${title} · Kevin` : site.title;
+const structuredData = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${canonical.href}#article`,
+      mainEntityOfPage: canonical.href,
+      url: canonical.href,
+      headline: title,
+      description,
+      image: [imageUrl],
+      datePublished: article.published,
+      ...(article.modified ? { dateModified: article.modified } : {}),
+      author: {
+        '@type': 'Person',
+        name: 'Kevin',
+        url: new URL(href('/about/'), Astro.site).href,
+      },
+      inLanguage: locale === 'zh' ? 'zh-CN' : 'en',
+      keywords: article.tags,
+    }
+  : undefined;
+---
+
+<!doctype html>
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Kevin" />
+    <meta
+      name="robots"
+      content={
+        indexable && !noindex
+          ? 'index, follow, max-image-preview:large'
+          : 'noindex, follow'
+      }
+    />
+    <meta name="theme-color" content="#142d35" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:site_name" content="Kevin" />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    {alternates
+      .filter((item) => item.locale !== locale)
+      .map((item) => (
+        <meta
+          property="og:locale:alternate"
+          content={item.locale === 'zh' ? 'zh_CN' : 'en_US'}
+        />
+      ))}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    {article && (
+      <>
+        <meta property="article:published_time" content={article.published} />
+        {article.modified && (
+          <meta property="article:modified_time" content={article.modified} />
+        )}
+        <meta
+          property="article:author"
+          content={new URL(href('/about/'), Astro.site)}
+        />
+        {article.tags.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+      </>
+    )}
+    <meta
+      name="twitter:card"
+      content={image === site.avatar ? 'summary' : 'summary_large_image'}
+    />
+    <meta name="twitter:creator" content="@KevinAIMonster" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <meta property="og:url" content={canonical} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((item) => (
+      <link
+        rel="alternate"
+        hreflang={item.locale === 'zh' ? 'zh-CN' : 'en'}
+        href={new URL(item.path, Astro.site)}
+      />
+    ))}
+    {defaultPath && (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={new URL(defaultPath, Astro.site)}
+      />
+    )}
+    {structuredData && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+      />
+    )}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={t('Kevin 的笔记', 'Kevin’s notes')}
+      href={href('/rss.xml')}
+    />
+    <script is:inline>
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('garden-theme') === 'light' ? 'light' : 'dark';
+        if (
+          location.pathname === '/' &&
+          localStorage.getItem('garden-language') === 'zh'
+        ) {
+          location.replace('/zh/' + location.search + location.hash);
+        }
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t('跳到正文', 'Skip to content')}
+    </a>
+    <header
+      class:list={['site-header', 'container', { 'home-header': isHome }]}
+    >
+      <a
+        class="wordmark"
+        href={href('/')}
+        aria-label={t('Kevin 的个人博客首页', 'Kevin’s personal blog home')}
+      >
+        <span class="wordmark-symbol">
+          k<span>.</span>
+        </span>
+        <span class="wordmark-caption">
+          Kevin<small>{t('个人手记', 'A personal journal')}</small>
+        </span>
+      </a>
+      <nav aria-label={t('主导航', 'Main navigation')} class="main-nav">
+        {navigation.map((item) => (
+          <a
+            href={href(item.href)}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <div class="header-tools">
+        <button
+          type="button"
+          class="mobile-menu-button"
+          aria-expanded="false"
+          aria-controls="mobile-navigation"
+          data-menu-toggle
+        >
+          {t('菜单', 'Menu')} <List size={18} aria-hidden="true" />
+        </button>
+        <a
+          class="language-toggle"
+          href={languagePath}
+          lang={locale === 'en' ? 'zh-CN' : 'en'}
+          hreflang={locale === 'en' ? 'zh-CN' : 'en'}
+          aria-label={t('Switch to English', '切换到中文')}
+          data-language-toggle={locale === 'en' ? 'zh' : 'en'}
+        >
+          {t('EN', '中文')}
+        </a>
+        <button
+          class="theme-toggle"
+          type="button"
+          aria-label={t('切换到浅色模式', 'Switch to light mode')}
+          data-theme-toggle
+        >
+          <Sun size={22} className="sun-icon" aria-hidden="true" />
+          <Moon size={22} className="moon-icon" aria-hidden="true" />
+        </button>
+      </div>
+      <dialog
+        id="mobile-navigation"
+        class="mobile-navigation"
+        aria-label={t('手机导航', 'Mobile navigation')}
+      >
+        <div class="mobile-menu-heading">
+          <span>Kevin</span>
+          <button
+            type="button"
+            data-menu-close
+            aria-label={t('关闭菜单', 'Close menu')}
+          >
+            <X size={24} />
+          </button>
+        </div>
+        <nav aria-label={t('手机导航', 'Mobile navigation')}>
+          {navigation.map((item) => (
+            <a
+              href={href(item.href)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </dialog>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer container">
+      <div class="footer-top">
+        <div>
+          <a class="footer-name" href={href('/')}>
+            Kevin<span>.</span>
+          </a>
+          <p>
+            {t(
+              '写下一些事，再慢慢想明白。',
+              'A few things written down. A few things figured out.',
+            )}
+          </p>
+        </div>
+        <a class="text-link" href={href('/rss.xml')}>
+          RSS ↗
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <span>© {new Date().getFullYear()} Kevin</span>
+        <div>
+          <a href={site.x} target="_blank" rel="noopener noreferrer">
+            X ↗
+          </a>
+          <a href={site.github} target="_blank" rel="noopener noreferrer">
+            GitHub ↗
+          </a>
+          <a href={href('/about/')}>
+            {t('关于这个博客', 'About this journal')}
+          </a>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const zh = document.documentElement.lang === 'zh-CN';
+      document
+        .querySelector<HTMLAnchorElement>('[data-language-toggle]')
+        ?.addEventListener('click', (event) => {
+          const link = event.currentTarget as HTMLAnchorElement;
+          try {
+            localStorage.setItem(
+              'garden-language',
+              link.dataset.languageToggle!,
+            );
+          } catch {}
+        });
+      const themeButton = document.querySelector<HTMLButtonElement>(
+        '[data-theme-toggle]',
+      );
+      const syncTheme = () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        themeButton?.setAttribute(
+          'aria-label',
+          zh
+            ? dark
+              ? '切换到浅色模式'
+              : '切换到深色模式'
+            : dark
+              ? 'Switch to light mode'
+              : 'Switch to dark mode',
+        );
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', dark ? '#142d35' : '#f3f0e7');
+      };
+      syncTheme();
+      themeButton?.addEventListener('click', () => {
+        const next =
+          document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('garden-theme', next);
+        } catch {}
+        syncTheme();
+      });
+      const menuButton =
+        document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+      const menu =
+        document.querySelector<HTMLDialogElement>('#mobile-navigation');
+      menuButton?.addEventListener('click', () => {
+        menu?.showModal();
+        menuButton.setAttribute('aria-expanded', 'true');
+      });
+      document
+        .querySelector('[data-menu-close]')
+        ?.addEventListener('click', () => menu?.close());
+      menu?.addEventListener('close', () =>
+        menuButton?.setAttribute('aria-expanded', 'false'),
+      );
+    </script>
+  </body>
+</html>

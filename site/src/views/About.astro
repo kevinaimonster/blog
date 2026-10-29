@@ -1,0 +1,109 @@
+---
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
+import GitHubIcon from '../components/GitHubIcon.astro';
+import XIcon from '../components/XIcon.astro';
+import Base from '../layouts/Base.astro';
+import { getContent, localeFromPath, translator } from '../data/i18n';
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const { site } = getContent(locale);
+---
+
+<Base
+  title={t('关于', 'About')}
+  description={t(
+    '我是 Kevin，构建 AI 产品、macOS 工具与企业 AI 应用。这里记录我的能力、项目与写作。',
+    'I’m Kevin. I build AI products, macOS tools, and custom AI applications. Explore my work, projects, and personal journal.',
+  )}
+>
+  <div class="container page-container about-page">
+    <header class="page-heading">
+      <div class="eyebrow">
+        {t('写这些文字的人', 'The person behind the pages')}
+      </div>
+      <h1>
+        {t('你好，我是 Kevin', 'Hi, I’m Kevin')}
+        <span class="accent-period">.</span>
+      </h1>
+      <p>
+        {t(
+          'AI 产品、macOS 工具，以及企业 AI 定制。',
+          'AI products, macOS tools, and custom AI for businesses.',
+        )}
+      </p>
+    </header>
+    <div class="about-layout">
+      <div class="prose">
+        {site.about.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+        <h2>{t('为什么写这个博客', 'Why keep a journal?')}</h2>
+        <p>
+          {t(
+            '做东西的时候，常常有些不够完整的想法。它们不需要立刻变成结论，但值得被留下。这里是这些想法的落脚处：有时是一篇长文，有时只是一段近况，或一个想再看一遍的链接。',
+            'Making things leaves a trail of unfinished thoughts. They don’t all need to become conclusions, but they deserve somewhere to live. Sometimes that means an essay. Sometimes just a short update, or a link worth returning to.',
+          )}
+        </p>
+        <div class="colophon">
+          <h2>{t('关于这个博客', 'A small colophon')}</h2>
+          <p>
+            {t(
+              '头像与个人资料来自 ',
+              'The avatar and personal details come from ',
+            )}
+            <a
+              href="https://kevin.top/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              kevin.top
+            </a>
+            {t(
+              '。这里是一个独立设计、持续整理的个人博客。',
+              '. This is an independently designed personal blog, always a work in progress.',
+            )}
+          </p>
+          <p>
+            {t(
+              '首页的狐狸工作台插画由 AI 基于我的头像创作；开篇文章的纸页飞鸟也是为这个博客画的一点想象。',
+              'The fox at the workbench was created with AI, based on my avatar. The pages becoming birds in the opening entry are another little piece of imagination for this journal.',
+            )}
+          </p>
+        </div>
+      </div>
+      <aside class="about-links">
+        <img
+          class="about-portrait"
+          src={site.avatar}
+          alt={t(
+            'Kevin 的头像，来自 kevin.top',
+            'Kevin’s avatar from kevin.top',
+          )}
+          width="84"
+          height="84"
+        />
+        <span class="eyebrow">{t('也在这里', 'Elsewhere')}</span>
+        <a href={site.x} target="_blank" rel="noopener noreferrer">
+          <XIcon size={18} />
+          <span>
+            X<small>@KevinAIMonster</small>
+          </span>
+          <ArrowUpRightIcon size={16} />
+        </a>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">
+          <GitHubIcon size={18} />
+          <span>
+            GitHub<small>@kevinaimonster</small>
+          </span>
+          <ArrowUpRightIcon size={16} />
+        </a>
+        <p class="about-location">
+          {t(
+            '独立做 AI 产品，也做企业 AI 定制。',
+            'Independent AI products. Custom AI for businesses.',
+          )}
+        </p>
+      </aside>
+    </div>
+  </div>
+</Base>

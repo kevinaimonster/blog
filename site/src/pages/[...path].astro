@@ -1,0 +1,45 @@
+---
+import { getPublishedNotes, notePath } from '../data/notes';
+import { pagePaths } from '../data/seo';
+import { localizedPath, type Locale } from '../data/i18n';
+import Home from '../views/Home.astro';
+import About from '../views/About.astro';
+import Projects from '../views/Projects.astro';
+import Bookmarks from '../views/Bookmarks.astro';
+import Notes from '../views/Notes.astro';
+import Note from '../views/Note.astro';
+
+export async function getStaticPaths() {
+  return (
+    await Promise.all(
+      (['en', 'zh'] as Locale[]).map(async (locale) => [
+        ...pagePaths.map((page) => ({
+          params: {
+            path:
+              localizedPath(page, locale).replace(/^\/|\/$/g, '') || undefined,
+          },
+          props: { page, note: undefined },
+        })),
+        ...(await getPublishedNotes(locale)).map((note) => ({
+          params: {
+            path: notePath(note).replace(/^\/|\/$/g, ''),
+          },
+          props: { page: '/note/', note },
+        })),
+      ]),
+    )
+  ).flat();
+}
+const views = {
+  '/': Home,
+  '/about/': About,
+  '/projects/': Projects,
+  '/bookmarks/': Bookmarks,
+  '/notes/': Notes,
+  '/note/': Note,
+};
+const { page, note } = Astro.props;
+const Page = views[page as keyof typeof views];
+---
+
+<Page note={note!} />
