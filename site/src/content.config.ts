@@ -5,6 +5,7 @@ import { glob } from 'astro/loaders';
 const notes = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/notes' }),
   schema: z.object({
+    locale: z.enum(['en', 'zh']),
     title: z.string(),
     description: z.string(),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

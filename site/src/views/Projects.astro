@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getContent, localeFromPath, translator } from '../data/i18n';
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const { projects } = getContent(locale);
+---
+
+<Base title={t('项目', 'Projects')}>
+  <div class="container page-container">
+    <header class="page-heading">
+      <div class="eyebrow">PRODUCTS & SELECTED WORK</div>
+      <h1>{t('让想法，有所着落。', 'Ideas, made real.')}</h1>
+      <p>
+        {t(
+          '开源、产品实验与企业 AI 定制，也包括曾经参与的项目。',
+          'Open source, product experiments, and custom enterprise AI, including projects I’ve contributed to.',
+        )}
+      </p>
+    </header>
+    <div class="project-grid">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  </div>
+</Base>

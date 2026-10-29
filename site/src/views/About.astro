@@ -1,0 +1,98 @@
+---
+import { ArrowUpRight } from 'lucide-react';
+import GitHubIcon from '../components/GitHubIcon.astro';
+import XIcon from '../components/XIcon.astro';
+import Base from '../layouts/Base.astro';
+import { getContent, localeFromPath, translator } from '../data/i18n';
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const { site } = getContent(locale);
+---
+
+<Base title={t('关于', 'About')}>
+  <div class="container page-container about-page">
+    <header class="page-heading">
+      <div class="eyebrow">A LITTLE ABOUT ME</div>
+      <h1>
+        {t('你好，我是 Kevin', 'Hi, I’m Kevin')}
+        <span class="accent-period">.</span>
+      </h1>
+      <p>
+        {t(
+          '独立做 AI 产品，也做企业 AI 定制。',
+          'Independent AI products. Custom AI for businesses.',
+        )}
+      </p>
+    </header>
+    <div class="about-layout">
+      <div class="prose">
+        {site.about.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+        <h2>{t('在这里，你会看到', 'What you’ll find here')}</h2>
+        <ul>
+          <li>
+            <strong>{t('近况', 'Updates')}</strong>
+            {t(
+              '：短一点的记录，还没想完也没关系。',
+              ': short observations, even when the thought is still taking shape.',
+            )}
+          </li>
+          <li>
+            <strong>{t('笔记', 'Notes')}</strong>
+            {t(
+              '：完整一点的思考与过程。',
+              ': more room for ideas and the process behind them.',
+            )}
+          </li>
+          <li>
+            <strong>{t('收藏', 'Bookmarks')}</strong>
+            {t('：值得再次回来的链接。', ': links worth coming back to.')}
+          </li>
+          <li>
+            <strong>{t('项目', 'Projects')}</strong>
+            {t(
+              '：正在做的作品，以及它们的进展。',
+              ': things I’m building and how they’re progressing.',
+            )}
+          </li>
+        </ul>
+        <h2>{t('关于这个网站', 'About this website')}</h2>
+        <p>
+          {t(
+            '这个网站以 Spotlight 为视觉参考，使用独立编写的代码实现。内容会持续补充，结构也会随着使用慢慢调整。',
+            'This site is independently built, with Spotlight as a visual reference. The content and structure will evolve as I use it.',
+          )}
+        </p>
+        <p>
+          {t(
+            '头像、海滩插画和个人资料沿用自 ',
+            'The avatar, beach illustration, and personal details come from ',
+          )}
+          <a href="https://kevin.top/">kevin.top</a>
+          {t(
+            '。图片带中的其余图片来自 Unsplash 图库，不代表个人摄影或旅行经历；点击图片可查看来源。',
+            '. The other images are stock photographs from Unsplash, rather than my own photography or travel memories. Each image links to its source.',
+          )}
+        </p>
+      </div>
+      <aside class="about-links">
+        <span class="eyebrow">ELSEWHERE</span>
+        <a href={site.x} target="_blank" rel="noopener noreferrer">
+          <XIcon size={18} />
+          <span>
+            X<small>@KevinAIMonster</small>
+          </span>
+          <ArrowUpRight size={16} />
+        </a>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">
+          <GitHubIcon size={18} />
+          <span>
+            GitHub<small>@kevinaimonster</small>
+          </span>
+          <ArrowUpRight size={16} />
+        </a>
+      </aside>
+    </div>
+  </div>
+</Base>

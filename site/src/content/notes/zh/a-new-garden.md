@@ -1,4 +1,5 @@
 ---
+locale: zh
 title: 给想法留一块生长的地方
 description: 关于这个数字花园，以及准备怎样使用它。
 date: '2026-10-29'

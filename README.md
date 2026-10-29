@@ -20,13 +20,14 @@ npm test
 
 ## 修改内容
 
-| 内容                               | 文件                                 |
-| ---------------------------------- | ------------------------------------ |
-| 名字、介绍、导航、近况、收藏、项目 | `site/src/data/site.ts`              |
-| 长篇笔记                           | `site/src/content/notes/*.md`        |
-| 首页布局                           | `site/src/pages/index.astro`         |
-| 色彩、字体、间距和响应式样式       | `site/src/styles/global.css`         |
-| 搜索和分类筛选                     | `site/src/components/GardenFeed.tsx` |
+| 内容                                   | 文件                                  |
+| -------------------------------------- | ------------------------------------- |
+| 中文名字、介绍、导航、近况、收藏、项目 | `site/src/data/site.ts`               |
+| 英文内容与语言辅助函数                 | `site/src/data/i18n.ts`               |
+| 长篇笔记                               | `site/src/content/notes/{en,zh}/*.md` |
+| 首页布局                               | `site/src/views/Home.astro`           |
+| 色彩、字体、间距和响应式样式           | `site/src/styles/global.css`          |
+| 搜索和分类筛选                         | `site/src/components/GardenFeed.tsx`  |
 
 个人介绍、Second Me / valseit / Avatar / UPon 项目资料取自用户指定的 [kevin.top](https://kevin.top/)，文字作了压缩，未迁入可能过时的星数或上架进度。Flash 保留已确认的公开发布仓库链接。建站近况与建站笔记仍为起始文案。
 
@@ -34,7 +35,13 @@ npm test
 
 首页及关于页的社交入口只保留 X 与 GitHub。X 地址由用户明确提供：`https://x.com/KevinAIMonster`；GitHub 地址为 `https://github.com/kevinaimonster`。RSS 保留为独立订阅功能。
 
-新增笔记时复制现有 Markdown 的 frontmatter，日期使用 `YYYY-MM-DD`。`draft: true` 会同时从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。
+新增笔记时复制现有 Markdown 的 frontmatter，日期使用 `YYYY-MM-DD`，并指定 `locale: en` 或 `locale: zh`。同一篇笔记在两个语言目录下使用相同文件名，以支持当前页面切换语言；发布前一并补全两个版本。`draft: true` 会同时从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。
+
+## 默认外观与语言
+
+首次访问默认深色、英文，不跟随系统语言或系统主题。顶栏支持浅色/深色和中文/英文切换；选择分别保存在当前浏览器的 `garden-theme` 与 `garden-language` 中。以前明确选择的浅色仍保留。
+
+英文页面位于 `/`，中文页面位于 `/zh/`；各自有独立的笔记、RSS 与元数据。语言切换保留当前页面；再次从 `/` 进入时恢复保存的语言。直接打开某个语言的内容链接时尊重该链接。浏览器禁用本地存储或 JavaScript 时，默认页面仍是深色英文，中文链接仍可使用。
 
 ## 发布
 

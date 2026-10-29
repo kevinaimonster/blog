@@ -1,13 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
+import { getNotes, noteSlug } from '../data/notes';
 import { Rss, BriefcaseBusiness, ArrowRight, Copy } from 'lucide-react';
 import Base from '../layouts/Base.astro';
 import GitHubIcon from '../components/GitHubIcon.astro';
 import XIcon from '../components/XIcon.astro';
 import ProjectIcon from '../components/ProjectIcon.astro';
 import GardenFeed, { type FeedItem } from '../components/GardenFeed';
-import { site, projects, thoughts, bookmarks, photos } from '../data/site';
-const notes = await getCollection('notes', ({ data }) => !data.draft);
+import {
+  getContent,
+  localeFromPath,
+  localizedPath,
+  translator,
+} from '../data/i18n';
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const href = (path: string) => localizedPath(path, locale);
+const { site, projects, thoughts, bookmarks, photos } = getContent(locale);
+const notes = await getNotes(locale);
 const items: FeedItem[] = [
   ...notes.map((note) => ({
     id: note.id,
@@ -15,12 +24,12 @@ const items: FeedItem[] = [
     title: note.data.title,
     text: note.data.description,
     tag: note.data.tags[0],
-    url: `/notes/${note.id}/`,
+    url: href(`/notes/${noteSlug(note)}/`),
     kind: 'note' as const,
   })),
   ...thoughts.map((item) => ({
     ...item,
-    title: '一条建站近况',
+    title: t('一条建站近况', 'A small update on this site'),
     kind: 'thought' as const,
   })),
   ...bookmarks.map((item) => ({
@@ -34,10 +43,14 @@ const items: FeedItem[] = [
 
 <Base>
   <section class="hero container" aria-labelledby="hero-title">
-    <a class="hero-avatar" href="/about/" aria-label="关于 Kevin">
+    <a
+      class="hero-avatar"
+      href={href('/about/')}
+      aria-label={t('关于 Kevin', 'About Kevin')}
+    >
       <img
         src={site.avatar}
-        alt="Kevin 的头像，来自 kevin.top"
+        alt={t('Kevin 的头像，来自 kevin.top', 'Kevin’s avatar from kevin.top')}
         width="64"
         height="64"
         fetchpriority="high"
@@ -55,7 +68,7 @@ const items: FeedItem[] = [
           href={site.x}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Kevin 的 X"
+          aria-label={t('Kevin 的 X', 'Kevin on X')}
         >
           <XIcon />
         </a>
@@ -63,7 +76,7 @@ const items: FeedItem[] = [
           href={site.github}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Kevin 的 GitHub"
+          aria-label={t('Kevin 的 GitHub', 'Kevin on GitHub')}
         >
           <GitHubIcon />
         </a>
@@ -72,7 +85,10 @@ const items: FeedItem[] = [
   </section>
   <section
     class="photo-section"
-    aria-label="图片带：原站插画与可替换的图库示意图"
+    aria-label={t(
+      '图片带：原站插画与可替换的图库示意图',
+      'An illustration from kevin.top and stock photographs',
+    )}
   >
     <div class="photo-track">
       {photos.map((photo) => (
@@ -88,7 +104,7 @@ const items: FeedItem[] = [
             href={photo.source}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`查看${photo.kind}来源：${photo.alt}`}
+            aria-label={`${t('查看来源', 'View source')}: ${photo.alt}`}
           >
             <span>
               {photo.kind} · {photo.credit}
@@ -99,8 +115,11 @@ const items: FeedItem[] = [
     </div>
   </section>
   <div class="journal-grid container">
-    <section aria-label="笔记与近况" class="journal-main">
-      <GardenFeed items={items} client:load />
+    <section
+      aria-label={t('笔记与近况', 'Notes and updates')}
+      class="journal-main"
+    >
+      <GardenFeed items={items} locale={locale} client:load />
     </section>
     <aside class="journal-aside">
       <section
@@ -109,16 +128,30 @@ const items: FeedItem[] = [
       >
         <h2 id="subscribe-title">
           <Rss size={22} aria-hidden="true" />
-          保持联系
+          {t('保持联系', 'Stay in the loop')}
         </h2>
-        <p>通过 RSS 查看新笔记，按自己的节奏阅读。</p>
+        <p>
+          {t(
+            '通过 RSS 查看新笔记，按自己的节奏阅读。',
+            'New notes via RSS. Read them at your own pace.',
+          )}
+        </p>
         <div class="rss-controls">
-          <a href="/rss.xml" class="rss-address">
-            Kevin 的笔记 · RSS
+          <a href={href('/rss.xml')} class="rss-address">
+            {t('Kevin 的笔记 · RSS', 'Kevin’s notes · RSS')}
           </a>
-          <button type="button" data-copy-rss aria-label="复制 RSS 订阅地址">
+          <button
+            type="button"
+            data-copy-rss
+            data-copy-success={t('订阅地址已复制', 'Feed address copied')}
+            data-copy-error={t(
+              '暂时无法复制，可以打开左侧 RSS 链接获取地址。',
+              'Could not copy. Open the RSS link to get the address.',
+            )}
+            aria-label={t('复制 RSS 订阅地址', 'Copy RSS feed address')}
+          >
             <Copy size={15} aria-hidden="true" />
-            复制
+            {t('复制', 'Copy')}
           </button>
         </div>
         <span class="copy-status" role="status" data-copy-status></span>
@@ -126,7 +159,7 @@ const items: FeedItem[] = [
       <section class="sidebar-card work-card" aria-labelledby="work-title">
         <h2 id="work-title">
           <BriefcaseBusiness size={22} aria-hidden="true" />
-          作品与项目
+          {t('作品与项目', 'Selected work')}
         </h2>
         <ul>
           {projects
@@ -156,8 +189,8 @@ const items: FeedItem[] = [
               </li>
             ))}
         </ul>
-        <a class="subtle-button" href="/projects/">
-          查看所有项目 <ArrowRight size={15} />
+        <a class="subtle-button" href={href('/projects/')}>
+          {t('查看所有项目', 'View all projects')} <ArrowRight size={15} />
         </a>
       </section>
     </aside>
@@ -168,12 +201,11 @@ const items: FeedItem[] = [
       const status = document.querySelector<HTMLElement>('[data-copy-status]');
       try {
         await navigator.clipboard.writeText(
-          new URL('/rss.xml', location.origin).href,
+          document.querySelector<HTMLAnchorElement>('.rss-address')!.href,
         );
-        if (status) status.textContent = '订阅地址已复制';
+        if (status) status.textContent = button.dataset.copySuccess!;
       } catch {
-        if (status)
-          status.textContent = '暂时无法复制，可以打开左侧 RSS 链接获取地址。';
+        if (status) status.textContent = button.dataset.copyError!;
       }
     });
   </script>

@@ -1,0 +1,52 @@
+---
+import { getNotes, noteSlug } from '../data/notes';
+import { localeFromPath, localizedPath, translator } from '../data/i18n';
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const href = (path: string) => localizedPath(path, locale);
+
+import { ArrowUpRight, Rss } from 'lucide-react';
+import Base from '../layouts/Base.astro';
+const notes = await getNotes(locale);
+---
+
+<Base title={t('笔记', 'Notes')}>
+  <div class="container page-container">
+    <header class="page-heading">
+      <div class="eyebrow">NOTES & WRITING</div>
+      <h1>{t('把过程，写下来。', 'Notes along the way.')}</h1>
+      <p>
+        {t(
+          '一些想明白的事，也有一些还在寻找答案的问题。',
+          'Things I’ve figured out, and questions I’m still working through.',
+        )}
+      </p>
+      <a class="text-link" href={href('/rss.xml')}>
+        <Rss size={15} /> {t('订阅笔记', 'Subscribe via RSS')}
+      </a>
+    </header>
+    <div class="notes-list">
+      {notes.map((note) => (
+        <article>
+          <time datetime={note.data.date}>
+            {note.data.date.replaceAll('-', '.')}
+          </time>
+          <div>
+            <div class="tag-list">
+              {note.data.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+            <h2>
+              <a href={href(`/notes/${noteSlug(note)}/`)}>
+                {note.data.title}
+                <ArrowUpRight size={19} />
+              </a>
+            </h2>
+            <p>{note.data.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Base>

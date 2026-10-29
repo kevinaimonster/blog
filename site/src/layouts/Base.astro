@@ -1,27 +1,41 @@
 ---
 import { Moon, Sun, ChevronDown } from 'lucide-react';
-import { site, navigation } from '../data/site';
+import {
+  getContent,
+  localeFromPath,
+  localizedPath,
+  translator,
+  withoutLocale,
+} from '../data/i18n';
 import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
 }
-const { title, description = site.description } = Astro.props;
 const pathname = Astro.url.pathname;
-const isHome = pathname === '/';
+const locale = localeFromPath(pathname);
+const { site, navigation } = getContent(locale);
+const t = translator(locale);
+const href = (path: string) => localizedPath(path, locale);
+const { title, description = site.description } = Astro.props;
+const currentPath = withoutLocale(pathname);
+const isHome = currentPath === '/';
 const isActive = (href: string) =>
-  href === '/' ? isHome : pathname.startsWith(href);
+  href === '/' ? isHome : currentPath.startsWith(href);
 const canonical = new URL(pathname, Astro.site);
+const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
+  ? '/'
+  : currentPath;
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html lang={locale === 'zh' ? 'zh-CN' : 'en'} data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ? `${title} · Kevin` : site.title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#18181b" />
     <meta
       property="og:title"
       content={title ? `${title} · Kevin` : site.title}
@@ -30,44 +44,70 @@ const canonical = new URL(pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href={new URL(localizedPath(alternatePath, 'en'), Astro.site)}
+    />
+    <link
+      rel="alternate"
+      hreflang="zh-CN"
+      href={new URL(localizedPath(alternatePath, 'zh'), Astro.site)}
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="Kevin 的笔记"
-      href="/rss.xml"
+      title={t('Kevin 的笔记', 'Kevin’s notes')}
+      href={href('/rss.xml')}
     />
     <script is:inline>
       try {
         document.documentElement.dataset.theme =
-          localStorage.getItem('garden-theme') === 'dark' ? 'dark' : 'light';
+          localStorage.getItem('garden-theme') === 'light' ? 'light' : 'dark';
+        if (
+          location.pathname === '/' &&
+          localStorage.getItem('garden-language') === 'zh'
+        ) {
+          location.replace('/zh/' + location.search + location.hash);
+        }
       } catch {}
     </script>
   </head>
   <body>
     <div class="page-backdrop" aria-hidden="true"></div>
     <a class="skip-link" href="#main">
-      跳到正文
+      {t('跳到正文', 'Skip to content')}
     </a>
     <header
       class:list={['site-header', 'container', { 'home-header': isHome }]}
     >
       <div class="header-avatar-slot">
         {!isHome && (
-          <a href="/" class="header-avatar" aria-label="Kevin 的数字花园首页">
+          <a
+            href={href('/')}
+            class="header-avatar"
+            aria-label={t(
+              'Kevin 的数字花园首页',
+              'Kevin’s digital garden home',
+            )}
+          >
             <img
               src={site.avatar}
-              alt="Kevin 的头像，来自 kevin.top"
+              alt={t(
+                'Kevin 的头像，来自 kevin.top',
+                'Kevin’s avatar from kevin.top',
+              )}
               width="40"
               height="40"
             />
           </a>
         )}
       </div>
-      <nav aria-label="主导航" class="main-nav">
+      <nav aria-label={t('主导航', 'Main navigation')} class="main-nav">
         {navigation.map((item) => (
           <a
-            href={item.href}
+            href={href(item.href)}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
             {item.label}
@@ -82,12 +122,22 @@ const canonical = new URL(pathname, Astro.site);
           aria-controls="mobile-navigation"
           data-menu-toggle
         >
-          菜单 <ChevronDown size={14} aria-hidden="true" />
+          {t('菜单', 'Menu')} <ChevronDown size={14} aria-hidden="true" />
         </button>
+        <a
+          class="language-toggle"
+          href={localizedPath(alternatePath, locale === 'en' ? 'zh' : 'en')}
+          lang={locale === 'en' ? 'zh-CN' : 'en'}
+          hreflang={locale === 'en' ? 'zh-CN' : 'en'}
+          aria-label={t('Switch to English', '切换到中文')}
+          data-language-toggle={locale === 'en' ? 'zh' : 'en'}
+        >
+          {t('EN', '中')}
+        </a>
         <button
           class="theme-toggle"
           type="button"
-          aria-label="切换到深色模式"
+          aria-label={t('切换到浅色模式', 'Switch to light mode')}
           data-theme-toggle
         >
           <Sun size={22} className="sun-icon" aria-hidden="true" />
@@ -97,12 +147,12 @@ const canonical = new URL(pathname, Astro.site);
       <nav
         id="mobile-navigation"
         class="mobile-navigation"
-        aria-label="手机导航"
+        aria-label={t('手机导航', 'Mobile navigation')}
         hidden
       >
         {navigation.map((item) => (
           <a
-            href={item.href}
+            href={href(item.href)}
             aria-current={isActive(item.href) ? 'page' : undefined}
           >
             {item.label}
@@ -114,16 +164,31 @@ const canonical = new URL(pathname, Astro.site);
       <slot />
     </main>
     <footer class="site-footer container">
-      <nav aria-label="页尾导航">
+      <nav aria-label={t('页尾导航', 'Footer navigation')}>
         {navigation
           .filter((item) => item.href !== '/')
           .map((item) => (
-            <a href={item.href}>{item.label}</a>
+            <a href={href(item.href)}>{item.label}</a>
           ))}
       </nav>
-      <span>© {new Date().getFullYear()} Kevin. 保留所有权利。</span>
+      <span>
+        © {new Date().getFullYear()} Kevin.{' '}
+        {t('保留所有权利。', 'All rights reserved.')}
+      </span>
     </footer>
     <script>
+      const zh = document.documentElement.lang === 'zh-CN';
+      document
+        .querySelector<HTMLAnchorElement>('[data-language-toggle]')
+        ?.addEventListener('click', (event) => {
+          const link = event.currentTarget as HTMLAnchorElement;
+          try {
+            localStorage.setItem(
+              'garden-language',
+              link.dataset.languageToggle!,
+            );
+          } catch {}
+        });
       const themeButton = document.querySelector<HTMLButtonElement>(
         '[data-theme-toggle]',
       );
@@ -131,7 +196,13 @@ const canonical = new URL(pathname, Astro.site);
         const dark = document.documentElement.dataset.theme === 'dark';
         themeButton?.setAttribute(
           'aria-label',
-          dark ? '切换到浅色模式' : '切换到深色模式',
+          zh
+            ? dark
+              ? '切换到浅色模式'
+              : '切换到深色模式'
+            : dark
+              ? 'Switch to light mode'
+              : 'Switch to dark mode',
         );
         document
           .querySelector('meta[name="theme-color"]')
@@ -160,7 +231,7 @@ const canonical = new URL(pathname, Astro.site);
         menuButton.setAttribute('aria-expanded', String(!expanded));
       });
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
+        if (event.key === 'Escape' && menu && !menu.hidden) {
           closeMenu();
           menuButton?.focus();
         }

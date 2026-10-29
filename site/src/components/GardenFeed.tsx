@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Search, ChevronRight, ArrowUpRight, X } from 'lucide-react';
+import { translator, type Locale } from '../data/i18n';
 export interface FeedItem {
   id: string;
   kind: 'thought' | 'note' | 'bookmark';
@@ -10,18 +11,32 @@ export interface FeedItem {
   url?: string;
   domain?: string;
 }
-const categories = [
-  { key: 'all', label: '全部' },
-  { key: 'note', label: '笔记' },
-  { key: 'thought', label: '近况' },
-  { key: 'bookmark', label: '收藏' },
-];
-const labels = { thought: '近况', note: '笔记', bookmark: '收藏' };
-const displayDate = (date: string) => {
-  const [year, month, day] = date.split('-');
-  return `${year} 年 ${Number(month)} 月 ${Number(day)} 日`;
-};
-export default function GardenFeed({ items }: { items: FeedItem[] }) {
+export default function GardenFeed({
+  items,
+  locale,
+}: {
+  items: FeedItem[];
+  locale: Locale;
+}) {
+  const t = translator(locale);
+  const categories = [
+    { key: 'all', label: t('全部', 'All') },
+    { key: 'note', label: t('笔记', 'Notes') },
+    { key: 'thought', label: t('近况', 'Updates') },
+    { key: 'bookmark', label: t('收藏', 'Bookmarks') },
+  ];
+  const labels = {
+    thought: t('近况', 'Update'),
+    note: t('笔记', 'Note'),
+    bookmark: t('收藏', 'Bookmark'),
+  };
+  const displayDate = (date: string) =>
+    new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'UTC',
+    }).format(new Date(date + 'T00:00:00Z'));
   const [category, setCategory] = useState('all');
   const [query, setQuery] = useState('');
   const filtered = useMemo(
@@ -43,7 +58,11 @@ export default function GardenFeed({ items }: { items: FeedItem[] }) {
   return (
     <div className="garden-feed">
       <div className="feed-controls">
-        <div className="feed-tabs" role="group" aria-label="按内容类型筛选">
+        <div
+          className="feed-tabs"
+          role="group"
+          aria-label={t('按内容类型筛选', 'Filter by content type')}
+        >
           {categories.map((item) => (
             <button
               type="button"
@@ -59,15 +78,15 @@ export default function GardenFeed({ items }: { items: FeedItem[] }) {
           <Search size={16} aria-hidden="true" />
           <input
             type="search"
-            aria-label="搜索花园内容"
-            placeholder="搜索"
+            aria-label={t('搜索花园内容', 'Search the garden')}
+            placeholder={t('搜索', 'Search')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
           {query && (
             <button
               type="button"
-              aria-label="清空搜索"
+              aria-label={t('清空搜索', 'Clear search')}
               onClick={() => setQuery('')}
             >
               <X size={14} />
@@ -79,10 +98,15 @@ export default function GardenFeed({ items }: { items: FeedItem[] }) {
         {filtered.length === 0 ? (
           <div className="empty-state">
             <Search size={24} />
-            <h3>暂时没有找到</h3>
-            <p>试试别的关键词，或看看全部内容。</p>
+            <h3>{t('暂时没有找到', 'Nothing found yet')}</h3>
+            <p>
+              {t(
+                '试试别的关键词，或看看全部内容。',
+                'Try another keyword, or browse everything.',
+              )}
+            </p>
             <button className="text-link" onClick={reset}>
-              查看全部内容 <ChevronRight size={16} />
+              {t('查看全部内容', 'Show everything')} <ChevronRight size={16} />
             </button>
           </div>
         ) : (
@@ -115,7 +139,7 @@ export default function GardenFeed({ items }: { items: FeedItem[] }) {
               <p>{item.text}</p>
               {item.kind === 'note' && (
                 <a className="text-link" href={item.url}>
-                  继续阅读 <ChevronRight size={15} />
+                  {t('继续阅读', 'Read more')} <ChevronRight size={15} />
                 </a>
               )}
               {item.kind === 'bookmark' && (
