@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { ArrowLeft } from 'lucide-react';
+---
+
+<Base title="页面未找到">
+  <div class="container not-found">
+    <div class="eyebrow">404 / NOT FOUND</div>
+    <h1>这个页面不在这里。</h1>
+    <p>链接可能已经变更，可以回到首页继续浏览。</p>
+    <a class="primary-link" href="/">
+      <ArrowLeft size={16} /> 回到花园
+    </a>
+  </div>
+</Base>

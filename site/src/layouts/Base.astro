@@ -1,0 +1,131 @@
+---
+import { Moon, Sun, ArrowUpRight, Code, Rss } from 'lucide-react';
+import { site, navigation } from '../data/site';
+import '../styles/global.css';
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = site.description } = Astro.props;
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+const canonical = new URL(pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ? `${title} · Kevin` : site.title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fafaf7" />
+    <meta
+      property="og:title"
+      content={title ? `${title} · Kevin` : site.title}
+    />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Kevin 的笔记"
+      href="/rss.xml"
+    />
+    <script is:inline>
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('garden-theme') === 'dark' ? 'dark' : 'light';
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      跳到正文
+    </a>
+    <div class="site-shell">
+      <header class="site-header container">
+        <a href="/" class="wordmark" aria-label="Kevin 的数字花园首页">
+          <span class="monogram">
+            k<span>.</span>
+          </span>
+          <span>
+            Kevin<span class="wordmark-caption"> / 数字花园</span>
+          </span>
+        </a>
+        <nav aria-label="主导航" class="main-nav">
+          {navigation.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <button
+          class="theme-toggle icon-button"
+          type="button"
+          aria-label="切换到深色模式"
+          data-theme-toggle
+        >
+          <Sun size={19} className="sun-icon" aria-hidden="true" />
+          <Moon size={19} className="moon-icon" aria-hidden="true" />
+        </button>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="site-footer container">
+        <div class="footer-line">
+          <a href="/" class="footer-name">
+            Kevin<span class="small-dot"></span>
+          </a>
+          <span>记录，整理，继续前行。</span>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} Kevin</span>
+          <div>
+            <a href={site.github} target="_blank" rel="noopener noreferrer">
+              <Code size={14} aria-hidden="true" /> GitHub{' '}
+              <ArrowUpRight size={12} aria-hidden="true" />
+            </a>
+            <a href="/rss.xml">
+              <Rss size={14} aria-hidden="true" /> RSS
+            </a>
+            <a href="/about/">关于本站</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script>
+      const button = document.querySelector<HTMLButtonElement>(
+        '[data-theme-toggle]',
+      );
+      const syncTheme = () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        button?.setAttribute(
+          'aria-label',
+          dark ? '切换到浅色模式' : '切换到深色模式',
+        );
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute('content', dark ? '#171b19' : '#fafaf7');
+      };
+      syncTheme();
+      button?.addEventListener('click', () => {
+        const next =
+          document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem('garden-theme', next);
+        } catch {}
+        syncTheme();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+---
+import { ArrowUpRight, Code, Rss } from 'lucide-react';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+
+<Base title="关于">
+  <div class="container page-container about-page">
+    <header class="page-heading">
+      <div class="eyebrow">A LITTLE ABOUT ME</div>
+      <h1>
+        你好，我是 Kevin<span class="accent-period">.</span>
+      </h1>
+      <p>构建产品，也记录思考。</p>
+    </header>
+    <div class="about-layout">
+      <div class="prose">
+        {site.about.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+        <h2>在这里，你会看到</h2>
+        <ul>
+          <li>
+            <strong>近况</strong>：短一点的记录，还没想完也没关系。
+          </li>
+          <li>
+            <strong>笔记</strong>：完整一点的思考与过程。
+          </li>
+          <li>
+            <strong>收藏</strong>：值得再次回来的链接。
+          </li>
+          <li>
+            <strong>项目</strong>：正在做的作品，以及它们的进展。
+          </li>
+        </ul>
+        <h2>关于这个网站</h2>
+        <p>
+          这个网站采用原创设计，视觉上参考了 Spotlight
+          的留白与阅读节奏。内容会持续补充，结构也会随着使用慢慢调整。
+        </p>
+      </div>
+      <aside class="about-links">
+        <span class="eyebrow">ELSEWHERE</span>
+        <a href={site.github} target="_blank" rel="noopener noreferrer">
+          <Code size={18} />
+          <span>
+            GitHub<small>@kevinaimonster</small>
+          </span>
+          <ArrowUpRight size={16} />
+        </a>
+        <a href="/rss.xml">
+          <Rss size={18} />
+          <span>
+            RSS<small>用阅读器订阅笔记</small>
+          </span>
+          <ArrowUpRight size={16} />
+        </a>
+      </aside>
+    </div>
+  </div>
+</Base>

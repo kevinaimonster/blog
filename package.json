@@ -1,0 +1,32 @@
+{
+  "name": "kevin-digital-garden",
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --root site --host 127.0.0.1 --ignore-lock",
+    "build": "astro build --root site",
+    "preview": "astro preview --root site --host 127.0.0.1 --ignore-lock",
+    "check": "astro check --root site",
+    "test": "node --test tests/*.test.mjs",
+    "format": "prettier --write site/src site/astro.config.mjs tests package.json README.md"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "8.1.2",
+    "@astrojs/react": "7.1.2",
+    "astro": "7.4.4",
+    "lucide-react": "1.64.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "latest"
+  }
+}

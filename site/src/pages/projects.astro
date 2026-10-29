@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/site';
+---
+
+<Base title="项目">
+  <div class="container page-container">
+    <header class="page-heading">
+      <div class="eyebrow">THINGS I AM BUILDING</div>
+      <h1>让想法，有所着落。</h1>
+      <p>一些做出来的东西，也有一些正在生长的尝试。</p>
+    </header>
+    <div class="project-grid">
+      {projects.map((project) => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  </div>
+</Base>

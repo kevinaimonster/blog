@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowUpRight, Rss } from 'lucide-react';
+import Base from '../../layouts/Base.astro';
+const notes = (await getCollection('notes', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.localeCompare(a.data.date),
+);
+---
+
+<Base title="笔记">
+  <div class="container page-container">
+    <header class="page-heading">
+      <div class="eyebrow">NOTES & WRITING</div>
+      <h1>把过程，写下来。</h1>
+      <p>一些想明白的事，也有一些还在寻找答案的问题。</p>
+      <a class="text-link" href="/rss.xml">
+        <Rss size={15} /> 订阅笔记
+      </a>
+    </header>
+    <div class="notes-list">
+      {notes.map((note) => (
+        <article>
+          <time datetime={note.data.date}>
+            {note.data.date.replaceAll('-', '.')}
+          </time>
+          <div>
+            <div class="tag-list">
+              {note.data.tags.map((tag) => (
+                <span>{tag}</span>
+              ))}
+            </div>
+            <h2>
+              <a href={`/notes/${note.id}/`}>
+                {note.data.title}
+                <ArrowUpRight size={19} />
+              </a>
+            </h2>
+            <p>{note.data.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Base>

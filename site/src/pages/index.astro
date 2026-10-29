@@ -1,0 +1,144 @@
+---
+import { getCollection } from 'astro:content';
+import {
+  ArrowUpRight,
+  ArrowRight,
+  Code,
+  Rss,
+  BookOpen,
+  Compass,
+} from 'lucide-react';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import GardenFeed, { type FeedItem } from '../components/GardenFeed';
+import { site, projects, thoughts, bookmarks } from '../data/site';
+const notes = await getCollection('notes', ({ data }) => !data.draft);
+const items: FeedItem[] = [
+  ...thoughts.map((item) => ({ ...item, kind: 'thought' as const })),
+  ...notes.map((note) => ({
+    id: note.id,
+    date: note.data.date,
+    title: note.data.title,
+    text: note.data.description,
+    tag: note.data.tags[0],
+    url: `/notes/${note.id}/`,
+    kind: 'note' as const,
+  })),
+  ...bookmarks.map((item) => ({
+    ...item,
+    text: item.description,
+    tag: item.category,
+    kind: 'bookmark' as const,
+  })),
+].sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<Base>
+  <div class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-main">
+        <div class="eyebrow">
+          <span class="small-dot"></span> A PERSONAL WORK IN PROGRESS
+        </div>
+        <h1 id="hero-title">
+          {site.headline[0]}
+          <br />
+          <span>{site.headline[1]}</span>
+        </h1>
+        <p class="hero-intro">{site.intro}</p>
+        <div class="hero-actions">
+          <a class="primary-link" href="/notes/">
+            读一些笔记 <ArrowRight size={16} />
+          </a>
+          <a
+            class="quiet-link"
+            href={site.github}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Code size={17} /> GitHub <ArrowUpRight size={14} />
+          </a>
+        </div>
+      </div>
+      <aside class="now-note">
+        <div class="now-heading">
+          <span class="status-dot"></span>
+          <span>此刻 / NOW</span>
+        </div>
+        <p>
+          把这个空间
+          <br />
+          慢慢搭起来。
+        </p>
+        <div class="now-foot">
+          <span>一个新的开始</span>
+          <span>2026.10</span>
+        </div>
+        <div class="now-line"></div>
+      </aside>
+    </section>
+    <section class="projects-section" aria-labelledby="projects-heading">
+      <div class="section-heading">
+        <h2 id="projects-heading">
+          正在做<span class="section-en">SELECTED WORK</span>
+        </h2>
+        <a class="quiet-link" href="/projects/">
+          全部项目 <ArrowUpRight size={15} />
+        </a>
+      </div>
+      <div class="project-grid">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+    <section class="journal-section" aria-labelledby="journal-heading">
+      <div class="section-heading">
+        <h2 id="journal-heading">
+          最近留下的<span class="section-en">THE GARDEN</span>
+        </h2>
+        <a class="rss-link" href="/rss.xml" aria-label="订阅笔记 RSS">
+          <Rss size={16} />
+        </a>
+      </div>
+      <div class="journal-grid">
+        <GardenFeed items={items} client:load />
+        <aside class="journal-aside">
+          <div class="aside-note">
+            <BookOpen size={19} aria-hidden="true" />
+            <h3>不必等到想清楚。</h3>
+            <p>
+              一个正在推进的项目，一段尚未成形的想法，一条值得回看的链接。先留下，再整理。
+            </p>
+            <a class="text-link" href="/about/">
+              关于这块花园 <ArrowUpRight size={14} />
+            </a>
+          </div>
+          <div class="aside-directory">
+            <div class="aside-label">
+              <Compass size={15} /> 随处看看
+            </div>
+            <a href="/notes/">
+              <span>笔记</span>
+              <span>
+                更完整的思考 <ArrowUpRight size={13} />
+              </span>
+            </a>
+            <a href="/bookmarks/">
+              <span>收藏</span>
+              <span>
+                值得再看的链接 <ArrowUpRight size={13} />
+              </span>
+            </a>
+            <a href="/projects/">
+              <span>项目</span>
+              <span>
+                做出来的东西 <ArrowUpRight size={13} />
+              </span>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </div>
+</Base>

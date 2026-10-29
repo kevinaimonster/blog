@@ -1,0 +1,9 @@
+node_modules/
+site/dist/
+site/.astro/
+.sites-runtime/
+.DS_Store
+.env
+.env.*
+!.env.example
+artifacts/

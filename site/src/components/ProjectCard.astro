@@ -1,0 +1,67 @@
+---
+import { ArrowUpRight, ArrowRight, MoveUpRight } from 'lucide-react';
+import { projects } from '../data/site';
+interface Props {
+  project: (typeof projects)[number];
+}
+const { project } = Astro.props;
+const external = project.url.startsWith('http');
+---
+
+<a
+  class="project-card"
+  href={project.url}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+>
+  <div class:list={['project-art', `art-${project.visual}`]} aria-hidden="true">
+    <div class="art-topline">
+      <span>{project.eyebrow}</span>
+      <span>KEVIN / {project.visual === 'flash' ? '01' : '02'}</span>
+    </div>
+    {project.visual === 'flash' ? (
+      <div class="flash-art">
+        <div class="flash-orbit"></div>
+        <div class="flash-orbit orbit-two"></div>
+        <div class="flash-symbol">
+          f<span>.</span>
+        </div>
+        <span class="art-caption">
+          Less friction.
+          <br />
+          More flow.
+        </span>
+      </div>
+    ) : (
+      <div class="garden-art">
+        <div class="paper paper-back"></div>
+        <div class="paper paper-front">
+          <span class="paper-caption">FIELD NOTES</span>
+          <span class="paper-title">
+            想法，
+            <br />
+            慢慢生长。
+          </span>
+          <span class="paper-lines"></span>
+          <span class="paper-date">EST. 2026</span>
+        </div>
+        <span class="garden-dot dot-one"></span>
+        <span class="garden-dot dot-two"></span>
+      </div>
+    )}
+    <span class="art-open">
+      <MoveUpRight size={18} />
+    </span>
+  </div>
+  <div class="project-info">
+    <div class="project-title-row">
+      <h3>{project.name}</h3>
+      <span class="project-type">{project.tags[0]}</span>
+    </div>
+    <p>{project.description}</p>
+    <span class="text-link">
+      {project.linkLabel}
+      {external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
+    </span>
+  </div>
+</a>

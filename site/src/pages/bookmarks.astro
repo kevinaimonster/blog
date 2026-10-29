@@ -1,0 +1,40 @@
+---
+import { ArrowUpRight, Bookmark } from 'lucide-react';
+import Base from '../layouts/Base.astro';
+import { bookmarks } from '../data/site';
+---
+
+<Base title="收藏">
+  <div class="container page-container">
+    <header class="page-heading">
+      <div class="eyebrow">A SMALL COLLECTION</div>
+      <h1>值得，再看一次。</h1>
+      <p>留下一个链接，也留下当时收藏它的理由。</p>
+    </header>
+    <div class="bookmark-list">
+      {bookmarks.map((bookmark) => (
+        <a
+          class="bookmark-card"
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="bookmark-card-icon">
+            <Bookmark size={20} />
+          </div>
+          <div>
+            <span class="eyebrow">{bookmark.category}</span>
+            <h2>
+              {bookmark.title} <ArrowUpRight size={18} />
+            </h2>
+            <p>{bookmark.description}</p>
+            <span class="bookmark-domain">{bookmark.domain}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+    <p class="page-postscript">
+      收藏不在于多。能让自己再次停下来的，就值得留下。
+    </p>
+  </div>
+</Base>
