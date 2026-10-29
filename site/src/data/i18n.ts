@@ -13,14 +13,14 @@ export const translator = (locale: Locale) => (zh: string, en: string) =>
 const english = {
   site: {
     ...chinese.site,
-    title: 'Kevin Bao · Field notes',
+    title: 'Kevin · Field notes',
     description:
-      'Kevin Bao’s personal journal. On AI, making things, and everything I’m still figuring out.',
+      'Kevin’s personal blog. AI products, macOS tools, custom AI for businesses, and notes from the work.',
     about: [
-      'Hi, I’m Kevin Bao, an engineer and former CTO of Mindverse. I now build independent AI products.',
-      'At Mindverse, I worked on Second Me: a local-first personal AI that lets you train a model to think like you. The project is open source and accompanied by a research paper.',
-      'I also build custom AI for businesses through Hangzhou Guiyan Tanyu Technology Co., Ltd. valseit provides an LLM gateway and custom applications; UPon brings chat, cost tracking, and top-up billing into existing workflows.',
-      'I like making small AI tools. Some make it, some don’t. This space brings together open-source work, products, experiments, and the thoughts behind them.',
+      'I’m Kevin. I build independent AI products, macOS tools, and custom AI for businesses.',
+      'My work covers the path from an idea to an AI application: product interaction, model integration, application development, and connections to existing workflows.',
+      'Avatar is an infinite canvas for thinking with AI, and Flash is a macOS app. valseit brings together model routing, cost attribution, and custom applications. UPon connects chat and billing to enterprise workflows.',
+      'This blog is where I share technical decisions, product experiments, and lessons from the work, including ideas that are still taking shape.',
     ],
   },
   navigation: chinese.navigation.map((item, index) => ({
@@ -45,7 +45,7 @@ const english = {
         'second-me': {
           description:
             'Train a personal AI that thinks like you, locally. Open source, with a research paper.',
-          role: 'As CTO at Mindverse',
+          role: 'Personal AI',
           category: 'Open source',
         },
         valseit: {
@@ -62,8 +62,8 @@ const english = {
         },
         upon: {
           description:
-            'An enterprise integration that brings chat, cost tracking, and top-up billing into existing workflows. Delivered through Guiyan Tanyu.',
-          role: 'By Guiyan Tanyu',
+            'An enterprise integration that brings chat, cost tracking, and top-up billing into existing workflows.',
+          role: 'Workflow integration',
           category: 'Delivered',
         },
         flash: {

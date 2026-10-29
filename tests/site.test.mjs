@@ -87,7 +87,11 @@ test('RSS items use the deployment domain and point to generated notes', async (
 
 test('both languages include translated content and same-page switching', async () => {
   for (const [route, english, chinese] of [
-    ['', 'Field notes', '个人手记'],
+    [
+      '',
+      'Engineer &amp; independent AI builder',
+      '工程师 · 独立 AI 产品开发者',
+    ],
     ['about/', 'Hi, I’m Kevin', '你好，我是 Kevin'],
     ['projects/', 'Ideas, made real.', '让想法，有所着落。'],
     ['bookmarks/', 'Worth another look.', '值得，再看一次。'],

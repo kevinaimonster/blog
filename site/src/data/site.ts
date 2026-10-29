@@ -1,17 +1,17 @@
 export const site = {
   name: 'Kevin',
-  title: 'Kevin Bao · 个人手记',
+  title: 'Kevin · 个人手记',
   description:
-    'Kevin（鲍方毅）的个人博客。关于 AI、创造，以及那些还在寻找答案的事。',
+    'Kevin 的个人博客。AI 产品、macOS 工具、企业 AI 定制，以及开发过程中的笔记。',
   github: 'https://github.com/kevinaimonster',
   x: 'https://x.com/KevinAIMonster',
   avatar: '/images/kevin-avatar.jpg',
   // 所有个人介绍集中在这里。只填写愿意公开的信息。
   about: [
-    '你好，我是 Kevin，也叫鲍方毅。工程师，曾任 Mindverse CTO，现在独立做 AI 产品。',
-    '在 Mindverse CTO 任内，我参与了 Second Me：一个本地优先的个人 AI 项目，让人们训练像自己一样思考的模型，开源并发表论文。',
-    '我也通过杭州硅言碳语科技有限公司承接企业 AI 定制。valseit 提供 LLM 网关与定制应用，UPon 则把对话、成本核算和充值计费接入企业已有的工作流。',
-    '我喜欢做 AI 小工具：有的活了，有的没活。这个空间记录开源、产品和实验，也留下过程中的想法与复盘。',
+    '我是 Kevin，独立开发 AI 产品和 macOS 工具，也做企业 AI 定制。',
+    '我关注 AI 应用从想法到落地的过程：产品交互、模型接入、应用开发，以及与已有工作流的集成。',
+    'Avatar 是与 AI 一起整理想法的无限画布，Flash 是 macOS 应用。valseit 提供模型网关、路由、成本归因与定制应用；UPon 把对话和计费接入企业工作流。',
+    '这里记录项目中的技术选择、产品实验和复盘，也留下还没想明白的想法。',
   ],
 };
 
@@ -45,7 +45,7 @@ export const bookmarks = [
   },
 ];
 
-// 个人经历与项目介绍取自 kevin.top；阶段用作项目背景，不代表实时运营状态。
+// 项目能力取自已确认的资料；不展示公司或任职履历。
 export const projects = [
   {
     id: 'second-me',
@@ -53,7 +53,7 @@ export const projects = [
     description:
       '本地优先的个人 AI，训练一个像自己一样思考的模型。开源并发表论文。',
     url: 'https://github.com/mindverse/Second-Me',
-    role: 'Mindverse CTO 任内',
+    role: '个人 AI',
     category: '开源',
   },
   {
@@ -77,10 +77,9 @@ export const projects = [
   {
     id: 'upon',
     name: 'UPon',
-    description:
-      '企业集成方案：将对话、成本核算与充值计费接入现有工作流，由硅言碳语交付。',
+    description: '企业集成方案：将对话、成本核算与充值计费接入现有工作流。',
     url: 'https://kevin.top/#projects',
-    role: '硅言碳语交付',
+    role: '工作流集成',
     category: '已交付',
   },
   {

@@ -80,3 +80,18 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - 实际交互：收藏筛选只显示 Spotlight；无匹配搜索显示空结果；Show everything 恢复 3 条；手机菜单打开后焦点落在关闭按钮，Escape 关闭；浅色切换后切中文保持浅色；恢复英文深色；文章目录点击后 URL hash 与滚动位置变化。
 - 截图：/Users/kevinaimonster/empty/artifacts/kevin-field-notes-desktop.png、kevin-field-notes-responsive.png、kevin-field-notes-reading.png。均为本地构建验收，不声称真实手机设备测试或部署页面截图。
 - 继续使用同一个 owner-private Sites 项目及 codex/digital-garden 分支。正式域名、GitHub Pages 设置、master 未改。发布结果以本轮 Sites 原生部署返回为准。
+
+
+## 2026-10-29：身份、能力与当前项目优先
+
+本节替代上节的大刊头与首页封面设计。用户要求首屏直接介绍自己，整体素色，插画用于文章；随后明确只使用 Kevin，不写公司、职务履历或过去经历，聚焦现在的能力和项目。
+
+- 首页改为头像、Kevin、当前能力、写作主题和 X/GitHub；桌面右侧直接展示 valseit、Avatar、Flash，第一篇文章进入首屏。
+- 介绍聚焦 AI 产品、macOS 工具、企业 AI 定制。中英文首页、关于页、项目介绍、作者、页头页脚与元数据统一只用 Kevin，移除公司与履历介绍。
+- 深色英文仍为默认值；正文灰阶与交互色改为素色。窄屏优先显示个人介绍和文章。
+- 原插画移至中英文开篇文章末尾；主页不再包含该图，文章分享图沿用插画。保留生成来源说明。
+- Astro check：21 文件，0 errors / 0 warnings / 0 hints。构建输出 13 个 HTML 页面与中英文 RSS；5 项产物测试通过。
+- 对全部 13 个页面的渲染文本检查：无全名、公司和 CTO 履历；插画仅出现在中英文开篇文章。
+- CUA 原生 Safari 检查桌面首屏、390px 英文首页、320px 中文首页和 640px 文章插画；无可见横向溢出。这是本地浏览器布局检查，不等同于真实手机测试。
+- 本地截图：/Users/kevinaimonster/empty/artifacts/kevin-identity-desktop.png、kevin-identity-responsive.png。临时 QA 页已从部署产物移除。
+- 使用既有 owner-private Sites 项目及 codex/digital-garden 分支；发布状态以 Sites 返回为准。

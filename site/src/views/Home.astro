@@ -19,9 +19,11 @@ import {
 const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
-const { site, thoughts, bookmarks } = getContent(locale);
+const { site, thoughts, bookmarks, projects } = getContent(locale);
 const notes = await getNotes(locale);
-const featured = notes[0];
+const selectedProjects = projects.filter((project) =>
+  ['valseit', 'avatar', 'flash'].includes(project.id),
+);
 const items: FeedItem[] = [
   ...notes.map((note) => ({
     id: note.id,
@@ -47,180 +49,136 @@ const items: FeedItem[] = [
 ---
 
 <Base>
-  <div class="container">
-    <section class="journal-masthead" aria-labelledby="journal-title">
-      <div>
-        <p class="eyebrow">
-          <span class="ink-dot"></span>
-          {t('Kevin Bao 的个人博客', 'The personal journal of Kevin Bao')}
-        </p>
-        <h1 id="journal-title">
-          {t('个人手记', 'Field notes')}
-          <span>.</span>
-        </h1>
-      </div>
-      <p class="masthead-intro">
-        {t(
-          '关于 AI、创造，以及那些还在寻找答案的事。',
-          'On AI, making things, and everything I’m still figuring out.',
-        )}
-      </p>
-    </section>
-    <section
-      class="cover-story"
-      aria-label={t('开篇文章', 'The opening entry')}
-    >
-      <a
-        class="cover-image-link"
-        href={
-          featured ? href(`/notes/${noteSlug(featured)}/`) : '#journal-entries'
-        }
-        aria-label={featured?.data.title}
-      >
+  <div class="container home-layout">
+    <section class="identity-intro" aria-labelledby="identity-title">
+      <div class="identity-heading">
         <img
-          class="cover-art"
-          src="/images/field-notes-cover.png"
-          alt={t(
-            '夜色中的海边书桌，手记的纸页化成飞鸟。AI 创作插画。',
-            'An open notebook by the sea at night, its pages becoming birds. An AI-created illustration.',
-          )}
-          width="1983"
-          height="793"
+          class="identity-avatar"
+          src={site.avatar}
+          alt={t('Kevin 的头像', 'Kevin’s avatar')}
+          width="64"
+          height="64"
           fetchpriority="high"
         />
-        <span class="cover-corner">
-          <span>{t('一切，从一页开始', 'Everything begins with a page')}</span>
-          <ArrowUpRightIcon size={23} />
-        </span>
-      </a>
-      {featured && (
-        <div class="cover-caption">
-          <div class="cover-index">
-            <span class="eyebrow">{t('从这里开始', 'Start here')}</span>
-            <span>01</span>
-          </div>
-          <div class="cover-copy">
-            <h2>
-              <a href={href(`/notes/${noteSlug(featured)}/`)}>
-                {featured.data.title}
-              </a>
-            </h2>
-            <p>{featured.data.description}</p>
-            <div class="entry-meta">
-              <time datetime={featured.data.date}>
-                {featured.data.date.replaceAll('-', '.')}
-              </time>
-              <span>{t('关于这个博客', 'A note on this journal')}</span>
-            </div>
-          </div>
-          <a
-            class="round-link"
-            href={href(`/notes/${noteSlug(featured)}/`)}
-            aria-label={t('阅读开篇文章', 'Read the opening entry')}
-          >
-            <ArrowUpRightIcon size={27} />
-          </a>
-        </div>
-      )}
-    </section>
-    <div class="journal-columns" id="journal-entries">
-      <section class="journal-stream" aria-labelledby="entries-title">
-        <div class="section-label">
-          <h2 id="entries-title">
-            {t('最近写下的', 'Recently, in the journal')}
-          </h2>
-          <span>
-            {String(items.length).padStart(2, '0')} {t('则记录', 'entries')}
-          </span>
-        </div>
-        <GardenFeed items={items} locale={locale} client:load />
-      </section>
-      <aside class="journal-sidebar">
-        <section class="author-note" aria-labelledby="author-title">
-          <div class="author-heading">
-            <img
-              src={site.avatar}
-              alt={t('Kevin 的头像', 'Kevin’s avatar')}
-              width="52"
-              height="52"
-              loading="lazy"
-            />
-            <div>
-              <p class="eyebrow">{t('写在页边', 'A note in the margin')}</p>
-              <h2 id="author-title">
-                {t('你好，我是 Kevin。', 'Hello, I’m Kevin.')}
-              </h2>
-            </div>
-          </div>
-          <p>
+        <div>
+          <h1 id="identity-title">
+            Kevin<span>.</span>
+          </h1>
+          <p class="identity-role">
             {t(
-              '工程师，曾任 Mindverse CTO。现在独立做 AI 产品。这里记下我做过的事、遇到的想法，以及还没想明白的问题。',
-              'An engineer, formerly CTO at Mindverse. Now building independent AI products. This is where I write about the work, the ideas, and the questions along the way.',
+              '工程师 · 独立 AI 产品开发者',
+              'Engineer & independent AI builder',
             )}
           </p>
-          <a class="text-link" href={href('/about/')}>
-            {t('更多关于我', 'A little more about me')}
-            <ArrowRightIcon size={16} />
-          </a>
-          <div class="social-links">
-            <a
-              href={site.x}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Kevin on X"
-            >
-              <XIcon size={18} />
-            </a>
-            <a
-              href={site.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Kevin on GitHub"
-            >
-              <GitHubIcon size={20} />
-            </a>
-          </div>
-        </section>
-        <section class="rss-note" aria-labelledby="rss-title">
-          <RssIcon size={21} />
-          <h2 id="rss-title">
-            {t('按自己的节奏阅读。', 'Read at your own pace.')}
-          </h2>
-          <p>
-            {t(
-              '新文章会出现在 RSS 里。在你的阅读器中，慢慢看。',
-              'New writing, delivered to your feed reader. Nothing to keep up with.',
-            )}
-          </p>
-          <div class="rss-actions">
-            <a class="rss-address text-link" href={href('/rss.xml')}>
-              {t('订阅 RSS', 'Subscribe via RSS')}
-              <ArrowUpRightIcon size={15} />
-            </a>
-            <button
-              type="button"
-              data-copy-rss
-              data-copy-success={t('订阅地址已复制', 'Feed address copied')}
-              data-copy-error={t(
-                '暂时无法复制，请打开 RSS 链接获取地址。',
-                'Could not copy. Open the RSS link to get the address.',
-              )}
-              aria-label={t('复制 RSS 订阅地址', 'Copy RSS feed address')}
-            >
-              <CopyIcon size={17} />
-            </button>
-          </div>
-          <p class="copy-status" data-copy-status role="status"></p>
-        </section>
-        <a class="sidebar-index-link" href={href('/projects/')}>
-          <span>
-            <small>{t('写作之外', 'Outside the journal')}</small>
-            {t('做过的一些东西', 'Things I’ve made')}
-          </span>
-          <ArrowUpRightIcon size={20} />
+        </div>
+      </div>
+      <p class="identity-bio">
+        {t(
+          '我做 AI 产品、macOS 工具和企业 AI 定制，把想法做成真正能用的软件。',
+          'I build AI products, macOS tools, and custom AI for businesses—turning ideas into working software.',
+        )}
+      </p>
+      <p class="identity-writing">
+        {t(
+          '这里记录 AI、产品实验，以及把想法做出来的过程。',
+          'I write about AI, product experiments, and the process of making things.',
+        )}
+      </p>
+      <div class="identity-links">
+        <a
+          href={site.x}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('Kevin 的 X', 'Kevin on X')}
+        >
+          <XIcon size={16} />X<ArrowUpRightIcon size={13} />
         </a>
-      </aside>
-    </div>
+        <a
+          href={site.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t('Kevin 的 GitHub', 'Kevin on GitHub')}
+        >
+          <GitHubIcon size={18} />
+          GitHub
+          <ArrowUpRightIcon size={13} />
+        </a>
+        <a class="identity-about" href={href('/about/')}>
+          {t('更多关于我', 'More about me')}
+          <ArrowRightIcon size={15} />
+        </a>
+      </div>
+    </section>
+    <section
+      class="journal-stream"
+      id="journal-entries"
+      aria-labelledby="entries-title"
+    >
+      <div class="section-label">
+        <h2 id="entries-title">
+          {t('最近的文章与记录', 'Recent writing & notes')}
+        </h2>
+        <span>
+          {String(items.length).padStart(2, '0')} {t('则记录', 'entries')}
+        </span>
+      </div>
+      <GardenFeed items={items} locale={locale} client:load />
+    </section>
+    <aside class="journal-sidebar">
+      <section class="home-work" aria-labelledby="home-work-title">
+        <h2 class="eyebrow" id="home-work-title">
+          {t('我的项目', 'Selected projects')}
+        </h2>
+        <ul>
+          {selectedProjects.map((project) => (
+            <li>
+              <a href={project.url} target="_blank" rel="noopener noreferrer">
+                <span>
+                  <strong>{project.name}</strong>
+                  <small>{project.role}</small>
+                </span>
+                <ArrowUpRightIcon size={16} />
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a class="text-link" href={href('/projects/')}>
+          {t('所有项目', 'All projects')}
+          <ArrowRightIcon size={15} />
+        </a>
+      </section>
+      <section class="rss-note" aria-labelledby="rss-title">
+        <RssIcon size={21} />
+        <h2 id="rss-title">
+          {t('按自己的节奏阅读。', 'Read at your own pace.')}
+        </h2>
+        <p>
+          {t(
+            '新文章会出现在 RSS 里。在你的阅读器中，慢慢看。',
+            'New writing, delivered to your feed reader. Nothing to keep up with.',
+          )}
+        </p>
+        <div class="rss-actions">
+          <a class="rss-address text-link" href={href('/rss.xml')}>
+            {t('订阅 RSS', 'Subscribe via RSS')}
+            <ArrowUpRightIcon size={15} />
+          </a>
+          <button
+            type="button"
+            data-copy-rss
+            data-copy-success={t('订阅地址已复制', 'Feed address copied')}
+            data-copy-error={t(
+              '暂时无法复制，请打开 RSS 链接获取地址。',
+              'Could not copy. Open the RSS link to get the address.',
+            )}
+            aria-label={t('复制 RSS 订阅地址', 'Copy RSS feed address')}
+          >
+            <CopyIcon size={17} />
+          </button>
+        </div>
+        <p class="copy-status" data-copy-status role="status"></p>
+      </section>
+    </aside>
   </div>
   <script>
     document

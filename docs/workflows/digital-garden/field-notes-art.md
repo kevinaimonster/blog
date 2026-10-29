@@ -1,11 +1,11 @@
 # Field notes cover artwork
 
 - Mode: built-in `image_gen`, generate, opaque background.
-- Use: personal journal cover illustration.
+- Current use: an illustration at the end of the opening blog entry. Removed from the homepage by user request.
 - Workspace asset: `site/public/images/field-notes-cover.png` (1983 × 793).
 - Original output remains at `/Users/kevinaimonster/.codex/generated_images/01a187f7-dcaa-7421-9cfe-c73e94b3881b/exec-0fdfc148-b095-4b40-956e-36ac2b925ee9.png`.
 - Fictional illustration, not personal photography. No source/reference images supplied.
-- The asset is used as generated; responsive framing is handled by CSS.
+- The asset is used as generated; the article displays its original aspect ratio.
 
 ## Final prompt
 

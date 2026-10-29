@@ -1,8 +1,8 @@
-# Kevin Bao · Field notes
+# Kevin · Personal blog
 
 Kevin 的个人博客：文章、短想法、收藏，以及独立的项目索引。默认英文、深色，支持中文和浅色模式。
 
-这一版从个人写作出发重新设计：Manrope 刊头、炭灰与暖金配色、定制海边手记插画、开篇文章、最近记录，以及有目录的独立阅读页。项目退到单独栏目。代码为原创实现，未使用 Tailwind Plus 源码。
+首页以 Kevin 和当前能力为中心：AI 产品、macOS 工具、企业 AI 定制。素色排版，个人介绍与 X/GitHub 后直接接最近文章，桌面侧栏展示 valseit、Avatar 和 Flash。全站只使用 Kevin，不展示公司或任职经历。代码为原创实现。
 
 旧 Hexo 生成文件保留在根目录；新网站在 `site/`。GitHub Pages 仍从 `master` 根目录发布，开发分支不会替换线上站点。
 
@@ -32,9 +32,11 @@ npm test
 
 个人介绍、Second Me / valseit / Avatar / UPon 资料取自用户指定的 [kevin.top](https://kevin.top/)，未迁入可能过时的星数或运营进度。Flash 保留已确认的公开发布仓库链接。建站近况与开篇文章仍为起始文案，不代表已迁移旧博客文章。
 
-头像沿用 `kevin.top`，保存为 `site/public/images/kevin-avatar.jpg`。首页主视觉由内置 imagegen 创作并保存为 `site/public/images/field-notes-cover.png`；这是想象场景，非个人摄影。上一版图片留在素材目录中，本版不再展示。只有 X 与 GitHub 社交入口；RSS 是独立订阅功能。
+头像沿用 `kevin.top`，保存为 `site/public/images/kevin-avatar.jpg`。开篇文章末尾的插画由内置 imagegen 创作并保存为 `site/public/images/field-notes-cover.png`；这是想象场景，非个人摄影。上一版图片留在素材目录中，本版不再展示。只有 X 与 GitHub 社交入口；RSS 是独立订阅功能。
 
 新增文章时复制 Markdown frontmatter，日期使用 `YYYY-MM-DD`，指定 `locale: en` 或 `locale: zh`。同一篇文章在两个语言目录下使用相同文件名，以支持当前页面切换语言；发布前补全两个版本。`draft: true` 会从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。阅读页目录从文章二级标题自动生成。
+
+文章可在 frontmatter 中配置 `illustration: { src, alt, caption }`。只在该文章末尾显示插画，并用于文章的分享预览；首页使用头像作为分享图。
 
 ## 默认外观与语言
 

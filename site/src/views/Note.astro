@@ -13,7 +13,11 @@ const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
 ---
 
-<Base title={note.data.title} description={note.data.description}>
+<Base
+  title={note.data.title}
+  description={note.data.description}
+  image={note.data.illustration?.src}
+>
   <article class="article-page container">
     <a class="quiet-link back-link" href={href('/notes/')}>
       <ArrowLeftIcon size={15} />
@@ -25,7 +29,7 @@ const href = (path: string) => localizedPath(path, locale);
           {note.data.date.replaceAll('-', '.')}
         </time>
         <span>—</span>
-        <span>Kevin Bao</span>
+        <span>Kevin</span>
       </div>
       <h1>{note.data.title}</h1>
       <p>{note.data.description}</p>
@@ -49,6 +53,18 @@ const href = (path: string) => localizedPath(path, locale);
       </aside>
       <div class="prose">
         <Content />
+        {note.data.illustration && (
+          <figure class="article-illustration">
+            <img
+              src={note.data.illustration.src}
+              alt={note.data.illustration.alt}
+              width="1983"
+              height="793"
+              loading="lazy"
+            />
+            <figcaption>{note.data.illustration.caption}</figcaption>
+          </figure>
+        )}
       </div>
       <div class="article-bottom">
         <span>

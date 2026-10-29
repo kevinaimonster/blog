@@ -17,13 +17,18 @@ import '../styles/journal.css';
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 const pathname = Astro.url.pathname;
 const locale = localeFromPath(pathname);
 const { site, navigation } = getContent(locale);
 const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
-const { title, description = site.description } = Astro.props;
+const {
+  title,
+  description = site.description,
+  image = site.avatar,
+} = Astro.props;
 const currentPath = withoutLocale(pathname);
 const isHome = currentPath === '/';
 const isActive = (href: string) =>
@@ -48,11 +53,11 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
     />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
     <meta
-      property="og:image"
-      content={new URL('/images/field-notes-cover.png', Astro.site)}
+      name="twitter:card"
+      content={image === site.avatar ? 'summary' : 'summary_large_image'}
     />
-    <meta name="twitter:card" content="summary_large_image" />
     <meta property="og:url" content={canonical} />
     <link rel="canonical" href={canonical} />
     <link
@@ -101,7 +106,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
           k<span>.</span>
         </span>
         <span class="wordmark-caption">
-          Kevin Bao<small>{t('个人手记', 'A personal journal')}</small>
+          Kevin<small>{t('个人手记', 'A personal journal')}</small>
         </span>
       </a>
       <nav aria-label={t('主导航', 'Main navigation')} class="main-nav">
@@ -150,7 +155,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         aria-label={t('手机导航', 'Mobile navigation')}
       >
         <div class="mobile-menu-heading">
-          <span>Kevin Bao</span>
+          <span>Kevin</span>
           <button
             type="button"
             data-menu-close
@@ -178,7 +183,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
       <div class="footer-top">
         <div>
           <a class="footer-name" href={href('/')}>
-            Kevin Bao<span>.</span>
+            Kevin<span>.</span>
           </a>
           <p>
             {t(
@@ -192,7 +197,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         </a>
       </div>
       <div class="footer-bottom">
-        <span>© {new Date().getFullYear()} Kevin Bao</span>
+        <span>© {new Date().getFullYear()} Kevin</span>
         <div>
           <a href={site.x} target="_blank" rel="noopener noreferrer">
             X ↗

@@ -11,6 +11,13 @@ const notes = defineCollection({
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    illustration: z
+      .object({
+        src: z.string(),
+        alt: z.string(),
+        caption: z.string(),
+      })
+      .optional(),
   }),
 });
 
