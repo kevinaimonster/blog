@@ -1,7 +1,7 @@
 node_modules/
 dist/
 site/dist/
-site/.astro/
+**/.astro/
 .sites-runtime/
 .DS_Store
 .env
