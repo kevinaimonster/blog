@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 用户选择 Spotlight 的专业、成熟风格，并明确选择「没有，按这个风格做原创版本」。用户随后否定了第一版的视觉相似度，本次按原站实际布局纠正。
-- 阶段：deliver；状态：production_release_in_progress。
+- 阶段：deliver；状态：production_verified。
 - 本次终点：用户已确认第一版并明确授权推送原仓库、覆盖正式博客；执行 SEO 与旧链接迁移后，将新版发布到 kevin1988.fun。本节与最后一节取代早先仅私密预览、不动 master 的限制。
 - 基线：kevinaimonster/blog，master fd3f84618d7f888907f27c777cb7c61aa2191303；实现分支 codex/digital-garden。
 
@@ -149,4 +149,9 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - 正式与私密预览两种环境分别构建，通过 9 项产物测试：元数据、全部本地链接/资源、订阅、双语与默认偏好、canonical/分享图/双向 hreflang、BlogPosting 与可见正文一致、索引清单、旧 URL/锚点/Atom。
 - 18 个 HTML 页面，正式 sitemap 含 12 个可索引 URL，预览 sitemap 为空。修复了 Astro 404 页自动生成 /404/ canonical 的问题，明确为 /404.html 并设 noindex。
 - 本地 Safari 实际打开 First Post，确认旧链接内容、无目录时的阅读栏布局正常；只检查本轮迁移影响，前述已确认视觉保持。
-- 正式推送、CI、部署与线上验收：待执行。
+- 代码经 PR #1 合并，首次正式部署提交 973e029c616a0693428ed9a929538cbebb871301。PR CI 40937188849 和 master 发布 40937368229 均成功；原 master 已推送标签 pre-v1-20261029。
+- HTTPS OAuth 凭据缺少 workflow scope，推送改用机器上已授权的 SSH；未增加权限。Pages 构建模式已切到 workflow。
+- Pages 模式切换重置 https_enforced，GitHub API 恢复时返回自定义域名证书不存在。现有 Cloudflare HTTPS 证书一直可用；通过已经登录的 Chrome 控制台添加仅匹配主域名 HTTP 的 301 规则 Blog HTTPS canonical redirect，保留路径/query。其他域名、子域名、DNS、代理及 TLS 模式未改。最终验证文章带参数地址 HTTP 301 → HTTPS 200，无循环。
+- 正式 HTTPS 验证 28 个 HTML/订阅/robots/不存在路径响应以及 7 个引用资源，全部通过；404 返回真实 404，旧 directory/index.html 地址均 200；RSS、Atom、sitemap 均通过 XML 解析；12 个 sitemap URL 均为正式域名。文章 BlogPosting、canonical、索引状态与语言关联已检查；线上图片哈希与原素材一致。
+- Safari 实际打开正式首页，首屏、图片和玻璃材质正常；Bookmarks 筛选只留下 Spotlight，恢复 All 正常。截图：/Users/kevinaimonster/empty/artifacts/kevin-blog-v1-live.png；HTTP 检查明细：kevin-blog-v1-live-check.json（本地 artifacts）。
+- 本轮未提交 Search Console，未声称已被搜索引擎收录；技术 SEO 与生产响应验证完成。

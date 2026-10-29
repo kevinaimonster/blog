@@ -48,7 +48,7 @@ npm test
 
 ## 发布
 
-工作流为 `.github/workflows/pages.yml`：PR 执行依赖安装、类型检查、构建和产物测试；合并到 `master` 后重新执行检查并发布 GitHub Pages。Pages 使用 GitHub Actions 构建模式，保留自定义域名与 HTTPS。环境只允许 `master` 部署。
+工作流为 `.github/workflows/pages.yml`：PR 执行依赖安装、类型检查、构建和产物测试；合并到 `master` 后重新执行检查并发布 GitHub Pages。Pages 使用 GitHub Actions 构建模式，保留自定义域名。环境只允许 `master` 部署。HTTPS 由现有 Cloudflare 边缘证书提供，主域名的 HTTP 请求由下述规则永久跳转到 HTTPS。
 
 正式构建：
 
@@ -61,8 +61,14 @@ SITE_URL=https://kevin1988.fun SITE_INDEXABLE=true npm test
 
 SEO 随构建生成：独立标题/摘要、canonical、现有译文的互相 hreflang 与 x-default、Open Graph/Twitter、文章 BlogPosting、作者、发布日期与可选更新日期。`/sitemap.xml` 只列正式可索引页面；`/robots.txt` 声明站点地图；404 和旧空白/模板记录为 noindex。RSS 在 `/rss.xml`、`/zh/rss.xml`，旧订阅地址 `/atom.xml` 提供有效 Atom feed。页面正文为静态 HTML，爬虫不需要运行 JavaScript。
 
-旧版回退点为 `pre-v1-20261029`。若需退回旧 Hexo，先暂停新工作流的自动部署，从该标签恢复旧产物到回退分支，再将 Pages source 指向该分支根目录并切换为 legacy；保留 `kevin1988.fun` 与 HTTPS 设置。不要在新工作流仍运行时同时切换发布源。新版正常迭代可直接 revert 代码并由 Actions 重新发布。
+旧版回退点为 `pre-v1-20261029`。若需退回旧 Hexo，先暂停新工作流的自动部署，从该标签恢复旧产物到回退分支，再将 Pages source 指向该分支根目录并切换为 legacy；保留 `kevin1988.fun`、Cloudflare 代理与主域名 HTTPS 跳转规则。不要在新工作流仍运行时同时切换发布源。新版正常迭代可直接 revert 代码并由 Actions 重新发布。
 
 验证通过意味着部署与技术 SEO 已检查，不等于搜索引擎已经重新抓取或收录。
 
 实施及验证记录：`docs/workflows/digital-garden/workflow.md`。
+
+## 正式域名入口
+
+Cloudflare Single Redirect `Blog HTTPS canonical redirect` 只匹配 `(http.host eq "kevin1988.fun" and not ssl)`，以 301 转向 `concat("https://kevin1988.fun", http.request.uri.path)`，保留 query string。其他子域名不匹配此规则，DNS 与代理状态未改。
+
+切换 GitHub Pages 构建模式时，GitHub 重置了 `https_enforced`；重新开启返回自定义域名证书不存在。当前 GitHub 的该开关为 false，访客侧的证书与强制 HTTPS 由 Cloudflare 提供，并已实测 HTTP → 301 → HTTPS 200。不能仅用 GitHub 的 `html_url` 字段判断公开 HTTPS 状态；正式链接、canonical 和订阅地址统一使用 `https://kevin1988.fun`。若以后迁出 Cloudflare，需先为新入口配置有效证书与 HTTPS 跳转。
