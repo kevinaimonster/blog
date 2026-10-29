@@ -7,7 +7,13 @@ const t = translator(locale);
 const { projects } = getContent(locale);
 ---
 
-<Base title={t('项目', 'Projects')}>
+<Base
+  title={t('项目', 'Projects')}
+  description={t(
+    'Kevin 的项目索引：AI 产品、macOS 应用和企业工作流，从想法到实际应用。',
+    'Kevin’s project index: AI products, macOS applications, and enterprise workflows, from ideas to working applications.',
+  )}
+>
   <div class="container page-container">
     <header class="page-heading">
       <div class="eyebrow">{t('写作之外', 'Outside the journal')}</div>

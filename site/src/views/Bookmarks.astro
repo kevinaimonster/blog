@@ -7,7 +7,13 @@ const t = translator(locale);
 const { bookmarks } = getContent(locale);
 ---
 
-<Base title={t('收藏', 'Bookmarks')}>
+<Base
+  title={t('收藏', 'Bookmarks')}
+  description={t(
+    'Kevin 收藏的设计参考、文章与工具，以及留下它们的理由。',
+    'Design references, articles, and tools saved by Kevin, with a note on why each one is worth revisiting.',
+  )}
+>
   <div class="container page-container">
     <header class="page-heading">
       <div class="eyebrow">{t('留在书架上的', 'Kept on the shelf')}</div>

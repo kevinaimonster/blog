@@ -1,5 +1,5 @@
 ---
-import { getNotes, noteSlug } from '../data/notes';
+import { getNotes, notePath } from '../data/notes';
 import {
   ArrowUpRightIcon,
   ArrowRightIcon,
@@ -31,7 +31,7 @@ const items: FeedItem[] = [
     title: note.data.title,
     text: note.data.description,
     tag: note.data.tags[0],
-    url: href(`/notes/${noteSlug(note)}/`),
+    url: notePath(note),
     kind: 'note' as const,
   })),
   ...thoughts.map((item) => ({
@@ -48,7 +48,13 @@ const items: FeedItem[] = [
 ].sort((a, b) => b.date.localeCompare(a.date));
 ---
 
-<Base image="/images/kevin-workbench.png">
+<Base
+  image="/images/kevin-workbench.png"
+  imageAlt={t(
+    'Kevin 的狐狸形象在暖灯下工作。',
+    'Kevin’s fox character working by a warm desk lamp.',
+  )}
+>
   <div class="container home-layout">
     <section class="identity-intro" aria-labelledby="identity-title">
       <div class="identity-heading">

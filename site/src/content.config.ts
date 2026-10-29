@@ -9,6 +9,15 @@ const notes = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    updated: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+    permalink: z
+      .string()
+      .regex(/^\/(?!\/)(?:[A-Za-z0-9_-]+\/)+$/)
+      .optional(),
+    archived: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     illustration: z

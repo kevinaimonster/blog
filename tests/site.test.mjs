@@ -65,9 +65,7 @@ test('RSS items use the deployment domain and point to generated notes', async (
       new RegExp(`<language>${locale === 'zh' ? 'zh-cn' : 'en'}</language>`),
     );
     assert.match(xml, /<rss version="2.0">/);
-    const expectedOrigin =
-      process.env.SITE_URL ||
-      'https://kevin-digital-garden.kevinmonster.chatgpt.site';
+    const expectedOrigin = process.env.SITE_URL || 'https://kevin1988.fun';
     const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
     assert.ok(items.length > 0, 'Expected the starter note in RSS');
     for (const [, body] of items) {

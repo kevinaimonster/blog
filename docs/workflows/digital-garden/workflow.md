@@ -3,8 +3,8 @@
 ## 当前状态
 
 - 用户选择 Spotlight 的专业、成熟风格，并明确选择「没有，按这个风格做原创版本」。用户随后否定了第一版的视觉相似度，本次按原站实际布局纠正。
-- 阶段：deliver；状态：implementation_verified。
-- 本次终点：原创网站实现、验证、私密预览。正式域名继续使用既有 master 发布结果。
+- 阶段：deliver；状态：production_release_in_progress。
+- 本次终点：用户已确认第一版并明确授权推送原仓库、覆盖正式博客；执行 SEO 与旧链接迁移后，将新版发布到 kevin1988.fun。本节与最后一节取代早先仅私密预览、不动 master 的限制。
 - 基线：kevinaimonster/blog，master fd3f84618d7f888907f27c777cb7c61aa2191303；实现分支 codex/digital-garden。
 
 ## 业务基线与设计
@@ -126,3 +126,27 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - CUA 原生 Safari 检查：桌面深/浅模式、390px 英文与320px 中文首页、640px 项目页、390px 文章归档、320px 中文关于、640px 阅读页。无可见横向溢出；筛选仅显示收藏、主题切换、手机菜单焦点和 Escape 关闭通过。窄屏检查使用临时 iframe，不等同于真实手机测试，临时页已移除。
 - 本地截图：/Users/kevinaimonster/empty/artifacts/kevin-glass-desktop.png、kevin-glass-light.png、kevin-glass-responsive.png、kevin-glass-reading.png。
 - 同一 owner-private Sites 项目与 codex/digital-garden 分支交付；master、正式域名及 Pages 发布配置不变。
+
+
+## 2026-10-29：第一版正式发布与文章 SEO
+
+用户原话：“作为第一版先推上去吧……覆盖到 blog 上面去，注意一下它整体文章的 SEO 部分”；随后明确可以直接使用原 blog repo 推代码。授权终点为正式部署和线上验证，无需再次确认。
+
+就绪：ready。已读取旧 master、Pages 设置、环境部署规则和 Actions 权限。正式域名由同一仓库 master 根目录 legacy 发布，HTTPS 开启；仓库无分支保护，github-pages 环境仅允许 master。旧内容仅两条记录：First Post 无正文，Hello World 为 Hexo 示例。没有需要用户补充的迁移映射。
+
+| 规则 | 设计 | 验收 |
+| --- | --- | --- |
+| P1 将已确认的第一版覆盖正式博客 | 保留现有设计与素材；master 上 Actions 构建 dist 并部署 Pages，保留域名/HTTPS | 正式域名呈现新版，部署 SHA 对应合并提交 |
+| P2 文章 SEO 不遗漏 | 页面标题/摘要、canonical、社交预览、BlogPosting、作者日期、中英文现有译文双向关联 | 检查静态 HTML 与线上响应；sitemap 仅列可索引页面 |
+| P3 旧文章入口继续工作 | 原 URL 200、保留 Hello World 原锚点；旧归档 URL 仍可访问；atom.xml 继续订阅 | 原目录与 index.html 地址均验证；旧空白/模板条目 noindex，排除当前 feed |
+| P4 正式发布可回退、预览不索引 | 旧 master 标签；生产显式 SITE_INDEXABLE=true，预览默认 noindex | 生产与预览两组产物测试；GitHub Actions 构建门禁 |
+
+实现：共享 SEO 与路由辅助函数，Markdown 支持稳定 permalink、实际 updated 日期与 archived。文章元数据源自同一份 frontmatter。网站地图使用同一路由清单；草稿不生成详情与订阅项。历史页面保留日期和内容来源，不引入旧评论组件。
+
+发布前验证：
+
+- Node 22.23.4 下 Astro check：26 文件，0 errors / warnings / hints。
+- 正式与私密预览两种环境分别构建，通过 9 项产物测试：元数据、全部本地链接/资源、订阅、双语与默认偏好、canonical/分享图/双向 hreflang、BlogPosting 与可见正文一致、索引清单、旧 URL/锚点/Atom。
+- 18 个 HTML 页面，正式 sitemap 含 12 个可索引 URL，预览 sitemap 为空。修复了 Astro 404 页自动生成 /404/ canonical 的问题，明确为 /404.html 并设 noindex。
+- 本地 Safari 实际打开 First Post，确认旧链接内容、无目录时的阅读栏布局正常；只检查本轮迁移影响，前述已确认视觉保持。
+- 正式推送、CI、部署与线上验收：待执行。

@@ -1,18 +1,7 @@
-import { getNotes, noteSlug } from './notes';
+import { getNotes, notePath } from './notes';
 import type { APIRoute } from 'astro';
 import { getContent, localizedPath, type Locale } from './i18n';
-const escape = (text: string) =>
-  text.replace(
-    /[<>&"']/g,
-    (c) =>
-      ({
-        '<': '&lt;',
-        '>': '&gt;',
-        '&': '&amp;',
-        '"': '&quot;',
-        "'": '&apos;',
-      })[c]!,
-  );
+import { escapeXml as escape } from './seo';
 export const createFeed =
   (locale: Locale): APIRoute =>
   async ({ site: origin }) => {
@@ -20,10 +9,7 @@ export const createFeed =
     const notes = await getNotes(locale);
     const items = notes
       .map((note) => {
-        const url = new URL(
-          localizedPath(`/notes/${noteSlug(note)}/`, locale),
-          origin,
-        ).href;
+        const url = new URL(notePath(note), origin).href;
         return `<item><title>${escape(note.data.title)}</title><description>${escape(note.data.description)}</description><link>${url}</link><guid>${url}</guid><pubDate>${new Date(`${note.data.date}T00:00:00Z`).toUTCString()}</pubDate></item>`;
       })
       .join('');

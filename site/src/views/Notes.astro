@@ -1,5 +1,5 @@
 ---
-import { getNotes, noteSlug } from '../data/notes';
+import { getNotes, notePath } from '../data/notes';
 import { localeFromPath, localizedPath, translator } from '../data/i18n';
 import { ArrowUpRightIcon, RssIcon } from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
@@ -10,7 +10,13 @@ const notes = await getNotes(locale);
 const years = [...new Set(notes.map((note) => note.data.date.slice(0, 4)))];
 ---
 
-<Base title={t('文章', 'Writing')}>
+<Base
+  title={t('文章', 'Writing')}
+  description={t(
+    'Kevin 的文章与手记：AI 产品、macOS 工具、技术决策和实践中的思考。',
+    'Articles and field notes by Kevin on AI products, macOS tools, technical decisions, and work in progress.',
+  )}
+>
   <div class="container page-container">
     <header class="page-heading">
       <div class="eyebrow">{t('写作与记录', 'The writing archive')}</div>
@@ -50,7 +56,7 @@ const years = [...new Set(notes.map((note) => note.data.date.slice(0, 4)))];
                     ))}
                   </div>
                   <h2>
-                    <a href={href(`/notes/${noteSlug(note)}/`)}>
+                    <a href={notePath(note)}>
                       {note.data.title}
                       <ArrowUpRightIcon size={21} />
                     </a>
@@ -64,6 +70,10 @@ const years = [...new Set(notes.map((note) => note.data.date.slice(0, 4)))];
     ))}
     <p class="page-postscript">
       {t('刚刚开始，往后慢慢写。', 'A beginning. More pages to come.')}
+      <br />
+      <a class="text-link" href="/archives/">
+        {t('查看 2024 年的早期记录', 'Earlier entries from 2024')} ↗
+      </a>
     </p>
   </div>
 </Base>

@@ -9,7 +9,13 @@ const t = translator(locale);
 const { site } = getContent(locale);
 ---
 
-<Base title={t('关于', 'About')}>
+<Base
+  title={t('关于', 'About')}
+  description={t(
+    '我是 Kevin，构建 AI 产品、macOS 工具与企业 AI 应用。这里记录我的能力、项目与写作。',
+    'I’m Kevin. I build AI products, macOS tools, and custom AI applications. Explore my work, projects, and personal journal.',
+  )}
+>
   <div class="container page-container about-page">
     <header class="page-heading">
       <div class="eyebrow">

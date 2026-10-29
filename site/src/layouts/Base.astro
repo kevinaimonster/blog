@@ -11,7 +11,9 @@ import {
   localizedPath,
   translator,
   withoutLocale,
+  type Locale,
 } from '../data/i18n';
+import { indexable, pageAlternates } from '../data/seo';
 import '@fontsource-variable/geist';
 import '../styles/journal.css';
 import '../styles/glass.css';
@@ -19,6 +21,11 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  canonicalPath?: string;
+  alternates?: { locale: Locale; path: string }[];
+  article?: { published: string; modified?: string; tags: string[] };
 }
 const pathname = Astro.url.pathname;
 const locale = localeFromPath(pathname);
@@ -29,15 +36,46 @@ const {
   title,
   description = site.description,
   image = site.avatar,
+  imageAlt = 'Kevin',
+  noindex = false,
+  canonicalPath = pathname,
+  alternates: customAlternates,
+  article,
 } = Astro.props;
 const currentPath = withoutLocale(pathname);
 const isHome = currentPath === '/';
 const isActive = (href: string) =>
   href === '/' ? isHome : currentPath.startsWith(href);
-const canonical = new URL(pathname, Astro.site);
-const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
-  ? '/'
-  : currentPath;
+const canonical = new URL(canonicalPath, Astro.site);
+const alternates = customAlternates ?? pageAlternates(currentPath);
+const otherLocale = locale === 'en' ? 'zh' : 'en';
+const languagePath =
+  alternates.find((item) => item.locale === otherLocale)?.path ??
+  localizedPath('/notes/', otherLocale);
+const imageUrl = new URL(image, Astro.site).href;
+const defaultPath = alternates.find((item) => item.locale === 'en')?.path;
+const pageTitle = title ? `${title} · Kevin` : site.title;
+const structuredData = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${canonical.href}#article`,
+      mainEntityOfPage: canonical.href,
+      url: canonical.href,
+      headline: title,
+      description,
+      image: [imageUrl],
+      datePublished: article.published,
+      ...(article.modified ? { dateModified: article.modified } : {}),
+      author: {
+        '@type': 'Person',
+        name: 'Kevin',
+        url: new URL(href('/about/'), Astro.site).href,
+      },
+      inLanguage: locale === 'zh' ? 'zh-CN' : 'en',
+      keywords: article.tags,
+    }
+  : undefined;
 ---
 
 <!doctype html>
@@ -45,32 +83,80 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title ? `${title} · Kevin` : site.title}</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#142d35" />
+    <meta name="author" content="Kevin" />
     <meta
-      property="og:title"
-      content={title ? `${title} · Kevin` : site.title}
+      name="robots"
+      content={
+        indexable && !noindex
+          ? 'index, follow, max-image-preview:large'
+          : 'noindex, follow'
+      }
     />
+    <meta name="theme-color" content="#142d35" />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:site_name" content="Kevin" />
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
+    {alternates
+      .filter((item) => item.locale !== locale)
+      .map((item) => (
+        <meta
+          property="og:locale:alternate"
+          content={item.locale === 'zh' ? 'zh_CN' : 'en_US'}
+        />
+      ))}
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    {article && (
+      <>
+        <meta property="article:published_time" content={article.published} />
+        {article.modified && (
+          <meta property="article:modified_time" content={article.modified} />
+        )}
+        <meta
+          property="article:author"
+          content={new URL(href('/about/'), Astro.site)}
+        />
+        {article.tags.map((tag) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+      </>
+    )}
     <meta
       name="twitter:card"
       content={image === site.avatar ? 'summary' : 'summary_large_image'}
     />
+    <meta name="twitter:creator" content="@KevinAIMonster" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta property="og:url" content={canonical} />
     <link rel="canonical" href={canonical} />
-    <link
-      rel="alternate"
-      hreflang="en"
-      href={new URL(localizedPath(alternatePath, 'en'), Astro.site)}
-    />
-    <link
-      rel="alternate"
-      hreflang="zh-CN"
-      href={new URL(localizedPath(alternatePath, 'zh'), Astro.site)}
-    />
+    {alternates.map((item) => (
+      <link
+        rel="alternate"
+        hreflang={item.locale === 'zh' ? 'zh-CN' : 'en'}
+        href={new URL(item.path, Astro.site)}
+      />
+    ))}
+    {defaultPath && (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={new URL(defaultPath, Astro.site)}
+      />
+    )}
+    {structuredData && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')}
+      />
+    )}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="alternate"
@@ -132,7 +218,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         </button>
         <a
           class="language-toggle"
-          href={localizedPath(alternatePath, locale === 'en' ? 'zh' : 'en')}
+          href={languagePath}
           lang={locale === 'en' ? 'zh-CN' : 'en'}
           hreflang={locale === 'en' ? 'zh-CN' : 'en'}
           aria-label={t('Switch to English', '切换到中文')}
