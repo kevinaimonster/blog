@@ -109,3 +109,20 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - CUA 原生 Safari 目视检查深色桌面、浅色桌面、390px 英文、320px 中文与 640px 阅读页。主题切换实测通过；窄屏无可见横向溢出。临时 iframe QA 页面已移除，不进入部署。
 - 本地验收图：/Users/kevinaimonster/empty/artifacts/kevin-workbench-desktop.png、kevin-workbench-responsive.png。属于浏览器尺寸检查，不声称真实设备测试。
 - 继续发布同一 owner-private Sites 项目并同步 codex/digital-garden 分支。正式域名、master 与 Pages 配置保持原状。
+
+
+## 2026-10-29：液态玻璃、插画配色与字体统一
+
+用户认可现有初版，要求组件采用液态玻璃；随后补充背景主色应与现有狐狸插画协调，并使用新安装的设计技能调整字体。本轮保留页面内容结构与现有插画，做全站材质和排版改进。
+
+- 已重新阅读本地 landing-page-design，并按其 companion redesign-existing-projects 先诊断：背景偏冷、缺少与画面暖色的过渡，9–13px 小字过多、层次偏轻，组件表面缺少透光与深度。
+- 用户明确要求与插画匹配的颜色和玻璃材质，因此覆盖技能的固定中性暗色/禁止背景渐变限制；不引入其销售落地页区块、虚构证言或转化内容。
+- 主色为墨蓝绿 #142d35、暖白 #f5eee2 与杏橙 #f2b780。使用同一插画的低透明模糊背景来承接画面颜色，并在底部淡出；原图文件未修改。浅色为暖纸白与灰绿。
+- 新增 glass.css 统一导航、社交按钮、项目/RSS、筛选/搜索、文章卡片、归档、收藏、项目页、目录、关于侧栏及手机菜单的半透明材质、边缘高光、内外阴影与交互状态。
+- Manrope 替换为本地 Geist Variable 5.3.0。统一 12/14/16/18/20/24/30/36/48/60px 层级，正文 16–18px，小标签至少 12px；字重聚焦 400/500/600，保留中文系统字体回退。
+- 增加 backdrop-filter 不可用与 prefers-reduced-transparency 的实色回退；保留 reduced-motion，菜单使用短距离渐入，按钮有按压和键盘焦点状态。降级媒体条件已实现，未声称在所有浏览器实机测试。
+- 清理项目页剩余的过往参与措辞，改为当前 AI 产品、macOS 应用与企业工作流能力。
+- 验证：21 文件 Astro check 无 errors/warnings/hints；最终构建 13 个 HTML 页面及中英文 RSS；5 项已有产物测试通过；git diff --check 通过。
+- CUA 原生 Safari 检查：桌面深/浅模式、390px 英文与320px 中文首页、640px 项目页、390px 文章归档、320px 中文关于、640px 阅读页。无可见横向溢出；筛选仅显示收藏、主题切换、手机菜单焦点和 Escape 关闭通过。窄屏检查使用临时 iframe，不等同于真实手机测试，临时页已移除。
+- 本地截图：/Users/kevinaimonster/empty/artifacts/kevin-glass-desktop.png、kevin-glass-light.png、kevin-glass-responsive.png、kevin-glass-reading.png。
+- 同一 owner-private Sites 项目与 codex/digital-garden 分支交付；master、正式域名及 Pages 发布配置不变。

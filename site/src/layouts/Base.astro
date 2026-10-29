@@ -12,8 +12,9 @@ import {
   translator,
   withoutLocale,
 } from '../data/i18n';
-import '@fontsource-variable/manrope';
+import '@fontsource-variable/geist';
 import '../styles/journal.css';
+import '../styles/glass.css';
 interface Props {
   title?: string;
   description?: string;
@@ -46,7 +47,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ? `${title} · Kevin` : site.title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#101f2d" />
+    <meta name="theme-color" content="#142d35" />
     <meta
       property="og:title"
       content={title ? `${title} · Kevin` : site.title}
@@ -241,7 +242,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         );
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', dark ? '#101f2d' : '#f2f7fa');
+          ?.setAttribute('content', dark ? '#142d35' : '#f3f0e7');
       };
       syncTheme();
       themeButton?.addEventListener('click', () => {

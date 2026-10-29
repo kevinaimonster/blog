@@ -2,7 +2,7 @@
 
 Kevin 的个人博客：文章、短想法、收藏，以及独立的项目索引。默认英文、深色，支持中文和浅色模式。
 
-首页以 Kevin 和当前能力为中心：AI 产品、macOS 工具、企业 AI 定制。深海蓝、青蓝与杏橙配色，以头像延展的狐狸工作台形象替代泛泛的介绍，X/GitHub 后直接接最近文章，桌面侧栏展示 valseit、Avatar 和 Flash。全站只使用 Kevin，不展示公司或任职经历。代码为原创实现。
+首页以 Kevin 和当前能力为中心：AI 产品、macOS 工具、企业 AI 定制。从插画延续出的墨蓝绿、暖白与杏橙配色，以头像延展的狐狸工作台形象替代泛泛的介绍，X/GitHub 后直接接最近文章，桌面侧栏展示 valseit、Avatar 和 Flash。全站只使用 Kevin，不展示公司或任职经历。代码为原创实现。导航、按钮、筛选、搜索、内容卡片与目录采用统一玻璃表面；本地 Geist 可变字体统一标题、正文与标签层级。
 
 旧 Hexo 生成文件保留在根目录；新网站在 `site/`。GitHub Pages 仍从 `master` 根目录发布，开发分支不会替换线上站点。
 
@@ -26,7 +26,7 @@ npm test
 | 英文内容与语言辅助函数     | `site/src/data/i18n.ts`                            |
 | 长篇文章                   | `site/src/content/notes/{en,zh}/*.md`              |
 | 首页布局                   | `site/src/views/Home.astro`                        |
-| 全站视觉与响应式样式       | `site/src/styles/journal.css`                      |
+| 基础排版与响应式样式       | `site/src/styles/journal.css`                      |
 | 搜索和分类筛选             | `site/src/components/GardenFeed.tsx`               |
 | 插画提示词与来源           | `docs/workflows/digital-garden/field-notes-art.md` |
 
@@ -41,6 +41,8 @@ npm test
 ## 默认外观与语言
 
 首次访问默认深色、英文，不跟随系统。选择分别保存在浏览器的 `garden-theme` 与 `garden-language` 中；以前明确选择的浅色仍保留。英文位于 `/`，中文位于 `/zh/`，各有文章、RSS 与元数据。切换语言保留当前页面；再次从 `/` 进入时恢复保存的语言。直接打开某个语言的内容链接时尊重该链接。
+
+`site/src/styles/glass.css` 管理玻璃材质、插画背景氛围、字体层级和对应响应式规则；`journal.css` 保留基础布局。无 backdrop-filter 支持或用户要求减少透明效果时使用更实的表面，并尊重减少动态效果偏好。
 
 主题、语言切换和手机菜单使用原生交互；搜索和筛选使用 React。无 JavaScript 时正文、文章链接和语言链接仍可访问。手机菜单为原生 dialog；键盘焦点、Escape、减弱动态效果均有处理。
 
