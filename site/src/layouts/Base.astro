@@ -1,5 +1,5 @@
 ---
-import { Moon, Sun, ArrowUpRight, Code, Rss } from 'lucide-react';
+import { Moon, Sun, ChevronDown } from 'lucide-react';
 import { site, navigation } from '../data/site';
 import '../styles/global.css';
 interface Props {
@@ -8,8 +8,9 @@ interface Props {
 }
 const { title, description = site.description } = Astro.props;
 const pathname = Astro.url.pathname;
+const isHome = pathname === '/';
 const isActive = (href: string) =>
-  href === '/' ? pathname === '/' : pathname.startsWith(href);
+  href === '/' ? isHome : pathname.startsWith(href);
 const canonical = new URL(pathname, Astro.site);
 ---
 
@@ -20,7 +21,7 @@ const canonical = new URL(pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ? `${title} · Kevin` : site.title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#fafaf7" />
+    <meta name="theme-color" content="#ffffff" />
     <meta
       property="og:title"
       content={title ? `${title} · Kevin` : site.title}
@@ -44,80 +45,100 @@ const canonical = new URL(pathname, Astro.site);
     </script>
   </head>
   <body>
+    <div class="page-backdrop" aria-hidden="true"></div>
     <a class="skip-link" href="#main">
       跳到正文
     </a>
-    <div class="site-shell">
-      <header class="site-header container">
-        <a href="/" class="wordmark" aria-label="Kevin 的数字花园首页">
-          <span class="monogram">
-            k<span>.</span>
-          </span>
-          <span>
-            Kevin<span class="wordmark-caption"> / 数字花园</span>
-          </span>
-        </a>
-        <nav aria-label="主导航" class="main-nav">
-          {navigation.map((item) => (
-            <a
-              href={item.href}
-              aria-current={isActive(item.href) ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+    <header
+      class:list={['site-header', 'container', { 'home-header': isHome }]}
+    >
+      <div class="header-avatar-slot">
+        {!isHome && (
+          <a href="/" class="header-avatar" aria-label="Kevin 的数字花园首页">
+            <img
+              src="/images/avatar.png"
+              alt="Kevin 的 GitHub 头像"
+              width="40"
+              height="40"
+            />
+          </a>
+        )}
+      </div>
+      <nav aria-label="主导航" class="main-nav">
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <div class="header-tools">
         <button
-          class="theme-toggle icon-button"
+          type="button"
+          class="mobile-menu-button"
+          aria-expanded="false"
+          aria-controls="mobile-navigation"
+          data-menu-toggle
+        >
+          菜单 <ChevronDown size={14} aria-hidden="true" />
+        </button>
+        <button
+          class="theme-toggle"
           type="button"
           aria-label="切换到深色模式"
           data-theme-toggle
         >
-          <Sun size={19} className="sun-icon" aria-hidden="true" />
-          <Moon size={19} className="moon-icon" aria-hidden="true" />
+          <Sun size={22} className="sun-icon" aria-hidden="true" />
+          <Moon size={22} className="moon-icon" aria-hidden="true" />
         </button>
-      </header>
-      <main id="main">
-        <slot />
-      </main>
-      <footer class="site-footer container">
-        <div class="footer-line">
-          <a href="/" class="footer-name">
-            Kevin<span class="small-dot"></span>
+      </div>
+      <nav
+        id="mobile-navigation"
+        class="mobile-navigation"
+        aria-label="手机导航"
+        hidden
+      >
+        {navigation.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? 'page' : undefined}
+          >
+            {item.label}
           </a>
-          <span>记录，整理，继续前行。</span>
-        </div>
-        <div class="footer-bottom">
-          <span>© {new Date().getFullYear()} Kevin</span>
-          <div>
-            <a href={site.github} target="_blank" rel="noopener noreferrer">
-              <Code size={14} aria-hidden="true" /> GitHub{' '}
-              <ArrowUpRight size={12} aria-hidden="true" />
-            </a>
-            <a href="/rss.xml">
-              <Rss size={14} aria-hidden="true" /> RSS
-            </a>
-            <a href="/about/">关于本站</a>
-          </div>
-        </div>
-      </footer>
-    </div>
+        ))}
+      </nav>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer container">
+      <nav aria-label="页尾导航">
+        {navigation
+          .filter((item) => item.href !== '/')
+          .map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
+      </nav>
+      <span>© {new Date().getFullYear()} Kevin. 保留所有权利。</span>
+    </footer>
     <script>
-      const button = document.querySelector<HTMLButtonElement>(
+      const themeButton = document.querySelector<HTMLButtonElement>(
         '[data-theme-toggle]',
       );
       const syncTheme = () => {
         const dark = document.documentElement.dataset.theme === 'dark';
-        button?.setAttribute(
+        themeButton?.setAttribute(
           'aria-label',
           dark ? '切换到浅色模式' : '切换到深色模式',
         );
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', dark ? '#171b19' : '#fafaf7');
+          ?.setAttribute('content', dark ? '#18181b' : '#ffffff');
       };
       syncTheme();
-      button?.addEventListener('click', () => {
+      themeButton?.addEventListener('click', () => {
         const next =
           document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
         document.documentElement.dataset.theme = next;
@@ -125,6 +146,34 @@ const canonical = new URL(pathname, Astro.site);
           localStorage.setItem('garden-theme', next);
         } catch {}
         syncTheme();
+      });
+      const menuButton =
+        document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+      const menu = document.querySelector<HTMLElement>('#mobile-navigation');
+      const closeMenu = () => {
+        if (menu) menu.hidden = true;
+        menuButton?.setAttribute('aria-expanded', 'false');
+      };
+      menuButton?.addEventListener('click', () => {
+        const expanded = menuButton.getAttribute('aria-expanded') === 'true';
+        if (menu) menu.hidden = expanded;
+        menuButton.setAttribute('aria-expanded', String(!expanded));
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeMenu();
+          menuButton?.focus();
+        }
+      });
+      document.addEventListener('click', (event) => {
+        if (
+          menu &&
+          !menu.hidden &&
+          event.target instanceof Node &&
+          !menu.contains(event.target) &&
+          !menuButton?.contains(event.target)
+        )
+          closeMenu();
       });
     </script>
   </body>
