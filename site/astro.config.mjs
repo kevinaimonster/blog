@@ -7,6 +7,7 @@ export default defineConfig({
     process.env.SITE_URL ||
     'https://kevin-digital-garden.kevinmonster.chatgpt.site',
   output: 'static',
+  outDir: '../dist',
   trailingSlash: 'always',
   integrations: [react(), mdx()],
 });

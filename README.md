@@ -32,6 +32,6 @@ npm test
 
 ## 发布
 
-`npm run build` 输出到 `site/dist/`，可独立部署到静态托管。当前 `.openai/hosting.json` 绑定私人预览 Sites 项目。`SITE_URL` 可覆盖 canonical 与 RSS 的域名；切换 `kevin1988.fun` 前需设置为正式域名并重新构建，同时制定旧文章 URL 的迁移/重定向。
+`npm run build` 输出到 `dist/`，可独立部署到静态托管。当前 `.openai/hosting.json` 绑定私人预览 Sites 项目。`SITE_URL` 可覆盖 canonical 与 RSS 的域名；切换 `kevin1988.fun` 前需设置为正式域名并重新构建，同时制定旧文章 URL 的迁移/重定向。
 
 详细实施及验证记录：`docs/workflows/digital-garden/workflow.md`。

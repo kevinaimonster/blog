@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
-const output = path.resolve('site/dist');
+const output = path.resolve('dist');
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   return (
