@@ -1,0 +1,147 @@
+---
+import {
+  ArrowUpRightIcon as ArrowUpRight,
+  LightningIcon as Lightning,
+} from '@phosphor-icons/react/ssr';
+import { translator, type Locale } from '../data/i18n';
+interface Props {
+  id: string;
+  locale: Locale;
+}
+const { id, locale } = Astro.props;
+const t = translator(locale);
+---
+
+<div class:list={['work-visual', `visual-${id}`]} aria-hidden="true">
+  {id === 'second-me' ? (
+    <>
+      <div class="visual-topline">
+        <span>Second Me</span>
+        <ArrowUpRight size={20} />
+      </div>
+      <svg class="self-diagram" viewBox="0 0 280 180" fill="none">
+        <circle cx="106" cy="88" r="64" />
+        <circle cx="174" cy="88" r="64" />
+        <circle cx="106" cy="88" r="48" />
+        <circle cx="174" cy="88" r="48" />
+        <circle cx="106" cy="88" r="32" />
+        <circle cx="174" cy="88" r="32" />
+        <path d="M106 88h68" class="diagram-accent" />
+        <circle cx="106" cy="88" r="6" class="diagram-dot" />
+        <circle cx="174" cy="88" r="6" class="diagram-dot" />
+      </svg>
+      <div class="visual-bottomline">
+        <span>{t('像你一样思考。', 'A mind of your own.')}</span>
+        <small>{t('本地个人 AI', 'Personal AI, locally')}</small>
+      </div>
+    </>
+  ) : id === 'avatar' ? (
+    <>
+      <div class="visual-topline">
+        <span>Avatar</span>
+        <ArrowUpRight size={20} />
+      </div>
+      <svg class="canvas-diagram" viewBox="0 0 280 180" fill="none">
+        <path d="M68 94H136M136 94V46H178M136 94H178M136 94V142H178" />
+        <rect
+          x="24"
+          y="62"
+          width="72"
+          height="64"
+          rx="8"
+          class="diagram-card"
+        />
+        <path
+          d="M40 100c22-48 4 20 30-18 13-21 7 22 16 9"
+          class="diagram-accent"
+        />
+        <rect
+          x="178"
+          y="26"
+          width="78"
+          height="40"
+          rx="8"
+          class="diagram-card"
+        />
+        <rect
+          x="178"
+          y="74"
+          width="78"
+          height="40"
+          rx="8"
+          class="diagram-card"
+        />
+        <rect
+          x="178"
+          y="122"
+          width="78"
+          height="40"
+          rx="8"
+          class="diagram-card"
+        />
+        <path
+          d="M194 42h44m-44 8h28M194 90h44m-44 8h28M194 138h44m-44 8h28"
+          class="diagram-detail"
+        />
+      </svg>
+      <div class="visual-bottomline">
+        <span>{t('让想法，有迹可循。', 'Room to think out loud.')}</span>
+        <small>{t('AI 共创无限画布', 'An infinite canvas with AI')}</small>
+      </div>
+    </>
+  ) : id === 'valseit' ? (
+    <>
+      <div class="visual-topline">
+        <span>valseit</span>
+        <ArrowUpRight size={20} />
+      </div>
+      <div class="gateway-diagram">
+        <div>
+          <span>OpenAI</span>
+          <span>Anthropic</span>
+          <span>DeepSeek</span>
+        </div>
+        <span class="gateway-node">
+          valseit
+          <br />
+          <small>{t('模型网关', 'Gateway')}</small>
+        </span>
+        <span class="gateway-output">{t('你的应用', 'Your apps')}</span>
+      </div>
+      <div class="visual-bottomline">
+        <span>{t('接入模型，连接业务。', 'Models meet your business.')}</span>
+        <small>{t('路由 · 成本 · 计费', 'Routing · Cost · Billing')}</small>
+      </div>
+    </>
+  ) : id === 'upon' ? (
+    <>
+      <div class="visual-topline">
+        <span>UPon</span>
+        <ArrowUpRight size={20} />
+      </div>
+      <div class="workflow-diagram">
+        <span>{t('对话', 'Chat')}</span>
+        <span>{t('成本', 'Cost')}</span>
+        <span>{t('计费', 'Billing')}</span>
+      </div>
+      <div class="visual-bottomline">
+        <span>{t('融入已有的工作方式。', 'Part of the way you work.')}</span>
+        <small>{t('企业集成', 'Enterprise integration')}</small>
+      </div>
+    </>
+  ) : (
+    <>
+      <div class="visual-topline">
+        <span>Flash</span>
+        <ArrowUpRight size={20} />
+      </div>
+      <div class="flash-symbol">
+        <Lightning size={64} weight="light" />
+      </div>
+      <div class="visual-bottomline">
+        <span>{t('为 Mac 而做。', 'Made for the Mac.')}</span>
+        <small>macOS</small>
+      </div>
+    </>
+  )}
+</div>

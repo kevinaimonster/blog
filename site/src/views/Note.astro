@@ -5,7 +5,10 @@ const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
 
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import {
+  ArrowLeftIcon as ArrowLeft,
+  ArrowRightIcon as ArrowRight,
+} from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
 interface Props {
   note: CollectionEntry<'notes'>;

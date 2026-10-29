@@ -5,7 +5,10 @@ const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
 
-import { ArrowUpRight, Rss } from 'lucide-react';
+import {
+  ArrowUpRightIcon as ArrowUpRight,
+  RssIcon as Rss,
+} from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
 const notes = await getNotes(locale);
 ---
@@ -13,7 +16,7 @@ const notes = await getNotes(locale);
 <Base title={t('笔记', 'Notes')}>
   <div class="container page-container">
     <header class="page-heading">
-      <div class="eyebrow">NOTES & WRITING</div>
+      <div class="eyebrow">Notes & writing</div>
       <h1>{t('把过程，写下来。', 'Notes along the way.')}</h1>
       <p>
         {t(

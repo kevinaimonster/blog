@@ -48,3 +48,15 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - 素材替换验证：构建、既有 3 项产物测试通过；桌面首页与项目页已目视核验，首页社交区精确包含用户指定的 X / GitHub URL。最新截图另存 kevin-materials.png。
 - 私密预览项目：appgprj_6ae356b37bb08191b39044a2b3247240；预期 URL https://kevin-digital-garden.kevinmonster.chatgpt.site 。实际发布状态以 Sites 部署记录为准。
 - 正式域名与旧 master 保持原有状态；旧文章迁移、真实内容审阅及正式域名切换属于后续上线工作。
+
+
+## 设计深化：ai-design-skills
+
+- 用户认为表现力仍弱，并要求安装及应用 https://github.com/elayadesign/ai-design-skills 。已通过 Codex skill-installer 安装 landing-page-design 到 ~/.codex/skills/landing-page-design；下一轮自动可用，本轮直接读取并应用。
+- 同时阅读该 skill 指向的 redesign-existing-projects 审查规则。诊断：通用图库占据主视觉，真实作品呈现薄弱；字号、灰阶和信息层级过于接近；移动导航及运动状态需要完善。
+- 保留用户明确认可的 Spotlight 布局和深色英文默认值。它是个人数字花园，不套用销售落地页的定价、FAQ、虚构证言或转化指标。
+- 已实施：Geist 本地字体、Phosphor 图标、中性深色表面、标题渐变、单一青绿交互色、身份介绍与作品入口、Second Me/Avatar 概念图示、两列作品页、侧栏作品优先、阅读区标题层级、低强度滚动/悬停效果、全屏原生 dialog 菜单、手机可横向浏览的项目图带。
+- 图示只表达 kevin.top 已有的产品概念，不声称是实际产品截图；不增加新的个人经历、客户或产品数据。
+- 构建与 5 项产物测试通过；27 文件类型检查 0 errors / 0 warnings / 0 hints。
+- 浏览器连接 host 不可用，改用 CUA 原生 Safari 独立窗口。实际检查桌面首页、作品页、内容区、浅色中文；搜索 Spotlight 后只显示收藏，清空后恢复 3 项；语言切换保留主题；全屏菜单能打开并由 Escape 关闭。
+- 窄屏验证使用 Safari 页面缩放触发响应式断点，不等同于真实手机设备验收。发现 501–600px 英文标题孤词后调整字号；手机图带增加横向浏览，项目优先。

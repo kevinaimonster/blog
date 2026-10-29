@@ -1,5 +1,10 @@
 ---
-import { Moon, Sun, ChevronDown } from 'lucide-react';
+import {
+  MoonIcon as Moon,
+  SunIcon as Sun,
+  ListIcon as List,
+  XIcon as X,
+} from '@phosphor-icons/react/ssr';
 import {
   getContent,
   localeFromPath,
@@ -7,7 +12,10 @@ import {
   translator,
   withoutLocale,
 } from '../data/i18n';
+import '@fontsource-variable/geist';
 import '../styles/global.css';
+import '../styles/editorial.css';
+import Motion from '../components/Motion.astro';
 interface Props {
   title?: string;
   description?: string;
@@ -35,13 +43,18 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title ? `${title} · Kevin` : site.title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#18181b" />
+    <meta name="theme-color" content="#181818" />
     <meta
       property="og:title"
       content={title ? `${title} · Kevin` : site.title}
     />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content={new URL('/images/kevin-beach.jpg', Astro.site)}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta property="og:url" content={canonical} />
     <link rel="canonical" href={canonical} />
     <link
@@ -122,7 +135,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
           aria-controls="mobile-navigation"
           data-menu-toggle
         >
-          {t('菜单', 'Menu')} <ChevronDown size={14} aria-hidden="true" />
+          {t('菜单', 'Menu')} <List size={18} aria-hidden="true" />
         </button>
         <a
           class="language-toggle"
@@ -144,21 +157,32 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
           <Moon size={22} className="moon-icon" aria-hidden="true" />
         </button>
       </div>
-      <nav
+      <dialog
         id="mobile-navigation"
         class="mobile-navigation"
         aria-label={t('手机导航', 'Mobile navigation')}
-        hidden
       >
-        {navigation.map((item) => (
-          <a
-            href={href(item.href)}
-            aria-current={isActive(item.href) ? 'page' : undefined}
+        <div class="mobile-menu-heading">
+          <span>Kevin Bao</span>
+          <button
+            type="button"
+            data-menu-close
+            aria-label={t('关闭菜单', 'Close menu')}
           >
-            {item.label}
-          </a>
-        ))}
-      </nav>
+            <X size={24} />
+          </button>
+        </div>
+        <nav aria-label={t('手机导航', 'Mobile navigation')}>
+          {navigation.map((item) => (
+            <a
+              href={href(item.href)}
+              aria-current={isActive(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </dialog>
     </header>
     <main id="main">
       <slot />
@@ -176,6 +200,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         {t('保留所有权利。', 'All rights reserved.')}
       </span>
     </footer>
+    <Motion />
     <script>
       const zh = document.documentElement.lang === 'zh-CN';
       document
@@ -206,7 +231,7 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
         );
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute('content', dark ? '#18181b' : '#ffffff');
+          ?.setAttribute('content', dark ? '#181818' : '#ffffff');
       };
       syncTheme();
       themeButton?.addEventListener('click', () => {
@@ -220,32 +245,18 @@ const alternatePath = /^\/404(?:\.html|\/)?$/.test(currentPath)
       });
       const menuButton =
         document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-      const menu = document.querySelector<HTMLElement>('#mobile-navigation');
-      const closeMenu = () => {
-        if (menu) menu.hidden = true;
-        menuButton?.setAttribute('aria-expanded', 'false');
-      };
+      const menu =
+        document.querySelector<HTMLDialogElement>('#mobile-navigation');
       menuButton?.addEventListener('click', () => {
-        const expanded = menuButton.getAttribute('aria-expanded') === 'true';
-        if (menu) menu.hidden = expanded;
-        menuButton.setAttribute('aria-expanded', String(!expanded));
+        menu?.showModal();
+        menuButton.setAttribute('aria-expanded', 'true');
       });
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && menu && !menu.hidden) {
-          closeMenu();
-          menuButton?.focus();
-        }
-      });
-      document.addEventListener('click', (event) => {
-        if (
-          menu &&
-          !menu.hidden &&
-          event.target instanceof Node &&
-          !menu.contains(event.target) &&
-          !menuButton?.contains(event.target)
-        )
-          closeMenu();
-      });
+      document
+        .querySelector('[data-menu-close]')
+        ?.addEventListener('click', () => menu?.close());
+      menu?.addEventListener('close', () =>
+        menuButton?.setAttribute('aria-expanded', 'false'),
+      );
     </script>
   </body>
 </html>

@@ -2,7 +2,7 @@
 
 个人网站：近况、Markdown 笔记、收藏、项目。以 Spotlight 的公开演示为视觉参照，独立编写页面代码，没有使用 Tailwind Plus 的模板源码或素材。
 
-当前版按实际页面对照实现：居中胶囊导航、64px 圆形头像、48px/56px 大标题、宽幅倾斜照片带、左侧文章流与右侧信息卡片、黑白灰配色与少量青绿色。第一版偏离参照的绿色便签和大项目封面已移除。
+当前版保留 Spotlight 的居中胶囊导航、圆形头像、倾斜图片带和文章/侧栏双栏结构，并按用户指定的 elayadesign/ai-design-skills 做设计深化：Geist 字体、更清晰的标题层级、Phosphor 图标、项目概念图示、独立作品展示页、克制的进入动效。深色为中性灰，青绿色用于交互重点。
 
 旧 Hexo 生成文件保留在根目录；新网站在 `site/`。GitHub Pages 仍从 `master` 根目录发布，开发分支不会替换线上站点。
 
@@ -31,11 +31,15 @@ npm test
 
 个人介绍、Second Me / valseit / Avatar / UPon 项目资料取自用户指定的 [kevin.top](https://kevin.top/)，文字作了压缩，未迁入可能过时的星数或上架进度。Flash 保留已确认的公开发布仓库链接。建站近况与建站笔记仍为起始文案。
 
-头像与海滩背景插画沿用用户指定的 kevin.top，分别保存在 `kevin-avatar.jpg` 与 `kevin-beach.jpg`。其余四张图片是可替换的图库示意，并非个人摄影或旅行经历；配置、作者与来源见 `photos` 数组，文件在 `site/public/images/`。使用 [Unsplash License](https://unsplash.com/license) 下的图库素材，未使用 Spotlight 演示站的照片。
+头像与海滩背景插画沿用用户指定的 kevin.top，分别保存在 `kevin-avatar.jpg` 与 `kevin-beach.jpg`。首页另外显示两张 Unsplash 风景图库图，并非个人摄影或旅行经历；两张备用图库图仍保留在素材目录。Second Me 和 Avatar 面板是依据已知功能绘制的概念图示，不是产品界面截图；配置、作者与来源见 `photos` 数组，文件在 `site/public/images/`。使用 [Unsplash License](https://unsplash.com/license) 下的图库素材，未使用 Spotlight 演示站的照片。
 
 首页及关于页的社交入口只保留 X 与 GitHub。X 地址由用户明确提供：`https://x.com/KevinAIMonster`；GitHub 地址为 `https://github.com/kevinaimonster`。RSS 保留为独立订阅功能。
 
 新增笔记时复制现有 Markdown 的 frontmatter，日期使用 `YYYY-MM-DD`，并指定 `locale: en` 或 `locale: zh`。同一篇笔记在两个语言目录下使用相同文件名，以支持当前页面切换语言；发布前一并补全两个版本。`draft: true` 会同时从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。
+
+## 视觉深化
+
+项目图示和展示带见 `WorkVisual.astro`、`StoryStrip.astro`，本轮视觉样式在 `site/src/styles/editorial.css`。桌面保留五幅倾斜图片的宽幅结构；手机端可以横向浏览，优先展示项目。全屏菜单使用原生 dialog 处理焦点与 Escape；滚动进入效果使用 IntersectionObserver，减少动态效果时直接显示完整内容。所有正文在没有 JavaScript 时仍然可见。
 
 ## 默认外观与语言
 

@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react';
-import { Search, ChevronRight, ArrowUpRight, X } from 'lucide-react';
+import {
+  MagnifyingGlassIcon as Search,
+  CaretRightIcon as ChevronRight,
+  ArrowUpRightIcon as ArrowUpRight,
+  XIcon as X,
+} from '@phosphor-icons/react';
 import { translator, type Locale } from '../data/i18n';
 export interface FeedItem {
   id: string;

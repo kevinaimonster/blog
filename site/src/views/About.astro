@@ -1,5 +1,5 @@
 ---
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRightIcon as ArrowUpRight } from '@phosphor-icons/react/ssr';
 import GitHubIcon from '../components/GitHubIcon.astro';
 import XIcon from '../components/XIcon.astro';
 import Base from '../layouts/Base.astro';
@@ -12,7 +12,7 @@ const { site } = getContent(locale);
 <Base title={t('关于', 'About')}>
   <div class="container page-container about-page">
     <header class="page-heading">
-      <div class="eyebrow">A LITTLE ABOUT ME</div>
+      <div class="eyebrow">A little about me</div>
       <h1>
         {t('你好，我是 Kevin', 'Hi, I’m Kevin')}
         <span class="accent-period">.</span>
@@ -71,13 +71,13 @@ const { site } = getContent(locale);
           )}
           <a href="https://kevin.top/">kevin.top</a>
           {t(
-            '。图片带中的其余图片来自 Unsplash 图库，不代表个人摄影或旅行经历；点击图片可查看来源。',
-            '. The other images are stock photographs from Unsplash, rather than my own photography or travel memories. Each image links to its source.',
+            '。风景图片来自 Unsplash 图库。项目图示展示 Second Me 和 Avatar 的概念；点击可查看对应项目或图片来源。',
+            '. The scenery photographs are from Unsplash. The project diagrams illustrate the ideas behind Second Me and Avatar. Each panel links to the project or image source.',
           )}
         </p>
       </div>
       <aside class="about-links">
-        <span class="eyebrow">ELSEWHERE</span>
+        <span class="eyebrow">Elsewhere</span>
         <a href={site.x} target="_blank" rel="noopener noreferrer">
           <XIcon size={18} />
           <span>

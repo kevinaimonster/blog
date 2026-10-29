@@ -1,5 +1,8 @@
 ---
-import { ArrowUpRight, Bookmark } from 'lucide-react';
+import {
+  ArrowUpRightIcon as ArrowUpRight,
+  BookmarkIcon as Bookmark,
+} from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
 import { getContent, localeFromPath, translator } from '../data/i18n';
 const locale = localeFromPath(Astro.url.pathname);
@@ -10,7 +13,7 @@ const { bookmarks } = getContent(locale);
 <Base title={t('收藏', 'Bookmarks')}>
   <div class="container page-container">
     <header class="page-heading">
-      <div class="eyebrow">A SMALL COLLECTION</div>
+      <div class="eyebrow">A small collection</div>
       <h1>{t('值得，再看一次。', 'Worth another look.')}</h1>
       <p>
         {t(
