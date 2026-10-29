@@ -1,11 +1,8 @@
 export const site = {
   name: 'Kevin',
-  title: 'Kevin · 数字花园',
+  title: 'Kevin Bao · 个人手记',
   description:
-    'Kevin（鲍方毅）的数字花园。独立做 AI 产品，记录开源、企业 AI 定制与产品实验。',
-  headline: ['把想法做成产品，', '把过程留在这里。'],
-  intro:
-    '嗨，我是 Kevin（鲍方毅），工程师，曾任 Mindverse CTO。现在独立做 AI 产品，也承接企业 AI 定制。喜欢做些 AI 小工具——有的活了，有的没活，这里记录它们的过程。',
+    'Kevin（鲍方毅）的个人博客。关于 AI、创造，以及那些还在寻找答案的事。',
   github: 'https://github.com/kevinaimonster',
   x: 'https://x.com/KevinAIMonster',
   avatar: '/images/kevin-avatar.jpg',
@@ -19,8 +16,8 @@ export const site = {
 };
 
 export const navigation = [
-  { label: '花园', href: '/' },
-  { label: '笔记', href: '/notes/' },
+  { label: '首页', href: '/' },
+  { label: '文章', href: '/notes/' },
   { label: '收藏', href: '/bookmarks/' },
   { label: '项目', href: '/projects/' },
   { label: '关于', href: '/about/' },
@@ -30,7 +27,7 @@ export const thoughts = [
   {
     id: 'a-new-garden',
     date: '2026-10-29',
-    text: '给这个网站重新找了一个方向：更克制的排版，更轻的表达。先留下一条想法，再慢慢长成一篇笔记。',
+    text: '把这个网站当作个人博客重新开始。先留下一条想法，再慢慢长成一篇笔记。不用等到想明白，才开始记录。',
     tag: '建站记录',
   },
 ];
@@ -42,7 +39,7 @@ export const bookmarks = [
     url: 'https://spotlight.tailwindui.com/',
     domain: 'tailwindui.com',
     description:
-      '这次改版的视觉参考。喜欢它的留白、清晰排版，以及作品与生活并置的方式。',
+      '曾经参考过的个人网站设计。清晰的排版和适度的留白，依然值得回看。',
     category: '设计参考',
     date: '2026-10-29',
   },
@@ -58,8 +55,6 @@ export const projects = [
     url: 'https://github.com/mindverse/Second-Me',
     role: 'Mindverse CTO 任内',
     category: '开源',
-    icon: 'brain',
-    featured: true,
   },
   {
     id: 'valseit',
@@ -69,8 +64,6 @@ export const projects = [
     url: 'https://kevin.top/valseit/',
     role: '企业 AI 定制',
     category: '企业服务',
-    icon: 'network',
-    featured: true,
   },
   {
     id: 'avatar',
@@ -80,8 +73,6 @@ export const projects = [
     url: 'https://avatar-nu-ten.vercel.app',
     role: 'AI 共创画布',
     category: '产品实验',
-    icon: 'canvas',
-    featured: true,
   },
   {
     id: 'upon',
@@ -91,8 +82,6 @@ export const projects = [
     url: 'https://kevin.top/#projects',
     role: '硅言碳语交付',
     category: '已交付',
-    icon: 'layers',
-    featured: true,
   },
   {
     id: 'flash',
@@ -101,50 +90,5 @@ export const projects = [
     url: 'https://github.com/kevinaimonster/flash-releases',
     role: 'macOS 应用',
     category: '产品',
-    icon: 'zap',
-    featured: false,
-  },
-];
-
-// kevin.top 原站插画与图库示意混排；不将插画或图库图标为个人摄影。
-export const photos = [
-  {
-    src: '/images/mountains.webp',
-    alt: '晴空下的雪山，图库示意',
-    credit: 'Ryan Schroeder',
-    kind: '图库示意',
-    source:
-      'https://unsplash.com/photos/landscape-photography-mountain-range-with-snow-Gg7uKdHFb_c',
-  },
-  {
-    src: '/images/workspace.webp',
-    alt: '窗边的黑白工作空间，图库示意',
-    credit: 'Jon Tyson',
-    kind: '图库示意',
-    source:
-      'https://unsplash.com/photos/an-empty-office-desk-in-front-of-a-window-HsMVmGngmWM',
-  },
-  {
-    src: '/images/kevin-beach.jpg',
-    alt: 'kevin.top 的海滩背景插画',
-    credit: 'kevin.top',
-    kind: '原站插画',
-    source: 'https://kevin.top/',
-  },
-  {
-    src: '/images/ocean.webp',
-    alt: '阳光下的海浪，图库示意',
-    credit: 'Kellen Riggin',
-    kind: '图库示意',
-    source:
-      'https://unsplash.com/photos/ocean-waves-crashing-under-a-warm-sky-Ty3FE6YCwpI',
-  },
-  {
-    src: '/images/layers.webp',
-    alt: '暮色中层叠的山峦，图库示意',
-    credit: 'Willian Justen de Vasconcellos',
-    kind: '图库示意',
-    source:
-      'https://unsplash.com/photos/landscape-photography-of-mountains-with-fog-_MMP5j_fCqw',
   },
 ];

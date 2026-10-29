@@ -60,3 +60,23 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - 构建与 5 项产物测试通过；27 文件类型检查 0 errors / 0 warnings / 0 hints。
 - 浏览器连接 host 不可用，改用 CUA 原生 Safari 独立窗口。实际检查桌面首页、作品页、内容区、浅色中文；搜索 Spotlight 后只显示收藏，清空后恢复 3 项；语言切换保留主题；全屏菜单能打开并由 Escape 关闭。
 - 窄屏验证使用 Safari 页面缩放触发响应式断点，不等同于真实手机设备验收。发现 501–600px 英文标题孤词后调整字号；手机图带增加横向浏览，项目优先。
+
+## 2026-10-29：Field notes 个人博客重做
+
+本节替代前述 B1 与「保留 Spotlight 布局」的视觉约束。用户明确要求完全抛弃之前做法，从个人博客出发重做，并允许使用 imagegen。
+
+- 重建首页、文章归档、阅读页、收藏、项目与关于页；删除原有胶囊导航、倾斜图片带、项目概念图、介绍型 hero 和旧样式文件。全站只保留一套 journal.css。
+- 设计中心转为写作：Field notes 刊头、开篇文章封面、最近记录与作者页边注；项目成为独立文字索引。使用 Manrope、本地字体文件、炭灰/暖白/暖金，浅色对应暖纸色。
+- 使用内置 image_gen 生成海边手记与纸页飞鸟插画。原图 1983 × 793，复制到 site/public/images/field-notes-cover.png。提示词及素材说明见 field-notes-art.md；关于页明确为 AI 插画。
+- 个人资料与社交链接沿用已确认的 kevin.top、X 和 GitHub；内容仍只有起始文章、建站近况与 Spotlight 收藏，未声称迁移旧文章。
+- 阅读页目录从 Markdown 二级标题生成。保留真实筛选、搜索、空结果恢复、RSS、主题与同页语言切换，默认深色英文。
+- 桌面实际观察发现第一屏文章标题过低，已收紧刊头与封面高度；手机顶栏控制区提供 44px 点击目标，搜索输入字号避免小字号聚焦缩放。
+
+验证：
+
+- 最终 Astro check：21 文件，0 errors / 0 warnings / 0 hints。
+- 最终构建：13 个 HTML 页面、中英文 RSS；5 项既有产物测试全部通过；git diff --check 通过。
+- CUA 原生 Safari 实际观察：1512px 桌面首页、文章阅读页、项目页；用临时 iframe 检查 390px 英文、320px 中文与 640px 阅读布局。临时 QA 页在最终构建时移除，不进入部署。
+- 实际交互：收藏筛选只显示 Spotlight；无匹配搜索显示空结果；Show everything 恢复 3 条；手机菜单打开后焦点落在关闭按钮，Escape 关闭；浅色切换后切中文保持浅色；恢复英文深色；文章目录点击后 URL hash 与滚动位置变化。
+- 截图：/Users/kevinaimonster/empty/artifacts/kevin-field-notes-desktop.png、kevin-field-notes-responsive.png、kevin-field-notes-reading.png。均为本地构建验收，不声称真实手机设备测试或部署页面截图。
+- 继续使用同一个 owner-private Sites 项目及 codex/digital-garden 分支。正式域名、GitHub Pages 设置、master 未改。发布结果以本轮 Sites 原生部署返回为准。

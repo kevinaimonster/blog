@@ -1,8 +1,8 @@
-# Kevin · 数字花园
+# Kevin Bao · Field notes
 
-个人网站：近况、Markdown 笔记、收藏、项目。以 Spotlight 的公开演示为视觉参照，独立编写页面代码，没有使用 Tailwind Plus 的模板源码或素材。
+Kevin 的个人博客：文章、短想法、收藏，以及独立的项目索引。默认英文、深色，支持中文和浅色模式。
 
-当前版保留 Spotlight 的居中胶囊导航、圆形头像、倾斜图片带和文章/侧栏双栏结构，并按用户指定的 elayadesign/ai-design-skills 做设计深化：Geist 字体、更清晰的标题层级、Phosphor 图标、项目概念图示、独立作品展示页、克制的进入动效。深色为中性灰，青绿色用于交互重点。
+这一版从个人写作出发重新设计：Manrope 刊头、炭灰与暖金配色、定制海边手记插画、开篇文章、最近记录，以及有目录的独立阅读页。项目退到单独栏目。代码为原创实现，未使用 Tailwind Plus 源码。
 
 旧 Hexo 生成文件保留在根目录；新网站在 `site/`。GitHub Pages 仍从 `master` 根目录发布，开发分支不会替换线上站点。
 
@@ -20,35 +20,30 @@ npm test
 
 ## 修改内容
 
-| 内容                                   | 文件                                  |
-| -------------------------------------- | ------------------------------------- |
-| 中文名字、介绍、导航、近况、收藏、项目 | `site/src/data/site.ts`               |
-| 英文内容与语言辅助函数                 | `site/src/data/i18n.ts`               |
-| 长篇笔记                               | `site/src/content/notes/{en,zh}/*.md` |
-| 首页布局                               | `site/src/views/Home.astro`           |
-| 色彩、字体、间距和响应式样式           | `site/src/styles/global.css`          |
-| 搜索和分类筛选                         | `site/src/components/GardenFeed.tsx`  |
+| 内容                       | 文件                                               |
+| -------------------------- | -------------------------------------------------- |
+| 中文资料、近况、收藏、项目 | `site/src/data/site.ts`                            |
+| 英文内容与语言辅助函数     | `site/src/data/i18n.ts`                            |
+| 长篇文章                   | `site/src/content/notes/{en,zh}/*.md`              |
+| 首页布局                   | `site/src/views/Home.astro`                        |
+| 全站视觉与响应式样式       | `site/src/styles/journal.css`                      |
+| 搜索和分类筛选             | `site/src/components/GardenFeed.tsx`               |
+| 插画提示词与来源           | `docs/workflows/digital-garden/field-notes-art.md` |
 
-个人介绍、Second Me / valseit / Avatar / UPon 项目资料取自用户指定的 [kevin.top](https://kevin.top/)，文字作了压缩，未迁入可能过时的星数或上架进度。Flash 保留已确认的公开发布仓库链接。建站近况与建站笔记仍为起始文案。
+个人介绍、Second Me / valseit / Avatar / UPon 资料取自用户指定的 [kevin.top](https://kevin.top/)，未迁入可能过时的星数或运营进度。Flash 保留已确认的公开发布仓库链接。建站近况与开篇文章仍为起始文案，不代表已迁移旧博客文章。
 
-头像与海滩背景插画沿用用户指定的 kevin.top，分别保存在 `kevin-avatar.jpg` 与 `kevin-beach.jpg`。首页另外显示两张 Unsplash 风景图库图，并非个人摄影或旅行经历；两张备用图库图仍保留在素材目录。Second Me 和 Avatar 面板是依据已知功能绘制的概念图示，不是产品界面截图；配置、作者与来源见 `photos` 数组，文件在 `site/public/images/`。使用 [Unsplash License](https://unsplash.com/license) 下的图库素材，未使用 Spotlight 演示站的照片。
+头像沿用 `kevin.top`，保存为 `site/public/images/kevin-avatar.jpg`。首页主视觉由内置 imagegen 创作并保存为 `site/public/images/field-notes-cover.png`；这是想象场景，非个人摄影。上一版图片留在素材目录中，本版不再展示。只有 X 与 GitHub 社交入口；RSS 是独立订阅功能。
 
-首页及关于页的社交入口只保留 X 与 GitHub。X 地址由用户明确提供：`https://x.com/KevinAIMonster`；GitHub 地址为 `https://github.com/kevinaimonster`。RSS 保留为独立订阅功能。
-
-新增笔记时复制现有 Markdown 的 frontmatter，日期使用 `YYYY-MM-DD`，并指定 `locale: en` 或 `locale: zh`。同一篇笔记在两个语言目录下使用相同文件名，以支持当前页面切换语言；发布前一并补全两个版本。`draft: true` 会同时从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。
-
-## 视觉深化
-
-项目图示和展示带见 `WorkVisual.astro`、`StoryStrip.astro`，本轮视觉样式在 `site/src/styles/editorial.css`。桌面保留五幅倾斜图片的宽幅结构；手机端可以横向浏览，优先展示项目。全屏菜单使用原生 dialog 处理焦点与 Escape；滚动进入效果使用 IntersectionObserver，减少动态效果时直接显示完整内容。所有正文在没有 JavaScript 时仍然可见。
+新增文章时复制 Markdown frontmatter，日期使用 `YYYY-MM-DD`，指定 `locale: en` 或 `locale: zh`。同一篇文章在两个语言目录下使用相同文件名，以支持当前页面切换语言；发布前补全两个版本。`draft: true` 会从列表、详情路由、首页和 RSS 排除。文件名即文章路径，发布后改名会改变链接。阅读页目录从文章二级标题自动生成。
 
 ## 默认外观与语言
 
-首次访问默认深色、英文，不跟随系统语言或系统主题。顶栏支持浅色/深色和中文/英文切换；选择分别保存在当前浏览器的 `garden-theme` 与 `garden-language` 中。以前明确选择的浅色仍保留。
+首次访问默认深色、英文，不跟随系统。选择分别保存在浏览器的 `garden-theme` 与 `garden-language` 中；以前明确选择的浅色仍保留。英文位于 `/`，中文位于 `/zh/`，各有文章、RSS 与元数据。切换语言保留当前页面；再次从 `/` 进入时恢复保存的语言。直接打开某个语言的内容链接时尊重该链接。
 
-英文页面位于 `/`，中文页面位于 `/zh/`；各自有独立的笔记、RSS 与元数据。语言切换保留当前页面；再次从 `/` 进入时恢复保存的语言。直接打开某个语言的内容链接时尊重该链接。浏览器禁用本地存储或 JavaScript 时，默认页面仍是深色英文，中文链接仍可使用。
+主题、语言切换和手机菜单使用原生交互；搜索和筛选使用 React。无 JavaScript 时正文、文章链接和语言链接仍可访问。手机菜单为原生 dialog；键盘焦点、Escape、减弱动态效果均有处理。
 
 ## 发布
 
-`npm run build` 输出到 `dist/`，可独立部署到静态托管。当前 `.openai/hosting.json` 绑定私人预览 Sites 项目。`SITE_URL` 可覆盖 canonical 与 RSS 的域名；切换 `kevin1988.fun` 前需设置为正式域名并重新构建，同时制定旧文章 URL 的迁移/重定向。
+`npm run build` 输出 `dist/`，可部署到静态托管。`.openai/hosting.json` 绑定现有私人预览项目。`SITE_URL` 可覆盖 canonical 与 RSS 域名；切换 `kevin1988.fun` 前需设置正式域名并重新构建，同时安排旧文章 URL 的迁移与重定向。
 
-详细实施及验证记录：`docs/workflows/digital-garden/workflow.md`。
+实施及验证记录：`docs/workflows/digital-garden/workflow.md`。

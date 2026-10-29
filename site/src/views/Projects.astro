@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import { getContent, localeFromPath, translator } from '../data/i18n';
 const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
@@ -10,18 +10,34 @@ const { projects } = getContent(locale);
 <Base title={t('项目', 'Projects')}>
   <div class="container page-container">
     <header class="page-heading">
-      <div class="eyebrow">Products & selected work</div>
+      <div class="eyebrow">{t('写作之外', 'Outside the journal')}</div>
       <h1>{t('让想法，有所着落。', 'Ideas, made real.')}</h1>
       <p>
         {t(
-          '开源、产品实验与企业 AI 定制，也包括曾经参与的项目。',
-          'Open source, product experiments, and custom enterprise AI, including projects I’ve contributed to.',
+          '一些自己做的东西，一些曾经参与的项目。每一件，都是想法与现实的一次碰面。',
+          'Things I’ve made, and projects I’ve been part of. Each one is a meeting between an idea and the real world.',
         )}
       </p>
     </header>
-    <div class="project-grid">
-      {projects.map((project) => (
-        <ProjectCard project={project} />
+    <div class="project-list">
+      {projects.map((project, i) => (
+        <a
+          class="project-entry"
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="project-number">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h2>{project.name}</h2>
+            <span class="project-role">{project.role}</span>
+          </div>
+          <div class="project-description">
+            <span class="eyebrow">{project.category}</span>
+            <p>{project.description}</p>
+          </div>
+          <ArrowUpRightIcon size={24} />
+        </a>
       ))}
     </div>
   </div>

@@ -83,7 +83,7 @@ export default function GardenFeed({
           <Search size={16} aria-hidden="true" />
           <input
             type="search"
-            aria-label={t('搜索花园内容', 'Search the garden')}
+            aria-label={t('搜索博客内容', 'Search the journal')}
             placeholder={t('搜索', 'Search')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}

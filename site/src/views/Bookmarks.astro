@@ -1,8 +1,5 @@
 ---
-import {
-  ArrowUpRightIcon as ArrowUpRight,
-  BookmarkIcon as Bookmark,
-} from '@phosphor-icons/react/ssr';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
 import { getContent, localeFromPath, translator } from '../data/i18n';
 const locale = localeFromPath(Astro.url.pathname);
@@ -13,7 +10,7 @@ const { bookmarks } = getContent(locale);
 <Base title={t('收藏', 'Bookmarks')}>
   <div class="container page-container">
     <header class="page-heading">
-      <div class="eyebrow">A small collection</div>
+      <div class="eyebrow">{t('留在书架上的', 'Kept on the shelf')}</div>
       <h1>{t('值得，再看一次。', 'Worth another look.')}</h1>
       <p>
         {t(
@@ -23,24 +20,21 @@ const { bookmarks } = getContent(locale);
       </p>
     </header>
     <div class="bookmark-list">
-      {bookmarks.map((bookmark) => (
+      {bookmarks.map((bookmark, i) => (
         <a
           class="bookmark-card"
           href={bookmark.url}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div class="bookmark-card-icon">
-            <Bookmark size={20} />
-          </div>
+          <span class="bookmark-number">{String(i + 1).padStart(2, '0')}</span>
           <div>
             <span class="eyebrow">{bookmark.category}</span>
-            <h2>
-              {bookmark.title} <ArrowUpRight size={18} />
-            </h2>
+            <h2>{bookmark.title}</h2>
             <p>{bookmark.description}</p>
             <span class="bookmark-domain">{bookmark.domain}</span>
           </div>
+          <ArrowUpRightIcon size={26} />
         </a>
       ))}
     </div>

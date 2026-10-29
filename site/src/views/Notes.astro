@@ -1,22 +1,19 @@
 ---
 import { getNotes, noteSlug } from '../data/notes';
 import { localeFromPath, localizedPath, translator } from '../data/i18n';
+import { ArrowUpRightIcon, RssIcon } from '@phosphor-icons/react/ssr';
+import Base from '../layouts/Base.astro';
 const locale = localeFromPath(Astro.url.pathname);
 const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
-
-import {
-  ArrowUpRightIcon as ArrowUpRight,
-  RssIcon as Rss,
-} from '@phosphor-icons/react/ssr';
-import Base from '../layouts/Base.astro';
 const notes = await getNotes(locale);
+const years = [...new Set(notes.map((note) => note.data.date.slice(0, 4)))];
 ---
 
-<Base title={t('笔记', 'Notes')}>
+<Base title={t('文章', 'Writing')}>
   <div class="container page-container">
     <header class="page-heading">
-      <div class="eyebrow">Notes & writing</div>
+      <div class="eyebrow">{t('写作与记录', 'The writing archive')}</div>
       <h1>{t('把过程，写下来。', 'Notes along the way.')}</h1>
       <p>
         {t(
@@ -25,31 +22,48 @@ const notes = await getNotes(locale);
         )}
       </p>
       <a class="text-link" href={href('/rss.xml')}>
-        <Rss size={15} /> {t('订阅笔记', 'Subscribe via RSS')}
+        <RssIcon size={15} />
+        {t('订阅文章', 'Subscribe via RSS')}
       </a>
     </header>
-    <div class="notes-list">
-      {notes.map((note) => (
-        <article>
-          <time datetime={note.data.date}>
-            {note.data.date.replaceAll('-', '.')}
-          </time>
-          <div>
-            <div class="tag-list">
-              {note.data.tags.map((tag) => (
-                <span>{tag}</span>
-              ))}
-            </div>
-            <h2>
-              <a href={href(`/notes/${noteSlug(note)}/`)}>
-                {note.data.title}
-                <ArrowUpRight size={19} />
-              </a>
-            </h2>
-            <p>{note.data.description}</p>
-          </div>
-        </article>
-      ))}
-    </div>
+    {years.map((year) => (
+      <section class="archive-layout" aria-label={year}>
+        <div class="archive-year">
+          {year}
+          <span>
+            {notes.filter((note) => note.data.date.startsWith(year)).length}{' '}
+            {t('篇文章', 'written entries')}
+          </span>
+        </div>
+        <div class="notes-list">
+          {notes
+            .filter((note) => note.data.date.startsWith(year))
+            .map((note) => (
+              <article>
+                <time datetime={note.data.date}>
+                  {note.data.date.replaceAll('-', '.')}
+                </time>
+                <div>
+                  <div class="tag-list">
+                    {note.data.tags.map((tag) => (
+                      <span>{tag}</span>
+                    ))}
+                  </div>
+                  <h2>
+                    <a href={href(`/notes/${noteSlug(note)}/`)}>
+                      {note.data.title}
+                      <ArrowUpRightIcon size={21} />
+                    </a>
+                  </h2>
+                  <p>{note.data.description}</p>
+                </div>
+              </article>
+            ))}
+        </div>
+      </section>
+    ))}
+    <p class="page-postscript">
+      {t('刚刚开始，往后慢慢写。', 'A beginning. More pages to come.')}
+    </p>
   </div>
 </Base>

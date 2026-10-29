@@ -13,12 +13,9 @@ export const translator = (locale: Locale) => (zh: string, en: string) =>
 const english = {
   site: {
     ...chinese.site,
-    title: 'Kevin · Digital Garden',
+    title: 'Kevin Bao · Field notes',
     description:
-      'Kevin Bao’s digital garden. Building AI products and sharing notes on open source, enterprise AI, and product experiments.',
-    headline: ['Building AI products.', 'Sharing the process.'],
-    intro:
-      'I’m Kevin Bao, an engineer and former CTO of Mindverse. These days I build independent AI products and custom AI for businesses. Some ideas make it, some don’t. This is where I share the work along the way.',
+      'Kevin Bao’s personal journal. On AI, making things, and everything I’m still figuring out.',
     about: [
       'Hi, I’m Kevin Bao, an engineer and former CTO of Mindverse. I now build independent AI products.',
       'At Mindverse, I worked on Second Me: a local-first personal AI that lets you train a model to think like you. The project is open source and accompanied by a research paper.',
@@ -28,17 +25,17 @@ const english = {
   },
   navigation: chinese.navigation.map((item, index) => ({
     ...item,
-    label: ['Garden', 'Notes', 'Bookmarks', 'Projects', 'About'][index],
+    label: ['Journal', 'Writing', 'Bookmarks', 'Projects', 'About'][index],
   })),
   thoughts: chinese.thoughts.map((item) => ({
     ...item,
-    text: 'A new direction for this website: quieter typography and a lighter way to share. A quick thought today can grow into a longer note tomorrow.',
+    text: 'Starting over with this space as a personal blog. A quick thought today can grow into a longer note tomorrow. No need to have it all figured out before writing it down.',
     tag: 'Building this site',
   })),
   bookmarks: chinese.bookmarks.map((item) => ({
     ...item,
     description:
-      'The visual reference for this redesign. I like its generous spacing, clear typography, and the way it brings work and life together.',
+      'A personal website design I’ve spent time with. Its clear typography and generous spacing are still worth revisiting.',
     category: 'Design reference',
   })),
   projects: chinese.projects.map((project) => ({
@@ -80,17 +77,6 @@ const english = {
         { description: string; role: string; category: string }
       >
     )[project.id],
-  })),
-  photos: chinese.photos.map((photo, index) => ({
-    ...photo,
-    alt: [
-      'Snow-covered mountains under a clear sky, stock photograph',
-      'A black-and-white workspace by a window, stock photograph',
-      'The beach illustration from kevin.top',
-      'Ocean waves in the sunlight, stock photograph',
-      'Layers of mountains at dusk, stock photograph',
-    ][index],
-    kind: index === 2 ? 'Original illustration' : 'Stock photograph',
   })),
 };
 

@@ -1,5 +1,5 @@
 ---
-import { ArrowUpRightIcon as ArrowUpRight } from '@phosphor-icons/react/ssr';
+import { ArrowUpRightIcon } from '@phosphor-icons/react/ssr';
 import GitHubIcon from '../components/GitHubIcon.astro';
 import XIcon from '../components/XIcon.astro';
 import Base from '../layouts/Base.astro';
@@ -12,15 +12,17 @@ const { site } = getContent(locale);
 <Base title={t('关于', 'About')}>
   <div class="container page-container about-page">
     <header class="page-heading">
-      <div class="eyebrow">A little about me</div>
+      <div class="eyebrow">
+        {t('写这些文字的人', 'The person behind the pages')}
+      </div>
       <h1>
         {t('你好，我是 Kevin', 'Hi, I’m Kevin')}
         <span class="accent-period">.</span>
       </h1>
       <p>
         {t(
-          '独立做 AI 产品，也做企业 AI 定制。',
-          'Independent AI products. Custom AI for businesses.',
+          '一个工程师，也在学习如何把所想的事写下来。',
+          'An engineer, learning to put the things I think about into words.',
         )}
       </p>
     </header>
@@ -29,69 +31,72 @@ const { site } = getContent(locale);
         {site.about.map((paragraph) => (
           <p>{paragraph}</p>
         ))}
-        <h2>{t('在这里，你会看到', 'What you’ll find here')}</h2>
-        <ul>
-          <li>
-            <strong>{t('近况', 'Updates')}</strong>
-            {t(
-              '：短一点的记录，还没想完也没关系。',
-              ': short observations, even when the thought is still taking shape.',
-            )}
-          </li>
-          <li>
-            <strong>{t('笔记', 'Notes')}</strong>
-            {t(
-              '：完整一点的思考与过程。',
-              ': more room for ideas and the process behind them.',
-            )}
-          </li>
-          <li>
-            <strong>{t('收藏', 'Bookmarks')}</strong>
-            {t('：值得再次回来的链接。', ': links worth coming back to.')}
-          </li>
-          <li>
-            <strong>{t('项目', 'Projects')}</strong>
-            {t(
-              '：正在做的作品，以及它们的进展。',
-              ': things I’m building and how they’re progressing.',
-            )}
-          </li>
-        </ul>
-        <h2>{t('关于这个网站', 'About this website')}</h2>
+        <h2>{t('为什么写这个博客', 'Why keep a journal?')}</h2>
         <p>
           {t(
-            '这个网站以 Spotlight 为视觉参考，使用独立编写的代码实现。内容会持续补充，结构也会随着使用慢慢调整。',
-            'This site is independently built, with Spotlight as a visual reference. The content and structure will evolve as I use it.',
+            '做东西的时候，常常有些不够完整的想法。它们不需要立刻变成结论，但值得被留下。这里是这些想法的落脚处：有时是一篇长文，有时只是一段近况，或一个想再看一遍的链接。',
+            'Making things leaves a trail of unfinished thoughts. They don’t all need to become conclusions, but they deserve somewhere to live. Sometimes that means an essay. Sometimes just a short update, or a link worth returning to.',
           )}
         </p>
-        <p>
-          {t(
-            '头像、海滩插画和个人资料沿用自 ',
-            'The avatar, beach illustration, and personal details come from ',
-          )}
-          <a href="https://kevin.top/">kevin.top</a>
-          {t(
-            '。风景图片来自 Unsplash 图库。项目图示展示 Second Me 和 Avatar 的概念；点击可查看对应项目或图片来源。',
-            '. The scenery photographs are from Unsplash. The project diagrams illustrate the ideas behind Second Me and Avatar. Each panel links to the project or image source.',
-          )}
-        </p>
+        <div class="colophon">
+          <h2>{t('关于这个博客', 'A small colophon')}</h2>
+          <p>
+            {t(
+              '头像与个人资料来自 ',
+              'The avatar and personal details come from ',
+            )}
+            <a
+              href="https://kevin.top/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              kevin.top
+            </a>
+            {t(
+              '。这里是一个独立设计、持续整理的个人博客。',
+              '. This is an independently designed personal blog, always a work in progress.',
+            )}
+          </p>
+          <p>
+            {t(
+              '首页的海边手记插画由 AI 创作。纸页化成飞鸟，是为这个博客画的一点想象。',
+              'The illustration on the homepage was created with AI. Pages becoming birds: a little imagination for this journal.',
+            )}
+          </p>
+        </div>
       </div>
       <aside class="about-links">
-        <span class="eyebrow">Elsewhere</span>
+        <img
+          class="about-portrait"
+          src={site.avatar}
+          alt={t(
+            'Kevin 的头像，来自 kevin.top',
+            'Kevin’s avatar from kevin.top',
+          )}
+          width="84"
+          height="84"
+        />
+        <span class="eyebrow">{t('也在这里', 'Elsewhere')}</span>
         <a href={site.x} target="_blank" rel="noopener noreferrer">
           <XIcon size={18} />
           <span>
             X<small>@KevinAIMonster</small>
           </span>
-          <ArrowUpRight size={16} />
+          <ArrowUpRightIcon size={16} />
         </a>
         <a href={site.github} target="_blank" rel="noopener noreferrer">
           <GitHubIcon size={18} />
           <span>
             GitHub<small>@kevinaimonster</small>
           </span>
-          <ArrowUpRight size={16} />
+          <ArrowUpRightIcon size={16} />
         </a>
+        <p class="about-location">
+          {t(
+            '独立做 AI 产品，也做企业 AI 定制。',
+            'Independent AI products. Custom AI for businesses.',
+          )}
+        </p>
       </aside>
     </div>
   </div>

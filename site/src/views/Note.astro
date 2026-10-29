@@ -1,34 +1,31 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
 import { localeFromPath, localizedPath, translator } from '../data/i18n';
-const locale = localeFromPath(Astro.url.pathname);
-const t = translator(locale);
-const href = (path: string) => localizedPath(path, locale);
-
-import {
-  ArrowLeftIcon as ArrowLeft,
-  ArrowRightIcon as ArrowRight,
-} from '@phosphor-icons/react/ssr';
+import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react/ssr';
 import Base from '../layouts/Base.astro';
 interface Props {
   note: CollectionEntry<'notes'>;
 }
 const { note } = Astro.props;
-const { Content } = await render(note);
+const { Content, headings } = await render(note);
+const locale = localeFromPath(Astro.url.pathname);
+const t = translator(locale);
+const href = (path: string) => localizedPath(path, locale);
 ---
 
 <Base title={note.data.title} description={note.data.description}>
   <article class="article-page container">
     <a class="quiet-link back-link" href={href('/notes/')}>
-      <ArrowLeft size={15} /> {t('所有笔记', 'All notes')}
+      <ArrowLeftIcon size={15} />
+      {t('所有文章', 'All writing')}
     </a>
     <header class="article-heading">
       <div class="article-meta">
         <time datetime={note.data.date}>
           {note.data.date.replaceAll('-', '.')}
         </time>
-        <span>·</span>
-        <span>Kevin</span>
+        <span>—</span>
+        <span>Kevin Bao</span>
       </div>
       <h1>{note.data.title}</h1>
       <p>{note.data.description}</p>
@@ -38,16 +35,33 @@ const { Content } = await render(note);
         ))}
       </div>
     </header>
-    <div class="prose">
-      <Content />
-    </div>
-    <div class="article-bottom">
-      <span>
-        {t('写下此刻，也为以后的想法留白。', 'Written now, with room to grow.')}
-      </span>
-      <a class="text-link" href={href('/')}>
-        {t('回到花园', 'Back to the garden')} <ArrowRight size={15} />
-      </a>
+    <div class="article-divider"></div>
+    <div class="article-layout">
+      <aside class="article-toc">
+        <p class="eyebrow">{t('这篇文章', 'In this entry')}</p>
+        <nav aria-label={t('文章目录', 'Table of contents')}>
+          {headings
+            .filter((heading) => heading.depth === 2)
+            .map((heading) => (
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            ))}
+        </nav>
+      </aside>
+      <div class="prose">
+        <Content />
+      </div>
+      <div class="article-bottom">
+        <span>
+          {t(
+            '写下此刻，也为以后的想法留白。',
+            'Written now, with room to grow.',
+          )}
+        </span>
+        <a class="text-link" href={href('/notes/')}>
+          {t('回到文章归档', 'Back to the archive')}
+          <ArrowRightIcon size={15} />
+        </a>
+      </div>
     </div>
   </article>
 </Base>
