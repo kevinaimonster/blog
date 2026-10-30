@@ -5,6 +5,8 @@ description: A fresh start for this digital garden, and how I plan to use it.
 date: '2026-10-29'
 tags: ['Building this site', 'Digital garden']
 illustration:
+  width: 1983
+  height: 793
   src: /images/field-notes-cover.png
   alt: An open notebook by the sea at night, its pages becoming birds.
   caption: Everything begins with a page. Illustration created with AI.

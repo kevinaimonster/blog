@@ -6,29 +6,38 @@ Kevin 的个人博客：文章、短想法、收藏，以及独立的项目索�
 
 正式站点为 https://kevin1988.fun/，源码仓库为 `kevinaimonster/blog`。网站源码在 `site/`；`master` 通过 GitHub Actions 构建并发布 `dist/` 到 GitHub Pages。仓库根目录的旧 Hexo 产物只作历史保留，不再作为部署目录。
 
-## 本地开发
+## 写作与维护
 
-需要 Node >= 22.23.4。
+需要 Node >= 22.23.4（`.nvmrc` 已固定版本）。已有仓库先同步最新 `master`，首次安装依赖，然后打开交互菜单：
 
 ```sh
 npm ci
-npm run dev
-npm run check
-npm run build
-npm test
+npm run blog
 ```
 
-## 修改内容
+按 Hexo 的使用习惯提供 `new / server / generate / deploy`：新建草稿 → 编辑 Markdown → 本地预览 → `publish` 标记为待发布 → `deploy` 检查、确认并推送。`master` 自动部署，其他分支需合并 PR。新建操作也支持近况、收藏和项目；草稿只在本地专用预览中显示。
 
-| 内容                       | 文件                                               |
-| -------------------------- | -------------------------------------------------- |
-| 中文资料、近况、收藏、项目 | `site/src/data/site.ts`                            |
-| 英文内容与语言辅助函数     | `site/src/data/i18n.ts`                            |
-| 长篇文章                   | `site/src/content/notes/{en,zh}/*.md`              |
-| 首页布局                   | `site/src/views/Home.astro`                        |
-| 基础排版与响应式样式       | `site/src/styles/journal.css`                      |
-| 搜索和分类筛选             | `site/src/components/GardenFeed.tsx`               |
-| 插画提示词与来源           | `docs/workflows/digital-garden/field-notes-art.md` |
+**完整操作说明：[维护手册](docs/MAINTENANCE.md)**，包括发文、图片、双语、SEO、改内容、归档、故障排查和回滚。工程审计与数据流见 [工程结构](docs/ARCHITECTURE.md)。
+
+```sh
+npm run blog -- new       # 交互新建，默认草稿
+npm run blog -- server    # 预览，包括草稿；Ctrl+C 退出
+npm run blog -- publish   # 本地准备发布，不推送
+npm run blog -- deploy    # 检查后确认提交、推送
+npm run validate         # 类型 + 内容 + 生产构建 + 测试，不发布
+```
+
+| 内容                         | 文件                                        |
+| ---------------------------- | ------------------------------------------- |
+| 中英文文章                   | `site/src/content/notes/{en,zh}/*.md`       |
+| 中英文介绍、近况、收藏、项目 | `site/src/content/settings/{en,zh}.json`    |
+| 名字、头像、X、GitHub        | `site/src/content/settings/shared.json`     |
+| 图片素材                     | `site/public/images/`                       |
+| 首页布局                     | `site/src/views/Home.astro`                 |
+| 基础排版 / 玻璃材质          | `site/src/styles/journal.css` / `glass.css` |
+| 搜索和分类筛选               | `site/src/components/GardenFeed.tsx`        |
+
+草稿不会生成正式页面，但公开仓库中的源文件和图片不具备私密性。推送成功后仍需等待 [Actions](https://github.com/kevinaimonster/blog/actions/workflows/pages.yml) 部署成功，并访问实际文章确认。
 
 个人介绍、Second Me / valseit / Avatar / UPon 资料取自用户指定的 [kevin.top](https://kevin.top/)，未迁入可能过时的星数或运营进度。Flash 保留已确认的公开发布仓库链接。建站近况与开篇文章为本次建站稿。旧站的两条记录已保留在原地址：`/First-Post/`（原空正文记录）和 `/2024/06/19/hello-world/`（Hexo 示例）；可从 `/archives/` 查看。
 
@@ -36,7 +45,7 @@ npm test
 
 新增文章时复制 Markdown frontmatter，日期使用 `YYYY-MM-DD`，指定 `locale: en` 或 `locale: zh`。同一篇文章在两个语言目录下使用相同文件名，即可建立中英文关联；仅发布一个语言也可以。语言元数据只指向实际存在的译文；没有译文时，切换按钮进入另一语言的文章列表。`draft: true` 会从列表、详情路由、首页和 RSS 排除。文件名默认决定文章路径；发布后不要直接改名。可用 `permalink: /your-stable-path/` 固定旧链接。`updated: YYYY-MM-DD` 只用于内容实际更新，不能把每次部署日期当作文章更新日期。`archived: true` 保留正文地址，但从首页、RSS、站点地图和搜索索引中排除；适用于旧模板记录，不应用于正常文章。阅读页目录从文章二级标题自动生成。
 
-文章可在 frontmatter 中配置 `illustration: { src, alt, caption }`。只在该文章末尾显示插画，并用于文章的分享预览；首页使用狐狸工作台形象作为分享图。
+文章可在 frontmatter 中配置 `illustration: { src, alt, caption, width, height }`（宽高按真实图片尺寸同时填写，也可同时省略）。只在该文章末尾显示插画，并用于文章的分享预览；首页使用狐狸工作台形象作为分享图。
 
 ## 默认外观与语言
 

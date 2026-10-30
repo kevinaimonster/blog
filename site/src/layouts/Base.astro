@@ -14,6 +14,7 @@ import {
   type Locale,
 } from '../data/i18n';
 import { indexable, pageAlternates } from '../data/seo';
+import { draftPreview } from '../data/preview';
 import '@fontsource-variable/geist';
 import '../styles/journal.css';
 import '../styles/glass.css';
@@ -89,7 +90,7 @@ const structuredData = article
     <meta
       name="robots"
       content={
-        indexable && !noindex
+        indexable && !noindex && !draftPreview
           ? 'index, follow, max-image-preview:large'
           : 'noindex, follow'
       }
@@ -178,6 +179,11 @@ const structuredData = article
     </script>
   </head>
   <body>
+    {draftPreview && (
+      <div class="draft-preview-notice" role="status">
+        Local draft preview · 草稿仅在本地预览，正式构建会排除。
+      </div>
+    )}
     <a class="skip-link" href="#main">
       {t('跳到正文', 'Skip to content')}
     </a>

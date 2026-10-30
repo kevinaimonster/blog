@@ -762,6 +762,13 @@ main {
   font-size: 12px;
   line-height: 16px;
 }
+.draft-preview-notice {
+  padding: 12px 20px;
+  text-align: center;
+  background: #574126;
+  color: #fff4df;
+  font-size: 14px;
+}
 .article-layout > .prose {
   grid-column: -2 / -1;
 }

@@ -21,9 +21,7 @@ const t = translator(locale);
 const href = (path: string) => localizedPath(path, locale);
 const { site, thoughts, bookmarks, projects } = getContent(locale);
 const notes = await getNotes(locale);
-const selectedProjects = projects.filter((project) =>
-  ['valseit', 'avatar', 'flash'].includes(project.id),
-);
+const selectedProjects = projects.filter((project) => project.featured);
 const items: FeedItem[] = [
   ...notes.map((note) => ({
     id: note.id,
@@ -36,7 +34,6 @@ const items: FeedItem[] = [
   })),
   ...thoughts.map((item) => ({
     ...item,
-    title: t('关于这里的一点近况', 'A small note on starting again'),
     kind: 'thought' as const,
   })),
   ...bookmarks.map((item) => ({
@@ -61,12 +58,7 @@ const items: FeedItem[] = [
         <h1 id="identity-title">
           Kevin<span>.</span>
         </h1>
-        <p class="identity-role">
-          {t(
-            'AI 产品 · macOS 工具 · 企业 AI 定制',
-            'AI products · macOS tools · Custom AI',
-          )}
-        </p>
+        <p class="identity-role">{site.tagline}</p>
       </div>
       <img
         class="identity-art"

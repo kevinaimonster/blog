@@ -1,11 +1,13 @@
 import type { APIRoute } from 'astro';
-import { getNotes, notePath } from '../data/notes';
+import { getPublishedNotes, notePath } from '../data/notes';
 import { getContent } from '../data/i18n';
 import { escapeXml } from '../data/seo';
 
 // Keep the original Hexo subscription address working.
 export const GET: APIRoute = async ({ site: origin }) => {
-  const notes = await getNotes('en');
+  const notes = (await getPublishedNotes('en')).filter(
+    (note) => !note.data.archived,
+  );
   const { site } = getContent('en');
   const timestamp = (date: string) => `${date}T00:00:00Z`;
   const updated =

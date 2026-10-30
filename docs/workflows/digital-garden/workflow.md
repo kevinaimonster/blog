@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 用户选择 Spotlight 的专业、成熟风格，并明确选择「没有，按这个风格做原创版本」。用户随后否定了第一版的视觉相似度，本次按原站实际布局纠正。
-- 阶段：deliver；状态：production_verified。
+- 当前阶段：implement；状态：maintenance_cli_verification。v1.0.0 已正式发布并验证；本轮新增本地写作与维护能力，详见文末。
 - 本次终点：用户已确认第一版并明确授权推送原仓库、覆盖正式博客；执行 SEO 与旧链接迁移后，将新版发布到 kevin1988.fun。本节与最后一节取代早先仅私密预览、不动 master 的限制。
 - 基线：kevinaimonster/blog，master fd3f84618d7f888907f27c777cb7c61aa2191303；实现分支 codex/digital-garden。
 
@@ -155,3 +155,28 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - 正式 HTTPS 验证 28 个 HTML/订阅/robots/不存在路径响应以及 7 个引用资源，全部通过；404 返回真实 404，旧 directory/index.html 地址均 200；RSS、Atom、sitemap 均通过 XML 解析；12 个 sitemap URL 均为正式域名。文章 BlogPosting、canonical、索引状态与语言关联已检查；线上图片哈希与原素材一致。
 - Safari 实际打开正式首页，首屏、图片和玻璃材质正常；Bookmarks 筛选只留下 Spotlight，恢复 All 正常。截图：/Users/kevinaimonster/empty/artifacts/kevin-blog-v1-live.png；HTTP 检查明细：kevin-blog-v1-live-check.json（本地 artifacts）。
 - 本轮未提交 Search Console，未声称已被搜索引擎收录；技术 SEO 与生产响应验证完成。
+
+
+## 2026-10-29：本地 Markdown 与交互式维护 CLI
+
+用户要求检查整个工程，补齐发文与标准维护方式；明确选择“本地写 Markdown，通过 Git 推送发布”，并要求“类似 Hexo 那样有交互的 CLI”。就绪：ready。无需引入登录后台或数据库，维持已确认的设计与生产部署链。
+
+| 规则 | 实现 | 验收 |
+| --- | --- | --- |
+| M1 日常发文有标准入口 | npm run blog 交互菜单；new/server/generate/deploy 命令 | 隔离副本真实终端完成新建与状态流转 |
+| M2 草稿可预览且不会误发 | 默认 draft，DEV + SHOW_DRAFTS 双重约束，预览 noindex | 本地草稿 HTTP 200；生产不产生路由、feed 或客户端内容 |
+| M3 维护所有现有内容类型 | Markdown 文章、分语言 JSON 资料/近况/收藏/项目，稳定 ID | 新条目用自身文案、双语独立，无固定英文覆盖 |
+| M4 Git 发布可审查和回滚 | 发布前校验、展示分支和文件、确认提交推送；保留旧 URL | dry-run 无 Git/远端写入，拒绝混入未完成代码 |
+| M5 标准维护可交接 | README 快速入口、维护手册、架构审计、模板 | 文档命令与真实操作一致，明确 Git 推送和上线区别 |
+
+审计发现：原英文近况与收藏采用硬编码映射，会覆盖新增内容；没有草稿预览；部分测试写死建站文章；文章插图宽高固定为起始图片。已改为独立内容 JSON、共享 schema 校验、开发专用预览、按内容集合验证元数据和可配置插图尺寸。生产设计与现有正文保持。
+
+本地验证已完成；测试文章只存在于隔离临时副本，不提交到正式内容库。
+
+- Node 22.23.4：Astro check 28 个文件，0 errors / warnings / hints；生产构建 18 页，14 项测试全部通过。
+- 真实终端菜单创建英文草稿；空正文 publish 被阻止并恢复原文件。发现并修正 YAML 日期未加引号导致 Astro 读取成 Date 的兼容问题；新建和状态切换统一引用字符串日期。
+- 隔离副本草稿文章 HTTP 200、正文与 JSON 草稿可见、预览提示和 noindex 正确；开发 RSS/Atom 排除草稿。生产刻意设置 SHOW_DRAFTS=true，仍无草稿路由，HTML/XML/JS/JSON 不含测试正文或 JSON 草稿标记。
+- publish 后文章出现在详情、RSS/Atom/sitemap，单语言文章没有指向不存在译文的 alternate 元数据；14 项测试在新增文章后仍全部通过。
+- deploy --dry-run 不改变 HEAD、暂存区和临时远端；真实交互 deploy 完成确认、提交、推送到本地 bare 测试仓库，工作区干净。正式工作区混有代码时，写作 deploy 按预期拒绝自动提交。
+- archive 后文章 URL 和正文保留，设置 noindex，从首页、列表、订阅和 sitemap 移除。
+- 本地验收证据：/Users/kevinaimonster/empty/artifacts/kevin-blog-cli-acceptance.json。没有发布测试文章；正式发布结果另行记录。

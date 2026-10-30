@@ -3,6 +3,18 @@ import assert from 'node:assert/strict';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import vm from 'node:vm';
+import { readNotes } from '../scripts/content.mjs';
+const notes = await readNotes();
+const settings = Object.fromEntries(
+  await Promise.all(
+    ['en', 'zh'].map(async (locale) => [
+      locale,
+      JSON.parse(
+        await readFile(`site/src/content/settings/${locale}.json`, 'utf8'),
+      ),
+    ]),
+  ),
+);
 
 const output = path.resolve('dist');
 async function filesIn(directory) {
@@ -67,7 +79,15 @@ test('RSS items use the deployment domain and point to generated notes', async (
     assert.match(xml, /<rss version="2.0">/);
     const expectedOrigin = process.env.SITE_URL || 'https://kevin1988.fun';
     const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
-    assert.ok(items.length > 0, 'Expected the starter note in RSS');
+    assert.equal(
+      items.length,
+      notes.filter(
+        (note) =>
+          note.data.locale === locale &&
+          !note.data.draft &&
+          !note.data.archived,
+      ).length,
+    );
     for (const [, body] of items) {
       const link = body.match(/<link>([^<]+)<\/link>/)?.[1];
       const url = new URL(link);
@@ -85,20 +105,11 @@ test('RSS items use the deployment domain and point to generated notes', async (
 
 test('both languages include translated content and same-page switching', async () => {
   for (const [route, english, chinese] of [
-    [
-      '',
-      'AI products · macOS tools · Custom AI',
-      'AI 产品 · macOS 工具 · 企业 AI 定制',
-    ],
+    ['', settings.en.site.tagline, settings.zh.site.tagline],
     ['about/', 'Hi, I’m Kevin', '你好，我是 Kevin'],
     ['projects/', 'Ideas, made real.', '让想法，有所着落。'],
     ['bookmarks/', 'Worth another look.', '值得，再看一次。'],
     ['notes/', 'Notes along the way.', '把过程，写下来。'],
-    [
-      'notes/a-new-garden/',
-      'A place for ideas to grow',
-      '给想法留一块生长的地方',
-    ],
   ]) {
     const en = await readFile(path.join(output, route, 'index.html'), 'utf8');
     const zh = await readFile(

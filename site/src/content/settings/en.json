@@ -1,0 +1,86 @@
+{
+  "site": {
+    "title": "Kevin · Field notes",
+    "description": "Kevin’s personal blog. AI products, macOS tools, custom AI for businesses, and notes from the work.",
+    "tagline": "AI products · macOS tools · Custom AI",
+    "about": [
+      "I’m Kevin. I build independent AI products, macOS tools, and custom AI for businesses.",
+      "My work covers the path from an idea to an AI application: product interaction, model integration, application development, and connections to existing workflows.",
+      "Avatar is an infinite canvas for thinking with AI, and Flash is a macOS app. valseit brings together model routing, cost attribution, and custom applications. UPon connects chat and billing to enterprise workflows.",
+      "This blog is where I share technical decisions, product experiments, and lessons from the work, including ideas that are still taking shape."
+    ]
+  },
+  "thoughts": [
+    {
+      "id": "a-new-garden",
+      "date": "2026-10-29",
+      "text": "Starting over with this space as a personal blog. A quick thought today can grow into a longer note tomorrow. No need to have it all figured out before writing it down.",
+      "tag": "Building this site",
+      "title": "A small note on starting again",
+      "draft": false
+    }
+  ],
+  "bookmarks": [
+    {
+      "id": "spotlight",
+      "title": "Spotlight",
+      "url": "https://spotlight.tailwindui.com/",
+      "description": "A personal website design I’ve spent time with. Its clear typography and generous spacing are still worth revisiting.",
+      "category": "Design reference",
+      "date": "2026-10-29",
+      "draft": false
+    }
+  ],
+  "projects": [
+    {
+      "id": "second-me",
+      "name": "Second Me",
+      "description": "Train a personal AI that thinks like you, locally. Open source, with a research paper.",
+      "url": "https://github.com/mindverse/Second-Me",
+      "role": "Personal AI",
+      "category": "Open source",
+      "featured": false,
+      "draft": false
+    },
+    {
+      "id": "valseit",
+      "name": "valseit",
+      "description": "Custom enterprise AI: an LLM gateway with multi-provider routing, cost attribution, and billing, plus bespoke applications built on top.",
+      "url": "https://kevin.top/valseit/",
+      "role": "Custom enterprise AI",
+      "category": "Enterprise",
+      "featured": true,
+      "draft": false
+    },
+    {
+      "id": "avatar",
+      "name": "Avatar",
+      "description": "An infinite canvas for thinking with AI. Turn scattered ideas into cards, structure, and next steps.",
+      "url": "https://avatar-nu-ten.vercel.app",
+      "role": "An AI canvas",
+      "category": "Experiment",
+      "featured": true,
+      "draft": false
+    },
+    {
+      "id": "upon",
+      "name": "UPon",
+      "description": "An enterprise integration that brings chat, cost tracking, and top-up billing into existing workflows.",
+      "url": "https://kevin.top/#projects",
+      "role": "Workflow integration",
+      "category": "Delivered",
+      "featured": false,
+      "draft": false
+    },
+    {
+      "id": "flash",
+      "name": "Flash",
+      "description": "A macOS app with public downloads, release notes, and automatic update information.",
+      "url": "https://github.com/kevinaimonster/flash-releases",
+      "role": "macOS app",
+      "category": "Product",
+      "featured": true,
+      "draft": false
+    }
+  ]
+}

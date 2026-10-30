@@ -22,7 +22,7 @@ const toc = headings.filter((heading) => heading.depth === 2);
   image={note.data.illustration?.src}
   imageAlt={note.data.illustration?.alt}
   alternates={alternates}
-  noindex={note.data.archived}
+  noindex={note.data.archived || note.data.draft}
   article={{
     published: note.data.date,
     modified: note.data.updated,
@@ -36,6 +36,7 @@ const toc = headings.filter((heading) => heading.depth === 2);
     </a>
     <header class="article-heading">
       <div class="article-meta">
+        {note.data.draft && <strong>{t('草稿预览', 'Draft preview')}</strong>}
         <time datetime={note.data.date}>
           {note.data.date.replaceAll('-', '.')}
         </time>
@@ -75,8 +76,8 @@ const toc = headings.filter((heading) => heading.depth === 2);
             <img
               src={note.data.illustration.src}
               alt={note.data.illustration.alt}
-              width="1983"
-              height="793"
+              width={note.data.illustration.width}
+              height={note.data.illustration.height}
               loading="lazy"
             />
             <figcaption>{note.data.illustration.caption}</figcaption>

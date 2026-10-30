@@ -1,5 +1,5 @@
 ---
-import { getPublishedNotes, notePath } from '../data/notes';
+import { getVisibleNotes, notePath } from '../data/notes';
 import { pagePaths } from '../data/seo';
 import { localizedPath, type Locale } from '../data/i18n';
 import Home from '../views/Home.astro';
@@ -20,7 +20,7 @@ export async function getStaticPaths() {
           },
           props: { page, note: undefined },
         })),
-        ...(await getPublishedNotes(locale)).map((note) => ({
+        ...(await getVisibleNotes(locale)).map((note) => ({
           params: {
             path: notePath(note).replace(/^\/|\/$/g, ''),
           },
