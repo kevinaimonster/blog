@@ -5,6 +5,8 @@ description: 关于这个数字花园，以及准备怎样使用它。
 date: '2026-10-29'
 tags: ['建站记录', '数字花园']
 illustration:
+  width: 1983
+  height: 793
   src: /images/field-notes-cover.png
   alt: 夜色中的海边书桌，手记的纸页化成飞鸟。
   caption: 一切，从一页开始。插画由 AI 创作。

@@ -2,6 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { readNotes } from '../scripts/content.mjs';
+const notes = await readNotes();
 
 const root = path.resolve('dist');
 const origin = new URL(process.env.SITE_URL || 'https://kevin1988.fun').origin;
@@ -68,17 +70,12 @@ test('canonical, social URLs, and reciprocal language alternatives match actual 
 });
 
 test('BlogPosting describes the visible article and actual publication date', async () => {
-  for (const [route, title, date, language] of [
-    ['/notes/a-new-garden/', 'A place for ideas to grow', '2026-10-29', 'en'],
-    [
-      '/zh/notes/a-new-garden/',
-      '给想法留一块生长的地方',
-      '2026-10-29',
-      'zh-CN',
-    ],
-    ['/First-Post/', 'First Post', '2024-06-19', 'en'],
-    ['/2024/06/19/hello-world/', 'Hello World', '2024-06-19', 'en'],
-  ]) {
+  for (const note of notes.filter((note) => !note.data.draft)) {
+    const {
+      path: route,
+      data: { title, date, locale, updated },
+    } = note;
+    const language = locale === 'zh' ? 'zh-CN' : 'en';
     const html = await read(routeFile(route));
     const json = html.match(
       /<script type="application\/ld\+json">([\s\S]*?)<\/script>/,
@@ -96,7 +93,8 @@ test('BlogPosting describes the visible article and actual publication date', as
     assert.equal(data.image[0], metadata(html, 'og:image'));
     assert.equal(metadata(html, 'og:type'), 'article');
     assert.match(html, new RegExp(`<time datetime="${date}"`));
-    assert.ok(html.includes(`<h1>${title}</h1>`));
+    assert.equal(decode(html.match(/<h1>([\s\S]*?)<\/h1>/)?.[1]), title);
+    assert.equal(data.dateModified, updated);
     await read(routeFile(new URL(data.author.url).pathname));
   }
 });
@@ -114,7 +112,13 @@ test('sitemap contains exactly indexable pages and robots exposes the production
       expected.push(canonical(html));
   }
   assert.deepEqual(urls.sort(), expected.sort());
-  assert.ok(indexable ? urls.length >= 12 : urls.length === 0);
+  assert.equal(
+    urls.length,
+    indexable
+      ? 10 +
+          notes.filter((note) => !note.data.draft && !note.data.archived).length
+      : 0,
+  );
   const robots = await read('robots.txt');
   if (indexable) {
     assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
@@ -150,7 +154,7 @@ test('old URLs, subscription address, and anchors survive the migration', async 
   for (const feedPath of ['rss.xml', 'zh/rss.xml', 'atom.xml']) {
     const xml = await read(feedPath);
     assert.ok(xml.includes(`${origin}/`));
-    assert.ok(xml.includes('a-new-garden/'));
+
     assert.ok(!xml.includes('/First-Post/') && !xml.includes('/hello-world/'));
   }
   assert.match(
@@ -158,4 +162,20 @@ test('old URLs, subscription address, and anchors survive the migration', async 
     /xmlns="http:\/\/www.w3.org\/2005\/Atom"/,
   );
   assert.equal((await read('CNAME')).trim(), 'kevin1988.fun');
+});
+
+test('draft notes never produce public routes or feed/sitemap entries', async () => {
+  const pages = new Set(
+    (await htmlFiles()).map(
+      (file) => '/' + path.relative(root, file).replace(/index\.html$/, ''),
+    ),
+  );
+  const feeds = await Promise.all(
+    ['sitemap.xml', 'rss.xml', 'zh/rss.xml', 'atom.xml'].map(read),
+  );
+  for (const note of notes.filter((note) => note.data.draft)) {
+    assert.ok(!pages.has(note.path), `Draft URL leaked: ${note.path}`);
+    for (const feed of feeds)
+      assert.ok(!feed.includes(`${origin}${note.path}`));
+  }
 });

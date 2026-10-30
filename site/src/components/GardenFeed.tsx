@@ -5,7 +5,7 @@ import {
   ArrowUpRightIcon as ArrowUpRight,
   XIcon as X,
 } from '@phosphor-icons/react';
-import { translator, type Locale } from '../data/i18n';
+import { translator, type Locale } from '../data/locales';
 export interface FeedItem {
   id: string;
   kind: 'thought' | 'note' | 'bookmark';

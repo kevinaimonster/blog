@@ -1,4 +1,4 @@
-import { getNotes, notePath } from './notes';
+import { getPublishedNotes, notePath } from './notes';
 import type { APIRoute } from 'astro';
 import { getContent, localizedPath, type Locale } from './i18n';
 import { escapeXml as escape } from './seo';
@@ -6,7 +6,9 @@ export const createFeed =
   (locale: Locale): APIRoute =>
   async ({ site: origin }) => {
     const { site } = getContent(locale);
-    const notes = await getNotes(locale);
+    const notes = (await getPublishedNotes(locale)).filter(
+      (note) => !note.data.archived,
+    );
     const items = notes
       .map((note) => {
         const url = new URL(notePath(note), origin).href;

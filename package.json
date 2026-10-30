@@ -7,11 +7,16 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --root site --host 127.0.0.1 --ignore-lock",
-    "build": "astro build --root site",
+    "build": "npm run content:check && astro build --root site",
     "preview": "astro preview --root site --host 127.0.0.1 --ignore-lock",
     "check": "astro check --root site",
     "test": "node --test tests/*.test.mjs",
-    "format": "prettier --write site/src site/astro.config.mjs tests package.json README.md"
+    "format": "prettier --write site/src site/astro.config.mjs scripts tests package.json README.md",
+    "post:new": "node scripts/content.mjs new",
+    "content:check": "node scripts/content.mjs check",
+    "dev:drafts": "node scripts/dev-drafts.mjs",
+    "validate": "node scripts/validate.mjs",
+    "blog": "node scripts/blog.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "8.1.2",
@@ -28,6 +33,7 @@
     "@types/react-dom": "latest",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
-    "typescript": "latest"
+    "typescript": "latest",
+    "yaml": "2.9.1"
   }
 }
