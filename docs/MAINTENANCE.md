@@ -14,6 +14,14 @@ npm ci
 npm run blog
 ```
 
+没有 nvm、或者当前 Node 太旧时，可直接使用指定版本启动菜单，不改变系统 Node：
+
+```sh
+npm exec --yes --package=node@22.23.4 -- npm run blog
+```
+
+这条命令启动的菜单及其预览、检查和发布子进程都会使用该 Node 版本。首次使用需要下载运行时。需要直接执行子命令时，在末尾加 `-- server`、`-- deploy` 等即可。
+
 本机已有仓库位于 `/Users/kevinaimonster/workspace/blog`，不必重新 clone。写作前先确认没有未完成的改动，再 `git switch master`、`git pull --ff-only`。第一次推送需要这台机器已获得 GitHub 仓库写权限；CLI 使用现有 Git 登录，不保存 token。
 
 菜单提供新建、内容清单、草稿预览、准备发布、归档、改回草稿、检查、提交发布和仓库状态。选择一个操作完成后回到终端，重新运行 `npm run blog` 即可继续。所有命令在仓库根目录执行。

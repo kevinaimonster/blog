@@ -3,7 +3,7 @@
 ## 当前状态
 
 - 用户选择 Spotlight 的专业、成熟风格，并明确选择「没有，按这个风格做原创版本」。用户随后否定了第一版的视觉相似度，本次按原站实际布局纠正。
-- 当前阶段：implement；状态：maintenance_cli_verification。v1.0.0 已正式发布并验证；本轮新增本地写作与维护能力，详见文末。
+- 当前阶段：deliver；状态：production_verified。v1.0.0 视觉版与本轮交互式维护 CLI 均已发布到 master 并完成线上验证，详见文末。
 - 本次终点：用户已确认第一版并明确授权推送原仓库、覆盖正式博客；执行 SEO 与旧链接迁移后，将新版发布到 kevin1988.fun。本节与最后一节取代早先仅私密预览、不动 master 的限制。
 - 基线：kevinaimonster/blog，master fd3f84618d7f888907f27c777cb7c61aa2191303；实现分支 codex/digital-garden。
 
@@ -180,3 +180,11 @@ conditional：用户已确认视觉方向并提供个人素材来源。kevin.top
 - deploy --dry-run 不改变 HEAD、暂存区和临时远端；真实交互 deploy 完成确认、提交、推送到本地 bare 测试仓库，工作区干净。正式工作区混有代码时，写作 deploy 按预期拒绝自动提交。
 - archive 后文章 URL 和正文保留，设置 noindex，从首页、列表、订阅和 sitemap 移除。
 - 本地验收证据：/Users/kevinaimonster/empty/artifacts/kevin-blog-cli-acceptance.json。没有发布测试文章；正式发布结果另行记录。
+
+
+正式发布：
+
+- PR #2 的 build 检查 41001887991 成功后合并，生产提交为 0d7ffcebb40459c069a7155d2f9463bfa80059f3。对应 Pages 发布 41002054878 的 build/deploy 均成功。
+- 正式域名 28 个页面/订阅/robots/404 响应、7 个资源和 12 个 sitemap URL 检查通过；CSS/JS/图片哈希与本地产物一致。文章 canonical、BlogPosting、语言关联、索引状态与旧 URL 正常，HTTP 301 保留旧路径与 query 并落到 HTTPS 200。
+- 没有新增正式测试内容，没有改动 DNS、Pages 来源或 Cloudflare 规则。线上 HTTP 验收文件：/Users/kevinaimonster/empty/artifacts/kevin-blog-v1-1-live-check.json。
+- 本地 master 已同步；维护手册补充使用固定 Node 22.23.4 启动菜单的方法，适用于当前默认 Node 22.23.2 的电脑。运行时版本不修改系统设置。
