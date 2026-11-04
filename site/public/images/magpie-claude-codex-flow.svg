@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="600" viewBox="0 0 1120 600" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Code through Magpie to Codex</title>
+  <desc id="desc">Claude Code sends Messages requests to Magpie on local port 3425. Magpie sends Responses requests to a Codex account. The same Magpie desktop app provides a menu bar and a local Web interface on port 3430.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M1 1 8 5 1 9" fill="none" stroke="#f3b78f" stroke-width="1.6"/></marker>
+  </defs>
+  <rect width="1120" height="600" rx="24" fill="#102b30"/>
+  <g font-family="system-ui, -apple-system, sans-serif">
+    <text x="52" y="63" fill="#f3b78f" font-size="16" letter-spacing="2">MY LOCAL WORKFLOW</text>
+    <text x="52" y="105" fill="#f8f3e9" font-size="31" font-weight="600">One client. One desktop gateway.</text>
+    <rect x="40" y="184" width="270" height="184" rx="18" fill="#1b3a3f" stroke="#507075"/>
+    <text x="65" y="224" fill="#a8c1bf" font-size="15" letter-spacing="1.5">CLIENT</text>
+    <text x="65" y="267" fill="#f8f3e9" font-size="29" font-weight="600">Claude Code</text>
+    <text x="65" y="306" fill="#d2ded8" font-size="18">gpt-claude / gcl</text>
+    <rect x="410" y="164" width="300" height="330" rx="18" fill="#234a4d" stroke="#f3b78f" stroke-width="2"/>
+    <text x="437" y="205" fill="#f3b78f" font-size="15" letter-spacing="1.5">ONE DESKTOP APP</text>
+    <text x="437" y="251" fill="#f8f3e9" font-size="31" font-weight="600">Magpie</text>
+    <text x="437" y="291" fill="#e1e8df" font-size="19">Gateway · localhost:3425</text>
+    <line x1="437" y1="327" x2="683" y2="327" stroke="#6f8985"/>
+    <text x="437" y="366" fill="#e1e8df" font-size="19">Menu bar</text>
+    <text x="437" y="407" fill="#e1e8df" font-size="19">Local Web UI · :3430</text>
+    <text x="437" y="454" fill="#a8c1bf" font-size="17">Protocol translation + routing</text>
+    <rect x="810" y="184" width="270" height="184" rx="18" fill="#1b3a3f" stroke="#507075"/>
+    <text x="835" y="224" fill="#a8c1bf" font-size="15" letter-spacing="1.5">PROVIDER</text>
+    <text x="835" y="267" fill="#f8f3e9" font-size="29" font-weight="600">Codex account</text>
+    <text x="835" y="306" fill="#d2ded8" font-size="18">ChatGPT subscription</text>
+    <path d="M319 277 H396" stroke="#f3b78f" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M719 277 H796" stroke="#f3b78f" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="252" fill="#d2ded8" font-size="14" text-anchor="middle">Messages</text>
+    <text x="759" y="252" fill="#d2ded8" font-size="14" text-anchor="middle">Responses</text>
+    <text x="52" y="554" fill="#a8c1bf" font-size="19">Fast request: speed="fast" → service_tier="priority"</text>
+  </g>
+</svg>
