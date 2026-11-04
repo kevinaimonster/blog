@@ -1,8 +1,9 @@
 ---
 locale: en
 title: 'Claude Code, powered by Codex: my Magpie setup'
-description: 'A practical macOS setup for using a Codex subscription in Claude Code, with one Magpie desktop app, a reusable launcher, and Fast mode for new and existing sessions.'
+description: 'Download the Magpie bridge skill, install it in Codex or Claude Code, and follow a step-by-step macOS setup for Codex subscriptions, the gpt-claude launcher, and Fast mode.'
 date: '2026-11-04'
+updated: '2026-11-04'
 tags:
   - AI tools
   - Claude Code
@@ -14,6 +15,119 @@ draft: false
 I wanted to use my Codex subscription from Claude Code. Then the practical questions followed: how do I keep the local gateway running, give it a menu bar icon, launch it with a short command, and turn on Fast mode without abandoning a conversation?
 
 The setup I ended up with uses one [Magpie](https://github.com/yetone/magpie) desktop app, a small `gpt-claude` launcher, and two ways to request Fast. This is a record of what I configured and checked on macOS on November 4, 2026.
+
+## Start here: download, install, and run the skill
+
+**[Download the Magpie bridge skill ZIP](/downloads/magpie-bridge.zip)** · [SHA-256 checksum](/downloads/magpie-bridge.zip.sha256) · [Read the source](https://github.com/kevinaimonster/blog/tree/master/docs/skills/magpie-bridge)
+
+The package gives your coding assistant the setup procedure and a `gpt-claude` launcher template. Follow these steps on the Mac where you will use Claude Code. You can use a working Codex session to bootstrap the connection; if Claude Code cannot send messages yet, do the setup from Codex.
+
+### 1. Download the package
+
+Use the ZIP link above, or run this in Terminal:
+
+```sh
+mkdir -p "$HOME/Downloads"
+curl -fL https://kevin1988.fun/downloads/magpie-bridge.zip \
+  -o "$HOME/Downloads/magpie-bridge.zip"
+curl -fL https://kevin1988.fun/downloads/magpie-bridge.zip.sha256 \
+  -o "$HOME/Downloads/magpie-bridge.zip.sha256"
+(cd "$HOME/Downloads" && shasum -a 256 -c magpie-bridge.zip.sha256)
+```
+
+The checksum should print `magpie-bridge.zip: OK`. You can inspect the package with `unzip -l "$HOME/Downloads/magpie-bridge.zip"`. It contains:
+
+```text
+magpie-bridge/
+├── SKILL.md                  # Procedure the assistant follows
+├── agents/openai.yaml       # Codex skill-picker metadata
+└── assets/gpt-claude        # Launcher template to adapt and install
+```
+
+### 2. Install it in the assistant you will use for setup
+
+Pick the appropriate client below. These are first-install commands. For an upgrade, move your existing `magpie-bridge` folder to a backup location outside all skill directories before extracting the new package. Keep only one installed copy per client, including across Codex search locations. `unzip -n` does not overwrite existing files; it is not an update command.
+
+**Codex CLI or IDE:** install in the personal skills directory documented by [OpenAI Docs](https://learn.chatgpt.com/docs/build-skills).
+
+```sh
+mkdir -p "$HOME/.agents/skills"
+unzip -n "$HOME/Downloads/magpie-bridge.zip" -d "$HOME/.agents/skills"
+test -f "$HOME/.agents/skills/magpie-bridge/SKILL.md" && echo "Skill installed"
+```
+
+**Claude Code:** install in its [personal skills directory](https://code.claude.com/docs/en/skills).
+
+```sh
+mkdir -p "$HOME/.claude/skills"
+unzip -n "$HOME/Downloads/magpie-bridge.zip" -d "$HOME/.claude/skills"
+test -f "$HOME/.claude/skills/magpie-bridge/SKILL.md" && echo "Skill installed"
+```
+
+The final path must end in `skills/magpie-bridge/SKILL.md`, with the `assets` directory beside that file. Do not move only `SKILL.md` or accidentally create `magpie-bridge/magpie-bridge/SKILL.md`.
+
+### 3. Start a session and ask the skill to set up the connection
+
+Open a new local session of your chosen assistant. The following is a **message to the assistant**, not a shell command.
+
+In **Codex CLI / IDE**, paste:
+
+```text
+$magpie-bridge Set up Claude Code to use my Codex subscription on this Mac.
+Use one Magpie desktop app, enable login startup and local Web access,
+and install gpt-claude plus a gcl shortcut. Preserve my existing global
+Claude settings. Check which Codex models my account offers before
+choosing the default. Keep Fast opt-in with --fast. Run a short request
+to verify the connection, then show me the commands to use each day.
+```
+
+In **Claude Code**, paste the same request with its slash-command invocation:
+
+```text
+/magpie-bridge Set up Claude Code to use my Codex subscription on this Mac.
+Use one Magpie desktop app, enable login startup and local Web access,
+and install gpt-claude plus a gcl shortcut. Preserve my existing global
+Claude settings. Check which Codex models my account offers before
+choosing the default. Keep Fast opt-in with --fast. Run a short request
+to verify the connection, then show me the commands to use each day.
+```
+
+For a desktop client with a skill picker, select `magpie-bridge` and send the same setup request. In Codex CLI, `/skills` or typing `$` lets you check discovery; in Claude Code, type `/magpie-bridge`. If it is missing, check the folder path and start a fresh session. The ZIP installs instructions and a template; the assistant still needs to carry out the setup. It will check the app and CLIs, back up affected files, confirm a usable Codex account, and adapt the launcher. Complete any required account sign-in yourself when prompted.
+
+### 4. Verify the result and use the launcher
+
+The assistant should finish with the installed command paths, the selected `codex/...` model, and evidence of a successful request. In a fresh terminal, these should now work:
+
+```sh
+gpt-claude --help
+gpt-claude
+gpt-claude --fast
+gcl --fast -w feature-name
+```
+
+Run the worktree command from a Git repository. `--fast` takes effect for the process you launch with it. The first setup request above leaves Fast opt-in; you can explicitly ask the assistant to test it with:
+
+```text
+$magpie-bridge Verify gpt-claude --fast with one short request.
+Show the requested, sent, and upstream-reported tiers from Magpie.
+Do not enable the model-wide Fast setting.
+```
+
+Use `/magpie-bridge` instead of `$magpie-bridge` when sending that request in Claude Code. Expect the agent to report the real result, including an unreported upstream tier, rather than simply say that Fast is on.
+
+### 5. Enable Fast for a session that is already running
+
+In Magpie, open **Agents → Claude Code → model picker**, find the model used by that session, and turn on **⚡ Fast**. The next model request uses the setting; an in-flight response is unchanged. This affects **all Claude Code sessions using that model**, not just the one window you are looking at.
+
+For an assistant-led check first, send:
+
+```text
+$magpie-bridge Check which model my active Claude Code sessions use.
+Explain which sessions would be affected by Magpie's Fast switch.
+Do not change the setting yet.
+```
+
+Once that scope matches what you want, ask it to enable Fast for the confirmed client-and-model combination. The rest of this post explains the components, configuration choices, and checks behind this procedure.
 
 ## The three parts of the setup
 
@@ -195,6 +309,6 @@ For the Web UI, I hit a separate testing trap: its sign-in link sets a cookie an
 
 ## Keep the workflow reusable
 
-I turned these decisions into a [small English skill](https://github.com/kevinaimonster/blog/tree/master/docs/skills/magpie-bridge), including the launcher. It records the setup steps, the scope of each Fast control, and what counts as a successful check. It contains no account credentials or private Web access links.
+The [downloadable skill](/downloads/magpie-bridge.zip) includes the setup procedure, launcher, and Codex picker metadata. Its [reviewable source](https://github.com/kevinaimonster/blog/tree/master/docs/skills/magpie-bridge) records the scope of each Fast control and what counts as a successful check. The package contains no account credentials or private Web access links. Return to the steps at the start of this post when installing it on another Mac.
 
 That is the part I want to keep: one desktop app, a command I can remember, and enough evidence to tell whether a request reached the model and tier I asked for. When a client or gateway update changes the behavior, those checks give me a concrete place to start.

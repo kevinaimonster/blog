@@ -1,0 +1,4 @@
+interface:
+  display_name: "Magpie bridge"
+  short_description: "Connect Claude Code to Codex through Magpie"
+  default_prompt: "Use $magpie-bridge to set up one Magpie desktop app, connect Claude Code to my Codex subscription, and verify the gpt-claude launcher with opt-in Fast."
