@@ -1,0 +1,100 @@
+#!/bin/sh
+# Claude Code using the Codex subscription through the local Magpie gateway.
+set -eu
+
+claude_bin="$HOME/.local/bin/claude"
+magpie_bin="$HOME/.local/bin/magpie"
+[ -x "$claude_bin" ] || claude_bin=$(command -v claude) || {
+  echo "gpt-claude: Claude Code is not installed." >&2
+  exit 1
+}
+
+# Consume wrapper flags while preserving Claude's arguments and their order.
+# -- ends wrapper option parsing, so literal prompt text can contain --fast.
+speed=
+parse_options=1
+for arg do
+  shift
+  case "$parse_options:$arg" in
+    1:--fast) speed=fast ;;
+    1:--no-fast) speed=standard ;;
+    1:--) parse_options=0; set -- "$@" "$arg" ;;
+    *) set -- "$@" "$arg" ;;
+  esac
+done
+
+# Help and version do not need the gateway.
+case "${1-}" in
+  -h|--help)
+    printf '%s\n' 'gpt-claude: Claude Code through the Magpie Codex gateway.' \
+      '  --fast       Request Codex Fast mode for this invocation.' \
+      '  --no-fast    Request standard speed for this invocation.' \
+      '  Other arguments, including -w/--worktree, go to Claude Code.' ''
+    exec "$claude_bin" "$@" ;;
+  -v|--version) exec "$claude_bin" "$@" ;;
+esac
+
+settings_json='{"env":{"ANTHROPIC_BASE_URL":"http://127.0.0.1:3425","ANTHROPIC_AUTH_TOKEN":"magpie-claude","ANTHROPIC_API_KEY":""}}'
+if [ -n "$speed" ]; then
+  # Claude accepts extra request fields; Magpie translates speed=fast into
+  # service_tier=priority for Codex. Preserve other caller-supplied fields.
+  settings_json=$(/usr/bin/python3 - "$speed" "$settings_json" <<'PYJSON'
+import json, os, sys
+try:
+    extra = json.loads(os.environ.get("CLAUDE_CODE_EXTRA_BODY") or "{}")
+    if not isinstance(extra, dict):
+        raise ValueError("expected an object")
+except (ValueError, TypeError):
+    sys.exit("gpt-claude: CLAUDE_CODE_EXTRA_BODY must be a JSON object.")
+extra["speed"] = sys.argv[1]
+settings = json.loads(sys.argv[2])
+settings["env"]["CLAUDE_CODE_EXTRA_BODY"] = json.dumps(extra, separators=(",", ":"))
+print(json.dumps(settings, separators=(",", ":")))
+PYJSON
+  )
+fi
+
+gateway_ready() {
+  reply=$(curl --noproxy '*' -fsS --connect-timeout 1 --max-time 2 \
+    -H 'Authorization: Bearer magpie-claude' \
+    http://127.0.0.1:3425/api/hello 2>/dev/null) || return 1
+  case "$reply" in
+    *'"name":"magpie"'*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+if ! gateway_ready; then
+  [ -x "$magpie_bin" ] || magpie_bin=$(command -v magpie) || {
+    echo "gpt-claude: Magpie is not installed." >&2
+    exit 1
+  }
+  log_dir="$HOME/.local/state/magpie"
+  mkdir -p "$log_dir"
+  chmod 700 "$log_dir"
+  echo "gpt-claude: starting Magpie desktop..." >&2
+  app_job="gui/$(id -u)/com.yetone.magpie"
+  app_plist="$HOME/Library/LaunchAgents/com.yetone.magpie.plist"
+  if /bin/launchctl print "$app_job" >/dev/null 2>&1; then
+    /bin/launchctl kickstart "$app_job" >>"$log_dir/gateway.log" 2>&1
+  elif [ -f "$app_plist" ]; then
+    /bin/launchctl bootstrap "gui/$(id -u)" "$app_plist" >>"$log_dir/gateway.log" 2>&1
+  else
+    /usr/bin/open -g /Applications/magpie.app --args tray
+  fi
+  attempts=0
+  until gateway_ready; do
+    attempts=$((attempts + 1))
+    if [ "$attempts" -ge 10 ]; then
+      echo "gpt-claude: Magpie did not become ready. Check $log_dir/gateway.log" >&2
+      exit 1
+    fi
+    sleep 1
+  done
+fi
+
+# Invocation-only settings override a different endpoint in user settings.
+# This is Magpie's local caller token, not an OpenAI API key.
+exec "$claude_bin" \
+  --settings "$settings_json" \
+  --model codex/gpt-6-astra "$@"
