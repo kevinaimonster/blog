@@ -14,6 +14,7 @@
     "format": "prettier --write site/src site/astro.config.mjs scripts tests package.json README.md",
     "post:new": "node scripts/content.mjs new",
     "content:check": "node scripts/content.mjs check",
+    "skill:package": "python3 scripts/package-magpie-skill.py",
     "dev:drafts": "node scripts/dev-drafts.mjs",
     "validate": "node scripts/validate.mjs",
     "blog": "node scripts/blog.mjs"

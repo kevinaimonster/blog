@@ -163,3 +163,11 @@ illustration:
 每次发布后：核对本次部署 SHA、实际文章 URL、正文图片、canonical、订阅和 sitemap；有译文时点一次语言切换。每月：检查项目/收藏外链、依赖安全提示和域名到期状态。源码和历史保存在 GitHub；另外保留本地工作副本，尚未推送的草稿仅存在本机。
 
 当前没有评论、账号后台、定时发文或自动翻译。它是一个由 Kevin 维护的静态个人博客，不是开放注册论坛。工程结构见 [ARCHITECTURE.md](ARCHITECTURE.md)。
+
+## 9. 文章附带的 skill 下载包
+
+Magpie 文章的公开 skill 源码在 `docs/skills/magpie-bridge/`。修改源码后运行 `npm run skill:package`，生成 `site/public/downloads/magpie-bridge.zip` 和同名 `.sha256` 文件，并把源码、ZIP 和校验文件一起提交。打包使用 Python 3 标准库和显式文件清单，不会扫描或打包用户的 skills／账号目录。
+
+`npm run validate` 中的下载测试会检查包与源码是否一致、生产资源及校验值、Codex 和 Claude Code 两种目录下的解压结构与脚本权限，以及 `unzip -n` 不覆盖已有文件。维护机和 CI 需要 `python3`、`unzip`；macOS 和当前 Ubuntu runner 均提供这些工具。固定归档时间使未修改源码的重复打包保持一致。
+
+下载包、打包脚本及 skill 源码不属于内容 CLI 自动提交范围，使用正常分支和 PR 流程。`public/downloads/` 中的文件会直接公开。发布后访问真实 ZIP 地址，下载到临时目录核对 SHA-256 并解压检查；不能只检查文章中的链接文字。
